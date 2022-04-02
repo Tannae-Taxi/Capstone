@@ -2,23 +2,22 @@ package com.example.tannae.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tannae.R;
+import com.example.tannae.entity.User;
 
-public class LoginScreen extends AppCompatActivity {
+public class ActivityLogin extends AppCompatActivity {
     // Views
     private EditText editId, editPw;
     private Button btnLogin;
     private TextView tvFind, tvSignUp;
 
     // Data
-    public String id, pw;
+    public User me;
 
     // < Methods >
     private void onClickFindAccount(View view) {}
@@ -28,6 +27,6 @@ public class LoginScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_screen);
+        setContentView(R.layout.activity_login);
     }
 }
