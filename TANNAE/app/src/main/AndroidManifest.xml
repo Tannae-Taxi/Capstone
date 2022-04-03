@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TANNAE">
         <activity
-            android:name=".activity.ActivityLogin"
+            android:name=".activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

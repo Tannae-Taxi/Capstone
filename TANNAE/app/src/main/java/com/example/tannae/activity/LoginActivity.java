@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.example.tannae.R;
 import com.example.tannae.entity.UserEntity;
 
-public class ActivityLogin extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     // Views
     private EditText editId, editPw;
     private Button btnLogin;
