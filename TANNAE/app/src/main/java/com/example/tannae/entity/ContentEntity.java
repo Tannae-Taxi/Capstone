@@ -2,7 +2,7 @@ package com.example.tannae.entity;
 
 import java.util.HashMap;
 
-public class Path {
+public class ContentEntity {
     // Data
     HashMap<String, Object> user = new HashMap<>();
 }

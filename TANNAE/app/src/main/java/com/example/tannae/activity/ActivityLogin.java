@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.tannae.R;
-import com.example.tannae.entity.User;
+import com.example.tannae.entity.UserEntity;
 
 public class ActivityLogin extends AppCompatActivity {
     // Views
@@ -17,7 +17,7 @@ public class ActivityLogin extends AppCompatActivity {
     private TextView tvFind, tvSignUp;
 
     // Data
-    public User me;
+    public UserEntity me;
 
     // < Methods >
     private void onClickFindAccount(View view) {}
