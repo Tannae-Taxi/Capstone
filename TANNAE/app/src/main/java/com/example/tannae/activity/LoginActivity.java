@@ -12,7 +12,7 @@ import com.example.tannae.entity.UserEntity;
 
 public class LoginActivity extends AppCompatActivity {
     // Views
-    private EditText editId, editPw;
+    private EditText textId, textPw;
     private Button btnLogin;
     private TextView tvFind, tvSignUp;
 
