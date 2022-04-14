@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/171014/AndroidStudioProjects/TANNAE/app/src/main/res/layout/activity_login.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3315" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3315" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_account.xml" value="0.33" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_account_edit.xml" value="0.33" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_detailservicereq.xml" value="0.33" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_faq.xml" value="0.1757852077001013" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_faq_edit.xml" value="0.1757852077001013" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_find.xml" value="0.33" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_history.xml" value="0.33" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_login.xml" value="0.22" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_lost_found.xml" value="0.1757852077001013" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_navigation.xml" value="0.1757852077001013" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_payment.xml" value="0.1757852077001013" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_point.xml" value="0.22" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_qna.xml" value="0.33" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_qna_detail.xml" value="0.1757852077001013" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_qna_edit.xml" value="0.1757852077001013" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_servicereq.xml" value="0.1757852077001013" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_serviceusing.xml" value="0.25" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_sign_up.xml" value="0.1757852077001013" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/activity_vehiclelist.xml" value="0.1757852077001013" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/detailservicereq_activity.xml" value="0.33" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/find_activity.xml" value="0.26752072343632255" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/login_activity.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/main_activity.xml" value="0.33" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/servicereq_activity.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/sign_up_activity.xml" value="0.33" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/layout/vehiclelist_activity.xml" value="0.20199275362318841" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/menu/bottom_app_bar.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/menu/shr_toolbar_menu.xml" value="0.3026041666666667" />
+        <entry key="..\:/Users/171014/AndroidStudioProjects/xml_private/app/src/main/res/menu/ttop_app_bar.xml" value="0.3619791666666667" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
