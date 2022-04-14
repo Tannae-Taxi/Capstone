@@ -1,10 +1,10 @@
-package com.example.xml_private.activity;
+package com.example.tannae.activity;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.xml_private.R;
+import com.example.tannae.R;
 
 public class NavigationActivity extends AppCompatActivity {
 

@@ -1,17 +1,17 @@
-package com.example.xml_private.activity;
+package com.example.tannae.activity;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.xml_private.R;
+import com.example.tannae.R;
 
-public class VehicleListActivity extends AppCompatActivity {
+public class QnAActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vehiclelist);
+        setContentView(R.layout.activity_qna);
 
     }
 }

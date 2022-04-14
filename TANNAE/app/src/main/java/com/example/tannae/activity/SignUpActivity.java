@@ -1,4 +1,4 @@
-package com.example.xml_private.activity;
+package com.example.tannae.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.xml_private.R;
+import com.example.tannae.R;
 
 public class SignUpActivity extends AppCompatActivity {
 

@@ -1,16 +1,17 @@
-package com.example.xml_private.activity;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.tannae.activity;
 
 import android.os.Bundle;
 
-import com.example.xml_private.R;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class FindActivity extends AppCompatActivity {
+import com.example.tannae.R;
+
+public class DetailServiceReqActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailservicereq);
+
     }
 }

@@ -1,4 +1,4 @@
-package com.example.xml_private;
+package com.example.tannae;
 
 import org.junit.Test;
 

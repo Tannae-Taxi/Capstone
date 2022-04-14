@@ -1,17 +1,17 @@
-package com.example.xml_private.activity;
+package com.example.tannae.activity;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.xml_private.R;
+import com.example.tannae.R;
 
-public class PointActivity extends AppCompatActivity {
+public class AccountEditActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_point);
+        setContentView(R.layout.activity_account_edit);
 
     }
 }
