@@ -22,39 +22,33 @@ let connection = mysql.createConnection({
 
 // << Reqeust & Response >>
 // < Account >
-app.post('/user/login', function (req, res) {
+app.post('/user/login', (req, res) => {
     console.log('Login Request');
 
-    let id = req.body.id;
-    let pw = req.body.pw;
-    let sql = 'select * from User where id = ?';
+    let id = req.body.nameValuePairs.id
+    let pw = req.body.nameValuePairs.pw
+    let sql = 'select * from User where binary  id = ?';
 
-    connection.query(sql, [id, pw], function (err, result) {
-        let code = 404;
-        let message = 'Error';
+    connection.query(sql, id, function (err, result) {
+        let jsErr = {"error": "false"};
 
-        if (err) {
-            console.log(err);
+        if(err) {
+            console.log(err)
         } else {
             if(result.length === 0) {
-                code = 204;
-                message = '존재하지 않는 계정입니다.';
+                //str = '[{"error":"Not a user"}]';
+                jsErr.error = "Not a user";
                 console.log('/user/login : Not a user');
-            } else if(pw !== result[0].pw) {
-                code = 204;
-                message = '잘못된 비밀번호입니다.';
-                console.log('/user/login : Wrong password');
+            } else if(pw !== result[0].pw.toString('utf-8')) {
+                jsErr.error = "Password mismatch";
+                //str = '[{"error":"Password mismatch"}]';
+                console.log('/user/login : Password mismatch');
             } else {
-                code = 200;
-                message = '로그인하였습니다.';
-                console.log("/user/login : Login Success");
+                console.log('/user/login : Login success');
             }
         }
-
-        res.json({
-            'code': code,
-            'message': message
-        })
+        result.unshift(jsErr);
+        res.json(JSON.stringify(result))
     });
 });
 
