@@ -37,10 +37,10 @@ app.post('/user/login', (req, res) => {
         } else {
             if(result.length === 0) {
                 //str = '[{"error":"Not a user"}]';
-                jsErr.error = "Not a user";
+                jsErr.error = "등록된 사용자가 아닙니다.";
                 console.log('/user/login : Not a user');
             } else if(pw !== result[0].pw.toString('utf-8')) {
-                jsErr.error = "Password mismatch";
+                jsErr.error = "비밀번호가 잘못되었습니다.";
                 //str = '[{"error":"Password mismatch"}]';
                 console.log('/user/login : Password mismatch');
             } else {
