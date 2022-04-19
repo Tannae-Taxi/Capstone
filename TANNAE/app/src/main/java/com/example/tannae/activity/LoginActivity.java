@@ -2,7 +2,9 @@ package com.example.tannae.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,16 @@ import com.example.tannae.network.ServiceApi;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,19 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String id = etID.getText().toString();
-                String pw = etPW.getText().toString();
-
-                JSONObject req = new JSONObject();
-
-                try {
-                    req.put("id", id);
-                    req.put("pw", pw);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                service.login(req).enqueue(new Callback<String>() {
+                service.login(etID.getText().toString(), etPW.getText().toString(), "ip").enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         try {
