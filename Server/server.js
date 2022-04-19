@@ -22,33 +22,34 @@ let connection = mysql.createConnection({
 
 // << Reqeust & Response >>
 // < Account >
-app.post('/user/login', (req, res) => {
-    console.log('Login Request');
+// Login
+app.get('/account/login', (req, res) => {
+    let id = req.query.id;
+    let pw = req.query.pw;
+    let ip = req.query.ip;
+    console.log(ip);
+    let sql = 'select * from User where binary id = ?';
 
-    let id = req.body.nameValuePairs.id
-    let pw = req.body.nameValuePairs.pw
-    let sql = 'select * from User where binary  id = ?';
-
-    connection.query(sql, id, function (err, result) {
+    connection.query(sql, id, (err, result) => {
         let jsErr = {"error": "false"};
 
         if(err) {
             console.log(err)
         } else {
             if(result.length === 0) {
-                //str = '[{"error":"Not a user"}]';
                 jsErr.error = "등록된 사용자가 아닙니다.";
                 console.log('/user/login : Not a user');
             } else if(pw !== result[0].pw.toString('utf-8')) {
                 jsErr.error = "비밀번호가 잘못되었습니다.";
-                //str = '[{"error":"Password mismatch"}]';
                 console.log('/user/login : Password mismatch');
             } else {
+                let sqlIP = "update User set ip = ? where id = cast(? as binary);";
+                connection.query(sqlIP, [ip, id]);
                 console.log('/user/login : Login success');
             }
         }
         result.unshift(jsErr);
-        res.json(JSON.stringify(result))
+        res.json(JSON.stringify(result));
     });
 });
 
