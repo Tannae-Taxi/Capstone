@@ -31,9 +31,9 @@ public interface ServiceApi {
     Call<String> getLost();
     @POST("/user/postLost")                 // Post lost
     Call<String> postLost(@Body JSONObject lost);
-    @GET("/user/getContent")
+    @GET("/user/getContent")                // Get content
     Call<String> getContent();
-    @POST("/user/editContent")
+    @POST("/user/editContent")              // Edit content
     Call<String> editContent(@Body JSONObject content);
 
     /* Driver */
