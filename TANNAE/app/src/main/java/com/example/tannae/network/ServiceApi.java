@@ -15,10 +15,26 @@ public interface ServiceApi {
     Call<String> checkID(@Query("id") String id);
     @POST("/account/signup")                // Sign Up
     Call<String> signup(@Body JSONObject user);
-    @GET("/account/findAccount")
+    @GET("/account/findAccount")            // Find Account
     Call<String> findAccount(@Query("uname") String uname, @Query("rrn") String rrn, @Query("phone") String phone, @Query("email") String email);
+    @POST("/account/signout")               // Sign Out
+    Call<String> signout(@Body JSONObject user);
+    @POST("/account/editAccount")           // Edit Account
+    Call<String> editAccount(@Body JSONObject user);
 
     /* User */
+    @POST("/user/charge")                   // Charge Point
+    Call<String> charge(@Body JSONObject point);
+    @GET("/user/getHistory")                // Get history
+    Call<String> getHistory(@Query("usn") String usn);
+    @GET("/user/getLost")                   // Get lost
+    Call<String> getLost();
+    @POST("/user/postLost")                 // Post lost
+    Call<String> postLost(@Body JSONObject lost);
+    @GET("/user/getContent")
+    Call<String> getContent();
+    @POST("/user/editContent")
+    Call<String> editContent(@Body JSONObject content);
 
     /* Driver */
 
