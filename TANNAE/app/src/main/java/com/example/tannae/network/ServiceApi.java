@@ -10,5 +10,5 @@ import retrofit2.http.Query;
 public interface ServiceApi {
     /* Account */
     @GET("/account/login")                  // Login
-    Call<String> login(@Query("id") String id, @Query("pw") String pw, @Query("ip") String ip);
+    Call<String> login(@Query("id") String id, @Query("pw") String pw);
 }
