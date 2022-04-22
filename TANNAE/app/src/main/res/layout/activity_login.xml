@@ -89,7 +89,7 @@
                 android:text="FIND" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_edit"
+                android:id="@+id/btn_signup"
                 style="@style/Widget.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

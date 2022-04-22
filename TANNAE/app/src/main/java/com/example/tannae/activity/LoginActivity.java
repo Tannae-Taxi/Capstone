@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.example.tannae.R;
+import com.example.tannae.network.Network;
 import com.example.tannae.network.RetrofitClient;
 import com.example.tannae.network.ServiceApi;
 import org.json.JSONArray;
@@ -20,12 +21,12 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText etID, etPW;
-    private Button btnLogin;
+    private Button btnLogin, btnSignUp;
     private String url = ";";
-    private ServiceApi service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Network.service = RetrofitClient.getClient().create(ServiceApi.class);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setViews();
@@ -36,26 +37,14 @@ public class LoginActivity extends AppCompatActivity {
         etID = findViewById(R.id.et_id);
         etPW = findViewById(R.id.et_pw);
         btnLogin = findViewById(R.id.btn_login);
-        service = RetrofitClient.getClient().create(ServiceApi.class);
+        btnSignUp = findViewById(R.id.btn_signup);
     }
 
     private void setEventListeners() {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String id = etID.getText().toString();
-                String pw = etPW.getText().toString();
-
-                JSONObject req = new JSONObject();
-
-                try {
-                    req.put("id", id);
-                    req.put("pw", pw);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                service.login(req).enqueue(new Callback<String>() {
+                Network.service.login(etID.getText().toString(), etPW.getText().toString()).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         try {
@@ -74,10 +63,17 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "로그인 에러 발생", Toast.LENGTH_SHORT).show();
-                        Log.e("로그인 에러 발생", t.getMessage());
+                        Toast.makeText(getApplicationContext(), "Server Error", Toast.LENGTH_SHORT).show();
+                        Log.e("Server Error", t.getMessage());
                     }
                 });
+            }
+        });
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                startActivity(intent);
             }
         });
     }

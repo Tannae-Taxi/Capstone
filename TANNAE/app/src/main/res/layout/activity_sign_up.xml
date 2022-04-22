@@ -62,18 +62,19 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/btn_checkid"
+                android:id="@+id/btn_checkID"
                 android:layout_width="96dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="120dp"
+                style="@style/Widget.Button.TextButton"
                 android:text="중복검사"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/et_id"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tv_checkid"
+                android:id="@+id/tv_checkID"
                 android:layout_width="208dp"
                 android:layout_height="19dp"
                 android:layout_marginStart="32dp"
@@ -94,7 +95,7 @@
                 android:inputType="textPassword"
                 app:layout_constraintBottom_toTopOf="@+id/et_checkpw"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_checkid" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_checkID" />
 
             <EditText
                 android:id="@+id/et_checkpw"
@@ -206,7 +207,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <Button
-        android:id="@+id/btn_edit"
+        android:id="@+id/btn_sign_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign Up"

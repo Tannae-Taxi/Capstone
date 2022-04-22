@@ -2,6 +2,7 @@
 
 // << Settings >>
 // < Import >
+const ServerF = require('./serverF.js')
 let mysql = require('mysql');
 let express = require('express');
 let app = express();
@@ -12,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // < MySQL Connection >
-let connection = mysql.createConnection({
+connection = mysql.createConnection({
     host: 'localhost',
     user: 'capstone',
     database: 'tannae',
@@ -20,40 +21,65 @@ let connection = mysql.createConnection({
     port: 3306
 });
 
-////update
+// < Listen >
+app.listen(3000, () => {
+    fun = new ServerF(connection);
+    console.log('Listening on port 3000');
+});
 
 // << Reqeust & Response >>
 // < Account >
-app.post('/user/login', (req, res) => {
-    console.log('Login Request');
-
-    let id = req.body.nameValuePairs.id
-    let pw = req.body.nameValuePairs.pw
-    let sql = 'select * from User where binary  id = ?';
-
-    connection.query(sql, id, function (err, result) {
+// Login
+app.get('/account/login', (req, res) => {
+    let id = req.query.id;
+    let pw = req.query.pw;
+    let sql = 'select * from User where binary id = ?';
+    connection.query(sql, id, (err, result) => {
         let jsErr = {"error": "false"};
 
         if(err) {
-            console.log(err)
+            console.log(err);
+            jsErr.error = "MySQL Error";
         } else {
             if(result.length === 0) {
-                //str = '[{"error":"Not a user"}]';
-                jsErr.error = "Not a user";
-                console.log('/user/login : Not a user');
+                jsErr.error = "등록된 사용자가 아닙니다.";
+                console.log('/account/login : Not a user');
             } else if(pw !== result[0].pw.toString('utf-8')) {
-                jsErr.error = "Password mismatch";
-                //str = '[{"error":"Password mismatch"}]';
-                console.log('/user/login : Password mismatch');
+                jsErr.error = "비밀번호가 잘못되었습니다.";
+                console.log('/account/login : Password mismatch');
             } else {
-                console.log('/user/login : Login success');
+                console.log('/account/login : Login success');
             }
         }
         result.unshift(jsErr);
-        res.json(JSON.stringify(result))
+        res.json(JSON.stringify(result));
     });
 });
 
-app.listen(3000, () => {
-    console.log('Listening on port 3000');
+app.get('/account/checkID', (req, res) => {
+    console.log('CheckID');
+    let id = req.query.id;
+    console.log(id);
+});
+
+app.post('/account/signup', (req, res) => {
+    let jsonReq = req.body.nameValuePairs;
+    let sql = 'insert User values(?, ?, ?, ?, ?, ?, ?, ?, false, 0, 4.5)'
+    let usn = fun.usnGenerator();
+    connection.query(sql, [usn, jsonReq.id, jsonReq.pw, jsonReq.uname, jsonReq.rrn, jsonReq.sex, jsonReq.phone, jsonReq.email, false, 0, 4.5], (err, result) => {
+        let jsErr = {"error": "false"};
+        if(err) {
+            console.log(err);
+            jsErr.error = "MySQL Error";
+        } else {
+            jsErr.error = "Sign up complete";
+            console.log('/account/signup : Sign Up complet');
+        }
+        result.unshift(jsErr);
+        res.json(JSON.stringify(result));
+    });
+});
+
+app.get('/account/findAccount', (req, res) => {
+
 });
