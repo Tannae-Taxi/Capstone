@@ -26,8 +26,6 @@ let connection = mysql.createConnection({
 app.get('/account/login', (req, res) => {
     let id = req.query.id;
     let pw = req.query.pw;
-    let ip = req.query.ip;
-    console.log(ip);
     let sql = 'select * from User where binary id = ?';
 
     connection.query(sql, id, (err, result) => {
@@ -35,6 +33,7 @@ app.get('/account/login', (req, res) => {
 
         if(err) {
             console.log(err)
+            jsErr.error = "MySQL Error";
         } else {
             if(result.length === 0) {
                 jsErr.error = "등록된 사용자가 아닙니다.";
@@ -43,8 +42,6 @@ app.get('/account/login', (req, res) => {
                 jsErr.error = "비밀번호가 잘못되었습니다.";
                 console.log('/user/login : Password mismatch');
             } else {
-                let sqlIP = "update User set ip = ? where id = cast(? as binary);";
-                connection.query(sqlIP, [ip, id]);
                 console.log('/user/login : Login success');
             }
         }
@@ -52,6 +49,18 @@ app.get('/account/login', (req, res) => {
         res.json(JSON.stringify(result));
     });
 });
+
+app.get('/account/checkID', (req, res) => {
+    console.log('CheckID');
+    let id = req.query.id;
+    console.log(id);
+});
+
+app.post('/account/signup', (req, res) => {
+    console.log('SignUp');
+    let jsonReq = req.body.nameValuePairs;
+    console.log(id);
+})
 
 app.listen(3000, () => {
     console.log('Listening on port 3000');
