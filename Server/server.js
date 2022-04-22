@@ -38,17 +38,17 @@ app.get('/account/login', (req, res) => {
         let jsErr = {"error": "false"};
 
         if(err) {
-            console.log(err)
+            console.log(err);
             jsErr.error = "MySQL Error";
         } else {
             if(result.length === 0) {
                 jsErr.error = "등록된 사용자가 아닙니다.";
-                console.log('/user/login : Not a user');
+                console.log('/account/login : Not a user');
             } else if(pw !== result[0].pw.toString('utf-8')) {
                 jsErr.error = "비밀번호가 잘못되었습니다.";
-                console.log('/user/login : Password mismatch');
+                console.log('/account/login : Password mismatch');
             } else {
-                console.log('/user/login : Login success');
+                console.log('/account/login : Login success');
             }
         }
         result.unshift(jsErr);
@@ -63,11 +63,21 @@ app.get('/account/checkID', (req, res) => {
 });
 
 app.post('/account/signup', (req, res) => {
-    let jsErr = {"error": "false"}
     let jsonReq = req.body.nameValuePairs;
     let sql = 'insert User values(?, ?, ?, ?, ?, ?, ?, ?, false, 0, 4.5)'
     let usn = fun.usnGenerator();
-    console.log(usn);
+    connection.query(sql, [usn, jsonReq.id, jsonReq.pw, jsonReq.uname, jsonReq.rrn, jsonReq.sex, jsonReq.phone, jsonReq.email, false, 0, 4.5], (err, result) => {
+        let jsErr = {"error": "false"};
+        if(err) {
+            console.log(err);
+            jsErr.error = "MySQL Error";
+        } else {
+            jsErr.error = "Sign up complete";
+            console.log('/account/signup : Sign Up complet');
+        }
+        result.unshift(jsErr);
+        res.json(JSON.stringify(result));
+    });
 });
 
 app.get('/account/findAccount', (req, res) => {
