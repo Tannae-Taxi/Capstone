@@ -2,6 +2,7 @@
 
 // << Settings >>
 // < Import >
+const ServerF = require('./serverF.js')
 let mysql = require('mysql');
 let express = require('express');
 let app = express();
@@ -12,12 +13,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // < MySQL Connection >
-let connection = mysql.createConnection({
+connection = mysql.createConnection({
     host: 'localhost',
     user: 'capstone',
     database: 'tannae',
     password: 'zoqtmxhs17',
     port: 3306
+});
+
+// < Listen >
+app.listen(3000, () => {
+    fun = new ServerF(connection);
+    console.log('Listening on port 3000');
 });
 
 // << Reqeust & Response >>
@@ -27,7 +34,6 @@ app.get('/account/login', (req, res) => {
     let id = req.query.id;
     let pw = req.query.pw;
     let sql = 'select * from User where binary id = ?';
-
     connection.query(sql, id, (err, result) => {
         let jsErr = {"error": "false"};
 
@@ -57,11 +63,13 @@ app.get('/account/checkID', (req, res) => {
 });
 
 app.post('/account/signup', (req, res) => {
-    console.log('SignUp');
+    let jsErr = {"error": "false"}
     let jsonReq = req.body.nameValuePairs;
-    console.log(id);
-})
+    let sql = 'insert User values(?, ?, ?, ?, ?, ?, ?, ?, false, 0, 4.5)'
+    let usn = fun.usnGenerator();
+    console.log(usn);
+});
 
-app.listen(3000, () => {
-    console.log('Listening on port 3000');
+app.get('/account/findAccount', (req, res) => {
+
 });
