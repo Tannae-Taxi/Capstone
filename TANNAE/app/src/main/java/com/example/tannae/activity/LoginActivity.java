@@ -51,12 +51,12 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             JSONArray jsArr = new JSONArray(response.body());
                             JSONObject jsObjErr = jsArr.getJSONObject(0);
-                            String err = jsObjErr.getString("error");
-                            if (err.equals("false")) {
+                            String resType = jsObjErr.getString("resType");
+                            if (resType.equals("OK")) {
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
                             } else
-                                Toast.makeText(getApplicationContext(), err, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), resType, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -64,8 +64,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "Server Error", Toast.LENGTH_SHORT).show();
-                        Log.e("Server Error", t.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                        Log.e("Error", t.getMessage());
                     }
                 });
             }
