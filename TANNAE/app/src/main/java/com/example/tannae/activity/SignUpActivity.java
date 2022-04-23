@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
@@ -19,6 +21,7 @@ import retrofit2.Response;
 public class SignUpActivity extends AppCompatActivity {
     private Button btnCheckID, btnSignUp;
     private EditText etID;
+    private boolean availableID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,10 @@ public class SignUpActivity extends AppCompatActivity {
         btnCheckID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!availableID) {
+                    Toast.makeText(getApplicationContext(), "지원되지 않는 ID 형식입니다. 다른 ID를 사용해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Network.service.checkID(etID.getText().toString()).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
