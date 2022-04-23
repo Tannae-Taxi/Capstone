@@ -21,7 +21,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText etID, etPW;
-    private Button btnLogin, btnSignUp;
+    private Button btnLogin, btnFind, btnSignUp;
     private String url = ";";
 
     @Override
@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         etID = findViewById(R.id.et_id);
         etPW = findViewById(R.id.et_pw);
         btnLogin = findViewById(R.id.btn_login);
+        btnFind = findViewById(R.id.btn_find);
         btnSignUp = findViewById(R.id.btn_signup);
     }
 
@@ -69,6 +70,13 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+        btnFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), FindActivity.class);
+                startActivity(intent);
+            }
+        });
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,5 +84,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 }
