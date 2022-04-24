@@ -27,7 +27,7 @@ app.listen(3000, () => {
     console.log('Listening on port 3000');
 });
 
-// << Reqeust & Response >>6
+// << Reqeust & Response >>
 // < Account >
 // Login
 app.get('/account/login', (req, res) => {
@@ -72,7 +72,7 @@ app.get('/account/checkID', (req, res) => {
     });
 });
 
-
+    
 // Sign Up
 app.post('/account/signup', (req, res) => {
     let jsonReq = req.body.nameValuePairs;
