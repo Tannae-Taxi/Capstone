@@ -66,6 +66,8 @@ app.get('/account/checkID', (req, res) => {
                 resType.resType = "이미 등록된 ID입니다.";
             } else
                 console.log('/account/checkID : ID permitted');
+            result.unshift(resType)
+            res.json(JSON.stringify(result));
         }
     });
 });
