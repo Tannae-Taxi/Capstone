@@ -59,15 +59,13 @@ app.get('/account/checkID', (req, res) => {
         if(err) {
             console.log(err.code);
             resType.resType = "Error";
-            res.json(JSON.stringify([resType]));
         } else {
             if(result.length !== 0) {
                 console.log('/account/checkID : Used ID');
                 resType.resType = "이미 등록된 ID입니다.";
             } else
                 console.log('/account/checkID : ID permitted');
-            result.unshift(resType)
-            res.json(JSON.stringify(result));
+            res.json(JSON.stringify(resType));
         }
     });
 });
