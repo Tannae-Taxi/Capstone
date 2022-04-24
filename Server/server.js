@@ -2,7 +2,6 @@
 
 // << Settings >>
 // < Import >
-const ServerF = require('./serverF.js')
 let mysql = require('mysql');
 let express = require('express');
 let app = express();
@@ -23,7 +22,6 @@ connection = mysql.createConnection({
 
 // < Listen >
 app.listen(3000, () => {
-    fun = new ServerF(connection);
     console.log('Listening on port 3000');
 });
 
@@ -65,7 +63,7 @@ app.get('/account/checkID', (req, res) => {
         } else {
             if(result.length !== 0) {
                 console.log('/account/checkID : Used ID');
-                resType.resType = "사용할 수 없는 ID 입니다.";
+                resType.resType = "이미 등록된 ID입니다.";
             } else
                 console.log('/account/checkID : ID permitted');
         }
@@ -76,17 +74,44 @@ app.get('/account/checkID', (req, res) => {
 // Sign Up
 app.post('/account/signup', (req, res) => {
     let jsonReq = req.body.nameValuePairs;
-    let sql = 'insert User values(?, ?, ?, ?, ?, ?, ?, ?, false, 0, 4.5)'
-    let usn = fun.usnGenerator();
-    connection.query(sql, [usn, jsonReq.id, jsonReq.pw, jsonReq.uname, jsonReq.rrn, jsonReq.sex, jsonReq.phone, jsonReq.email, false, 0, 4.5], (err, result) => {
-        let resType = { "resType": "OK" };
-        if (err) {
-            console.log(err);
+
+    let sql = 'select usn from User where usn like "u%" order by usn asc';
+    connection.query(sql, (err, result) => {
+        let resType = {"resType": "OK"};
+        if(err) {
+            console.log(err.code);
             resType.resType = "Error";
-        } else
-            console.log('/account/signup : Sign Up complete');
-        result.unshift(resType);
-        res.json(JSON.stringify(result));
+            res.json(JSON.stringify([resType]));
+        } else {
+            let usnNew = 'u';
+            for (let i = 0; i < result.length; i++) {
+                let usn = result[i].usn;
+                usn = usn.replace('u', '');
+                usn = usn.replace(/0/g, '');
+                if (i + 1 !== Number(usn)) {
+                    for (let j = 0; j < 5 - (i + 1).toString().length; j++)
+                        usnNew += '0';
+                    usnNew += (i + 1);
+                }
+            }
+            if (usnNew === 'u') {
+                let usnNum = result.length + 1;
+                for (let j = 0; j < 5 - usnNum.toString.length; j++)
+                    usnNew += '0';
+                usnNew += usnNum;
+            }
+    
+            sql = 'insert User values(?, ?, ?, ?, ?, ?, ?, ?, false, 0, 4.5)'
+            connection.query(sql, [usnNew, jsonReq.id, jsonReq.pw, jsonReq.uname, jsonReq.rrn, jsonReq.sex, jsonReq.phone, jsonReq.email, false, 0, 4.5], (err, result) => {
+                if (err) {
+                    console.log(err.code);
+                    resType.resType = "Error";
+                    res.json(JSON.stringify([resType]));
+                } else
+                    console.log('/account/signup : Sign Up complete');
+                res.json(JSON.stringify(result));
+            });
+        }
     });
 });
 
@@ -101,17 +126,20 @@ app.get('/account/findAccount', (req, res) => {
     connection.query(sql, uname, (err, result) => {
         let resType = { "resType": "OK" };
         if (err) {
-            console.log(err);
+            console.log(err.code);
             resType.resType = "Error";
-        } else if (result.length === 0) {
-            console.log('/account/findAccount : Not a user');
-            resType.resType = "등록된 사용자가 아닙니다.";
-        } else if (result[0].rrn !== rrn || result[0].phone !== phone || result[0].emial !== email) {
-            console.log('/account/findAccount : Wrong rrn');
-            resType.resType = "잘못된 사용자 정보입니다."
-        } else
-            console.log('/account/findAccount : Found user');
-        result.unshift(resType);
-        res.json(JSON.stringify(result));        
+            res.json(JSON.stringify([resType]));
+        } else {
+            if (result.length === 0) {
+                console.log('/account/findAccount : Not a user');
+                resType.resType = "등록된 사용자가 아닙니다.";
+            } else if (result[0].rrn !== rrn || result[0].phone !== phone || result[0].email !== email) {
+                console.log('/account/findAccount : Wrong rrn');
+                resType.resType = "잘못된 사용자 정보입니다."
+            } else
+                console.log('/account/findAccount : Found user');
+            result.unshift(resType);
+            res.json(JSON.stringify(result));  
+        }
     });
 });

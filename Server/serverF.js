@@ -15,8 +15,6 @@ module.exports = class ServerF {
                     for (let j = 0; j < 5 - (i + 1).toString().length; j++)
                         usnNew += '0';
                     usnNew += (i + 1);
-                    console.log('Generated ' + usnNew);
-                    return usnNew;
                 }
             }
             let usnNew = 'u';
@@ -24,8 +22,6 @@ module.exports = class ServerF {
             for (let j = 0; j < 5 - usnNum.toString.length; j++)
                 usnNew += '0';
             usnNew += usnNum;
-            console.log('Generated ' + usnNew);
-            return usnNew;
         });
     }
 }
