@@ -140,42 +140,54 @@
                 android:ems="10"
                 android:hint="Name"
                 android:inputType="textPersonName"
-                app:layout_constraintBottom_toTopOf="@+id/man"
+                app:layout_constraintBottom_toTopOf="@+id/rg_sex"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.553" />
 
             <EditText
-                android:id="@+id/et_birth"
-                android:layout_width="wrap_content"
+                android:id="@+id/et_rrn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
                 android:layout_marginTop="520dp"
+                android:layout_marginEnd="36dp"
                 android:ems="10"
-                android:hint="Birth"
-                android:inputType="date"
+                android:hint="RRN ( - 기호를 입력하지 마세요.)"
+                android:inputType="number"
+                android:maxLength="14"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <RadioButton
-                android:id="@+id/woman"
+            <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginBottom="16dp"
-                android:text="여"
-                app:layout_constraintBottom_toTopOf="@+id/et_birth"
-                app:layout_constraintStart_toEndOf="@+id/man" />
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                android:id="@+id/rg_sex"
+                app:layout_constraintBottom_toTopOf="@+id/et_rrn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_name">
 
-            <RadioButton
-                android:id="@+id/man"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginBottom="16dp"
-                android:text="남"
-                app:layout_constraintBottom_toTopOf="@+id/et_birth"
-                app:layout_constraintStart_toStartOf="parent" />
+                <RadioButton
+                    android:id="@+id/rb_man"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="남" />
+
+                <RadioButton
+                    android:id="@+id/rb_woman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="여" />
+            </RadioGroup>
 
             <EditText
                 android:id="@+id/et_email"
@@ -187,7 +199,7 @@
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_birth" />
+                app:layout_constraintTop_toBottomOf="@+id/et_rrn" />
 
             <EditText
                 android:id="@+id/et_phone"
