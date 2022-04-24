@@ -45,13 +45,19 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Network.service.login(etID.getText().toString(), etPW.getText().toString()).enqueue(new Callback<String>() {
+                String id = etID.getText().toString();
+                String pw = etPW.getText().toString();
+                if(id.length() == 0 || pw.length() == 0) {
+                    Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Network.service.login(id, pw).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         try {
-                            JSONArray jsArr = new JSONArray(response.body());
-                            JSONObject jsObjErr = jsArr.getJSONObject(0);
-                            String resType = jsObjErr.getString("resType");
+                            JSONArray resArr = new JSONArray(response.body());
+                            JSONObject resObj = resArr.getJSONObject(0);
+                            String resType = resObj.getString("resType");
                             if (resType.equals("OK")) {
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
@@ -70,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+
         btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
