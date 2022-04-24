@@ -22,7 +22,6 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
     private EditText etID, etPW;
     private Button btnLogin, btnFind, btnSignUp;
-    private String url = ";";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
