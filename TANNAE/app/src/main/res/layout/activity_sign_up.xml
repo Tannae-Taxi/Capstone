@@ -178,7 +178,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="36dp"
                     android:layout_marginBottom="16dp"
-                    android:text="남" />
+                    android:text="남"
+                    android:checked="true"/>
 
                 <RadioButton
                     android:id="@+id/rb_woman"

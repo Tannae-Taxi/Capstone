@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Pattern;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,7 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
     private RadioGroup rgSex;
     private EditText etID, etPW, etPWR, etName, etRRN, etPhone, etEmail;
     private TextView tvCheckId, tvCheckPW;
-    private boolean availableID = false, availablePW = false, availablePWR = false, checkedID = false, checkedSex;
+    private boolean availableID = false, checkedID = false, availablePW = false, availablePWR = false, sexType = true, availableEmail = false, availablePhone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,130 +63,99 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void setEventListeners() {
-        /* etID.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
+        etID.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(etID.getText().toString().length() == 0) {
+                String id = etID.getText().toString();
+                if (id.length() == 0) {
                     tvCheckId.setTextColor(0xAA000000);
-                    tvCheckId.setText("영문, 숫자를 조합하여 6자리 이상 작성하세요.");
+                    tvCheckId.setText("영문 혹은 숫자를 사용하여 6자리 이상 작성하세요.");
                     availableID = false;
-                }
-                if(etID.getText().toString().length() >= 6
-                        && etID.getText().toString().matches(".*[a-zA-Z].*")
-                        && etID.getText().toString().matches(".*[0-9].*")
-                        && !etID.getText().toString().matches(".*[가-힣].*")
-                        && !etID.getText().toString().matches(".*[\\W].*")) {
+                } else if (id.length() >= 6 && (id.matches(".*[a-zA-Z].*") || id.matches(".*[0-9].*"))
+                        && !id.matches(".*[가-힣].*") && !id.matches(".*[\\W].*")) {
                     tvCheckId.setTextColor(0xAA0000FF);
                     tvCheckId.setText("사용 가능한 ID 형식입니다.");
                     availableID = true;
-                }
-                tvCheckId.setTextColor(0xAAFF0000);
-                tvCheckId.setText("사용 불가능한 ID 형식입니다.");
-                availableID = false;
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-        */ /* 실시간으로 에딧텍스트 변화에 따라서 텍스트뷰에 변화를 주기 위한 코드인데 잘 안됨...
-            왜 그런지 잘 모르겠음. 원래 방식(아래 코드)대로 하면 backspace키를 눌러야 온키 리스너가 호출됨
-            근데 이건 rrn부분은 또 안그럼. 이거는 inputType의 차이 때문인걸로 추측됨 */
-
-       etID.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(etID.getText().toString().length() == 0) {
-                    tvCheckId.setTextColor(0xAA000000);
-                    tvCheckId.setText("영문, 숫자를 조합하여 6자리 이상 작성하세요.");
+                } else {
+                    tvCheckId.setTextColor(0xAAFF0000);
+                    tvCheckId.setText("사용 불가능한 ID 형식입니다.");
                     availableID = false;
-                    return false;
                 }
-                if(etID.getText().toString().length() >= 6
-                        && etID.getText().toString().matches(".*[a-zA-Z].*")
-                        && etID.getText().toString().matches(".*[0-9].*")
-                        && !etID.getText().toString().matches(".*[가-힣].*")
-                        && !etID.getText().toString().matches(".*[\\W].*")) {
-                    tvCheckId.setTextColor(0xAA0000FF);
-                    tvCheckId.setText("사용 가능한 ID 형식입니다.");
-                    availableID = true;
-                    return false;
-                }
-                tvCheckId.setTextColor(0xAAFF0000);
-                tvCheckId.setText("사용 불가능한 ID 형식입니다.");
-                availableID = false;
-
-                // 여기에 ID 입력 할 때마다의 ID 형식 체크 작성
-                // 형식을 체크했을 때 올바른 ID 형식이면 availableID = true;
-                // 형식을 체크했을 때 올바르지 않은 ID 형식이면 availableID = false;
-                return false;
             }
-        });
-        // etPW 에도 etID 와 동일하게 PW 형식을 체크하는 이벤트 리스너를 작성하고 올바름 여부에 따라 availablePW 체크
-        // 다만, PW를 체크할 때는 PW 확인을 위해 재입력하는 etPWR 또한 고려. 이 때는 availablePWR 사용
 
-        etPW.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(etPW.getText().toString().length() == 0) {
-                    availablePW = false;
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void afterTextChanged(Editable s) { }
+        });
+
+        etPW.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String pw = etPW.getText().toString();
+                if (etPW.getText().toString().length() == 0) {
                     tvCheckPW.setTextColor(0xAA000000);
-                    tvCheckPW.setText("비밀번호는 8자 이상이어야 합니다.");
-                    return false;
-                }
-                if(etPW.getText().length() >= 8
-                        && !etPW.getText().toString().matches(".*[\\W].*")) {
-                    availablePW = true;
+                    tvCheckPW.setText("영문, 숫자를 조합하여 8자리 이상으로 작성하세요.");
+                    availablePW = false;
+                } else if (pw.length() >= 8 && pw.matches(".*[a-zA-Z].*") && pw.matches(".*[0-9].*")
+                        && !pw.matches(".*[가-힣].*") && !pw.matches(".*[\\W].*")) {
                     tvCheckPW.setTextColor(0xAA0000FF);
-                    tvCheckPW.setText(new StringBuffer("사용 가능한 PW입니다.").toString());
-                    return false;
+                    tvCheckPW.setText("사용 가능한 PW 입니다.");
+                    availablePW = true;
+                } else {
+                    tvCheckPW.setTextColor(0xAAFF0000);
+                    tvCheckPW.setText("사용 불가능한 PW 입니다.");
+                    availablePW = false;
                 }
-                tvCheckPW.setTextColor(0xAAFF0000);
-                tvCheckPW.setText(new StringBuffer("사용 불가능한 PW입니다.").toString());
-                return false;
             }
+
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void afterTextChanged(Editable s) { }
         });
-        etPWR.setOnKeyListener(new View.OnKeyListener() {
+
+        etPWR.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (etPWR.getText().length() >= 8) {
-                    if(etPWR.getText().toString().equals(etPW.getText().toString())) {
-                        availablePWR = true;
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String pwr = etPWR.getText().toString();
+                if (!availablePW) {
+                    tvCheckPW.setTextColor(0xAAFF0000);
+                    tvCheckPW.setText("사용 불가능한 PW 입니다.");
+                    availablePWR = false;
+                } else {
+                    if(etPW.getText().toString().equals(pwr)) {
                         tvCheckPW.setTextColor(0xAA0000FF);
                         tvCheckPW.setText("비밀번호가 일치합니다.");
-                        return false;
-                    }
-                    else{
+                        availablePWR = true;
+                    } else {
                         tvCheckPW.setTextColor(0xAAFF0000);
                         tvCheckPW.setText("비밀번호가 불일치합니다.");
-                        return false;
+                        availablePWR = false;
                     }
                 }
-                tvCheckPW.setTextColor(0xAAFF0000);
-                tvCheckPW.setText("비밀번호가 불일치합니다.");
-                return false;
             }
+
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void afterTextChanged(Editable s) { }
         });
+
         rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                checkedSex = (checkedId == R.id.rb_man) ? true : false;
+                sexType = (checkedId == R.id.rb_man) ? true : false;
             }
         });
-        etRRN.setOnKeyListener(new View.OnKeyListener() {
+
+        etRRN.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String rrn = etRRN.getText().toString();
-                if(rrn.length() == 7 && rrn.charAt(rrn.length() - 1) != '-' ) {
+                if (rrn.length() == 7 && rrn.charAt(rrn.length() - 1) != '-') {
                     etRRN.setText(new StringBuffer(rrn).insert(6, '-').toString());
                     etRRN.setSelection(rrn.length() + 1);
                 }
-                return false;
             }
+
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void afterTextChanged(Editable s) { }
         });
+
         btnCheckID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,31 +189,41 @@ public class SignUpActivity extends AppCompatActivity {
                 });
             }
         });
+
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    if (!availableID || availablePW)
+                    if (!availableID || !availablePW)
                         Toast.makeText(getApplicationContext(), "허용되지 않은 ID or PW 형식입니다.", Toast.LENGTH_SHORT).show();
                     else if (!checkedID)
                         Toast.makeText(getApplicationContext(), "ID 중복을 확인하세요.", Toast.LENGTH_SHORT).show();
+                    else if (!availablePWR)
+                        Toast.makeText(getApplicationContext(), "PW가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                    else if (etName.getText().toString().length() == 0)
+                        Toast.makeText(getApplicationContext(), "이름을 입력하세요.", Toast.LENGTH_SHORT).show();
+                    else if (etRRN.getText().toString().length() != 14)
+                        Toast.makeText(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.", Toast.LENGTH_SHORT).show();
+                    else if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString()).matches())
+                        Toast.makeText(getApplicationContext(), "Email 을 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
+                    else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
+                        Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                     else {
                         JSONObject reqObj = new JSONObject();
                         reqObj.put("id", etID.getText().toString());
                         reqObj.put("pw", etPW.getText().toString());
                         reqObj.put("uname", etName.getText().toString());
                         reqObj.put("rrn", etRRN.getText().toString());
-                        reqObj.put("sex", checkedSex);
+                        reqObj.put("sex", sexType);
                         reqObj.put("phone", etPhone.getText().toString());
                         reqObj.put("email", etEmail.getText().toString());
                         Network.service.signup(reqObj).enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
                                 try {
-                                    JSONArray resArr = new JSONArray(response.body());
-                                    JSONObject resObj = resArr.getJSONObject(0);
+                                    JSONObject resObj = new JSONObject(response.body());
                                     String resType = resObj.getString("resType");
-                                    if(resType.equals("OK")) {
+                                    if (resType.equals("OK")) {
                                         Toast.makeText(getApplicationContext(), "가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

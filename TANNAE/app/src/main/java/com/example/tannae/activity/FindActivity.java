@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -11,15 +15,24 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tannae.R;
+import com.example.tannae.network.Network;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class FindActivity extends AppCompatActivity {
-    private TextView tvPersonal, tvMyId, tvMyPw;
-    private EditText etName, etRRN, etEmail, etPhoneNumber, etPinNumber;
-    private RadioGroup rgSex;
+    private TextView tvMyId, tvMyPw;
+    private EditText etName, etRRN, etEmail, etPhone, etPinNumber;
     private Button btnFindAccount, btnCertificate;
 
     private boolean checkedSex;
@@ -32,12 +45,10 @@ public class FindActivity extends AppCompatActivity {
         setEventListeners();
     }
     private void setViews(){
-        tvPersonal = findViewById(R.id.tv_personal);
         etName = findViewById(R.id.et_name);
         etRRN = findViewById(R.id.et_rrn);
-        rgSex = findViewById(R.id.rg_sex);
         etEmail = findViewById(R.id.et_email);
-        etPhoneNumber = findViewById(R.id.et_phone);
+        etPhone = findViewById(R.id.et_phone);
         btnFindAccount= findViewById(R.id.btn_findaccount);
         etPinNumber = findViewById(R.id.et_pinnumber);
         btnCertificate = findViewById(R.id.btn_Certificate);
@@ -46,23 +57,59 @@ public class FindActivity extends AppCompatActivity {
     }
 
     private void setEventListeners(){
-        rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        etRRN.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                checkedSex = (checkedId == R.id.rb_man) ? true : false;
-            }
-        });
-        etRRN.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String rrn = etRRN.getText().toString();
-                if(rrn.length() == 7 && rrn.charAt(rrn.length() - 1) != '-' ) {
+                if (rrn.length() == 7 && rrn.charAt(rrn.length() - 1) != '-') {
                     etRRN.setText(new StringBuffer(rrn).insert(6, '-').toString());
                     etRRN.setSelection(rrn.length() + 1);
                 }
-                return false;
+            }
+
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void afterTextChanged(Editable s) { }
+        });
+
+        btnFindAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (etName.getText().toString().length() == 0)
+                    Toast.makeText(getApplicationContext(), "이름을 입력하세요.", Toast.LENGTH_SHORT).show();
+                else if (etRRN.getText().toString().length() != 14)
+                    Toast.makeText(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.", Toast.LENGTH_SHORT).show();
+                else if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString()).matches())
+                    Toast.makeText(getApplicationContext(), "Email 을 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
+                else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
+                    Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
+                else {
+                    Network.service.findAccount(etName.getText().toString(), etRRN.getText().toString(), etEmail.getText().toString(), etPhone.getText().toString()).enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            try {
+                                JSONArray resArr = new JSONArray(response.body());
+                                JSONObject resObj = resArr.getJSONObject(0);
+                                if(resObj.getString("resType").equals("OK")) {
+                                    JSONObject user = resArr.getJSONObject(1);
+                                    tvMyId.setText(user.getString("id"));
+                                    tvMyPw.setText(user.getString("pw"));
+                                } else {
+                                    Toast.makeText(getApplicationContext(), resObj.getString("resType"), Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Log.e("Error", t.getMessage());
+                        }
+                    });
+                }
+
             }
         });
     }
-
 }
