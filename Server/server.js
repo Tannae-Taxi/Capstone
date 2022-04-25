@@ -106,10 +106,9 @@ app.post('/account/signup', (req, res) => {
                 if (err) {
                     console.log(err.code);
                     resType.resType = "Error";
-                    res.json(JSON.stringify([resType]));
                 } else
                     console.log('/account/signup : Sign Up complete');
-                res.json(JSON.stringify(result));
+                res.json(JSON.stringify(resType));
             });
         }
     });
