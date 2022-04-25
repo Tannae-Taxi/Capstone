@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_account.xml" value="0.264" />
+        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_account_edit.xml" value="0.1" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_detailservicereq.xml" value="0.264" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_find.xml" value="0.264" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_login.xml" value="0.264" />
