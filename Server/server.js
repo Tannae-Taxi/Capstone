@@ -144,3 +144,35 @@ app.get('/account/findAccount', (req, res) => {
         }
     });
 });
+
+// Edit Account
+app.post('/account/editAccount', (req, res) => {
+    let jsonReq = req.body.nameValuePairs;
+
+    let sql = 'update User set id = ?, pw = ?, email = ?, phone = ? where usn = ?';
+    connection.query(sql, [jsonReq.id, jsonReq.pw, jsonReq.email, jsonReq.phone, jsonReq.usn], (err, result) => {
+        let resType = {"resType": "OK"};
+        if (err) {
+            console.log(err.code);
+            resType.resType = "Error";
+        } else 
+            console.log('/account/editAccount : Account is updated');
+        res.json(JSON.stringify(resType));
+    });
+});
+
+// Sign Out
+app.post('/account/signout', (req, res) => {
+    let jsonReq = req.body.nameValuePairs;
+
+    let sql = 'delete from User where usn = ?';
+    connection.query(sql, jsonReq.usn, (err, result) => {
+        let resType = {"resType": "OK"};
+        if (err) {
+            console.log(err.code);
+            resType.resType = "Error";
+        } else
+            console.log('/account/signout : Account is deleted');
+        res.json(JSON.stringify(resType));
+    });
+});
