@@ -23,10 +23,25 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.SignUpActivity"/>
+        <activity android:name=".activity.AccountActivity"/>
+        <activity android:name=".activity.AccountEditActivity"/>
+        <activity android:name=".activity.DetailServiceReqActivity"/>
+        <activity android:name=".activity.FAQActivity"/>
+        <activity android:name=".activity.FAQEditActivity"/>
         <activity android:name=".activity.FindActivity"/>
+        <activity android:name=".activity.HistoryActivity"/>
+        <activity android:name=".activity.LostFoundActivity"/>
+        <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.NavigationActivity"/>
+        <activity android:name=".activity.PaymentActivity"/>
+        <activity android:name=".activity.PointActivity"/>
+        <activity android:name=".activity.QnAActivity"/>
+        <activity android:name=".activity.QnADetailActivity"/>
+        <activity android:name=".activity.QnAEditActivity"/>
+        <activity android:name=".activity.ServiceReqActivity"/>
+        <activity android:name=".activity.ServiceUsingActivity"/>
+        <activity android:name=".activity.SignUpActivity"/>
+        <activity android:name=".activity.VehicleListActivity"/>
 
     </application>
 
