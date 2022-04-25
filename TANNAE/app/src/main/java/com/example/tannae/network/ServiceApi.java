@@ -16,7 +16,7 @@ public interface ServiceApi {
     @POST("/account/signup")                // Sign Up
     Call<String> signup(@Body JSONObject user);
     @GET("/account/findAccount")            // Find Account
-    Call<String> findAccount(@Query("uname") String uname, @Query("rrn") String rrn, @Query("phone") String phone, @Query("email") String email);
+    Call<String> findAccount(@Query("uname") String uname, @Query("rrn") String rrn, @Query("email") String email, @Query("phone") String phone);
     @POST("/account/signout")               // Sign Out
     Call<String> signout(@Body JSONObject user);
     @POST("/account/editAccount")           // Edit Account

@@ -3,8 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_login.xml" value="0.36614583333333334" />
-        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_sign_up.xml" value="0.36614583333333334" />
+        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_account.xml" value="0.264" />
+        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_account_edit.xml" value="0.1" />
+        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_detailservicereq.xml" value="0.264" />
+        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_find.xml" value="0.264" />
+        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_login.xml" value="0.264" />
+        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_main.xml" value="0.27395833333333336" />
+        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
         <entry key="..\:/Users/unsyg/Programming/Capstone/TANNAE/app/src/main/res/layout/activity_login.xml" value="0.30055579307396324" />
         <entry key="..\:/Users/unsyg/Programming/Capstone/TANNAE/app/src/main/res/layout/login_screen.xml" value="0.30055579307396324" />
         <entry key="..\:/Users/unsyg/Programming/TANNAE/app/src/main/res/drawable/button_without_background.xml" value="0.2735" />

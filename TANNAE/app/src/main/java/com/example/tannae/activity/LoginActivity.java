@@ -21,8 +21,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText etID, etPW;
-    private Button btnLogin, btnSignUp;
-    private String url = ";";
+    private Button btnLogin, btnFind, btnSignUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         etID = findViewById(R.id.et_id);
         etPW = findViewById(R.id.et_pw);
         btnLogin = findViewById(R.id.btn_login);
+        btnFind = findViewById(R.id.btn_find);
         btnSignUp = findViewById(R.id.btn_signup);
     }
 
@@ -44,18 +44,24 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Network.service.login(etID.getText().toString(), etPW.getText().toString()).enqueue(new Callback<String>() {
+                String id = etID.getText().toString();
+                String pw = etPW.getText().toString();
+                if(id.length() == 0 || pw.length() == 0) {
+                    Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Network.service.login(id, pw).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         try {
-                            JSONArray jsArr = new JSONArray(response.body());
-                            JSONObject jsObjErr = jsArr.getJSONObject(0);
-                            String err = jsObjErr.getString("error");
-                            if (err.equals("false")) {
+                            JSONArray resArr = new JSONArray(response.body());
+                            JSONObject resObj = resArr.getJSONObject(0);
+                            String resType = resObj.getString("resType");
+                            if (resType.equals("OK")) {
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
                             } else
-                                Toast.makeText(getApplicationContext(), err, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), resType, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -63,12 +69,21 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "Server Error", Toast.LENGTH_SHORT).show();
-                        Log.e("Server Error", t.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                        Log.e("Error", t.getMessage());
                     }
                 });
             }
         });
+
+        btnFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), FindActivity.class);
+                startActivity(intent);
+            }
+        });
+
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,5 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 }

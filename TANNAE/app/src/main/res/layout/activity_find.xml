@@ -52,36 +52,54 @@
                 android:id="@+id/et_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="120dp"
                 android:ems="10"
                 android:hint="Name"
                 android:inputType="textPersonName"
-                app:layout_constraintBottom_toTopOf="@+id/man"
+                app:layout_constraintBottom_toTopOf="@+id/rg_sex"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.808" />
 
             <EditText
-                android:id="@+id/et_birth"
-                android:layout_width="wrap_content"
+                android:id="@+id/et_rrn"
+                android:layout_width="270dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="232dp"
                 android:ems="10"
-                android:hint="Birth"
-                android:inputType="date"
+                android:hint="RRN ( - 기호를 입력하지 마세요.)"
+                android:inputType="number"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:maxLength="14"/>
 
-            <RadioButton
-                android:id="@+id/woman"
+            <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="28dp"
-                android:layout_marginBottom="24dp"
-                android:text="여"
-                app:layout_constraintBottom_toTopOf="@+id/et_birth"
-                app:layout_constraintStart_toEndOf="@+id/man" />
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                android:id="@+id/rg_sex"
+                app:layout_constraintBottom_toTopOf="@+id/et_rrn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_name">
+
+                <RadioButton
+                    android:id="@+id/rb_man"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="남" />
+
+                <RadioButton
+                    android:id="@+id/rb_woman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:text="여" />
+            </RadioGroup>
 
             <EditText
                 android:id="@+id/et_email"
@@ -93,7 +111,7 @@
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_birth" />
+                app:layout_constraintTop_toBottomOf="@+id/et_rrn" />
 
             <EditText
                 android:id="@+id/et_phone"
@@ -107,15 +125,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_email" />
 
-            <RadioButton
-                android:id="@+id/man"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginBottom="24dp"
-                android:text="남"
-                app:layout_constraintBottom_toTopOf="@+id/et_birth"
-                app:layout_constraintStart_toStartOf="parent" />
 
             <Button
                 android:id="@+id/btn_findaccount"
@@ -162,7 +171,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/et_pinnumber" />
 
             <TextView
-                android:id="@+id/TV_mypw"
+                android:id="@+id/tv_mypw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
