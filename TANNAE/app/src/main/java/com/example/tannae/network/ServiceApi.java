@@ -35,6 +35,8 @@ public interface ServiceApi {
     Call<String> getContent();
     @POST("/user/editContent")              // Edit content
     Call<String> editContent(@Body JSONObject content);
+    @POST("/user/postContent")              // Post Content
+    Call<String> postContent(@Body JSONObject content);
 
     /* Driver */
 
