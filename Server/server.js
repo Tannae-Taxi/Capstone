@@ -137,6 +137,8 @@ app.get('/account/findAccount', (req, res) => {
                 resType.resType = "잘못된 사용자 정보입니다."
             } else
                 console.log('/account/findAccount : Found user');
+            result[0].id = String(result[0].id)
+            result[0].pw = String(result[0].pw);
             result.unshift(resType);
             res.json(JSON.stringify(result));  
         }
