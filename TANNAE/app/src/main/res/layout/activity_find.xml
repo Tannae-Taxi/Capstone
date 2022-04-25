@@ -49,7 +49,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/et_name"
+                android:id="@+id/et_name_find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
@@ -57,13 +57,13 @@
                 android:ems="10"
                 android:hint="Name"
                 android:inputType="textPersonName"
-                app:layout_constraintBottom_toTopOf="@+id/rg_sex"
+                app:layout_constraintBottom_toTopOf="@+id/rg_sex_find"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.808" />
 
             <EditText
-                android:id="@+id/et_rrn"
+                android:id="@+id/et_rrn_find"
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
@@ -82,19 +82,19 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
-                android:id="@+id/rg_sex"
-                app:layout_constraintBottom_toTopOf="@+id/et_rrn"
+                android:id="@+id/rg_sex_find"
+                app:layout_constraintBottom_toTopOf="@+id/et_rrn_find"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_name">
+                app:layout_constraintTop_toBottomOf="@+id/et_name_find">
 
                 <RadioButton
-                    android:id="@+id/rb_man"
+                    android:id="@+id/rb_man_find"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="남" />
 
                 <RadioButton
-                    android:id="@+id/rb_woman"
+                    android:id="@+id/rb_woman_find"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
@@ -102,7 +102,7 @@
             </RadioGroup>
 
             <EditText
-                android:id="@+id/et_email"
+                android:id="@+id/et_email_find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
@@ -111,10 +111,10 @@
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_rrn" />
+                app:layout_constraintTop_toBottomOf="@+id/et_rrn_find" />
 
             <EditText
-                android:id="@+id/et_phone"
+                android:id="@+id/et_phone_find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
@@ -123,11 +123,12 @@
                 android:hint="Phone Number"
                 android:inputType="phone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_email" />
+                app:layout_constraintTop_toBottomOf="@+id/et_email_find" />
 
 
             <Button
-                android:id="@+id/btn_findaccount"
+                android:id="@+id/btn_find_account_find"
+                style="@style/Widget.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
@@ -135,10 +136,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_phone" />
+                app:layout_constraintTop_toBottomOf="@+id/et_phone_find" />
 
             <EditText
-                android:id="@+id/et_pinnumber"
+                android:id="@+id/et_pinnumber_find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -147,20 +148,21 @@
                 android:hint="PIN number"
                 android:inputType="textPersonName"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_findaccount" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_find_account_find" />
 
             <Button
-                android:id="@+id/btn_Certificate"
+                android:id="@+id/btn_Certificate_find"
+                style="@style/Widget.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="Certificate"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/et_pinnumber"
-                app:layout_constraintTop_toBottomOf="@+id/btn_findaccount" />
+                app:layout_constraintStart_toEndOf="@+id/et_pinnumber_find"
+                app:layout_constraintTop_toBottomOf="@+id/btn_find_account_find" />
 
             <TextView
-                android:id="@+id/tv_myid"
+                android:id="@+id/tv_myid_find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -168,10 +170,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.488"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_pinnumber" />
+                app:layout_constraintTop_toBottomOf="@+id/et_pinnumber_find" />
 
             <TextView
-                android:id="@+id/tv_mypw"
+                android:id="@+id/tv_mypw_find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -179,7 +181,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.489"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_myid" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_myid_find" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

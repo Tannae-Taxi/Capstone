@@ -19,8 +19,8 @@ public class AccountActivity extends AppCompatActivity {
         setEventListeners();
     }
     private void setViews(){
-        btnEdit = findViewById(R.id.btn_edit);
-        btnSignOut = findViewById(R.id.btn_sign_out);
+        btnEdit = findViewById(R.id.btn_edit_account_edit);
+        btnSignOut = findViewById(R.id.btn_sign_out_account);
     }
     private void setEventListeners(){
         btnEdit.setOnClickListener(new View.OnClickListener() {

@@ -21,6 +21,6 @@ public class MainActivity extends AppCompatActivity {
         BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar);
         FloatingActionButton reqButton = findViewById(R.id.req_button);
 
-        ImageButton ibMap = findViewById(R.id.ib_map);
+        ImageButton ibMap = findViewById(R.id.ib_map_main);
     }
 }

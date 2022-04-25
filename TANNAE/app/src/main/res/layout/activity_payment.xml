@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/btn_back"
+        android:id="@+id/btn_back_payment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_send"
+        android:id="@+id/btn_send_payment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -27,11 +27,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.511"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_Desti" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_receipt"
+        android:id="@+id/rv_receipt_payment"
         android:layout_width="412dp"
         android:layout_height="417dp"
         android:layout_marginTop="92dp"
@@ -43,13 +42,13 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <RatingBar
-        android:id="@+id/rb_driverrating"
+        android:id="@+id/rb_driverrating_payment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="472dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rv_receipt" />
+        app:layout_constraintTop_toTopOf="@+id/rv_receipt_payment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

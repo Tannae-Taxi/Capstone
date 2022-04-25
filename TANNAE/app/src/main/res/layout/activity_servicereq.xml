@@ -7,7 +7,7 @@
 
 
     <ImageButton
-        android:id="@+id/ib_map"
+        android:id="@+id/ib_map_servicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,7 +16,7 @@
         app:srcCompat="@drawable/tannae_logo" />
 
     <EditText
-        android:id="@+id/et_origin"
+        android:id="@+id/et_origin_servicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -27,10 +27,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.194"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ib_map" />
+        app:layout_constraintTop_toBottomOf="@+id/ib_map_servicereq" />
 
     <EditText
-        android:id="@+id/et_Desti"
+        android:id="@+id/et_Desti_servicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -41,10 +41,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.194"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_origin" />
+        app:layout_constraintTop_toBottomOf="@+id/et_origin_servicereq" />
 
     <Button
-        android:id="@+id/btn_end"
+        android:id="@+id/btn_next_detailservicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -55,10 +55,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.902"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_Desti" />
+        app:layout_constraintTop_toBottomOf="@+id/et_Desti_servicereq" />
 
     <Button
-        android:id="@+id/btn_back"
+        android:id="@+id/btn_back_detailservicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

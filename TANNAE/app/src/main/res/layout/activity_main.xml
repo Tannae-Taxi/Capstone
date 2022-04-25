@@ -28,7 +28,7 @@
 
 
         <Switch
-            android:id="@+id/s_drive"
+            android:id="@+id/s_drive_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -36,10 +36,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.882"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ib_map" />
+            app:layout_constraintTop_toBottomOf="@+id/ib_map_main" />
 
         <ImageButton
-            android:id="@+id/ib_map"
+            android:id="@+id/ib_map_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/tannae_logo"

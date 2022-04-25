@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/btn_end"
+        android:id="@+id/btn_next_detailservicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <Button
-        android:id="@+id/btn_back"
+        android:id="@+id/btn_back_detailservicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_predictprice"
+        android:id="@+id/tv_predictprice_detailservicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -39,10 +39,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.062"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_back" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_back_detailservicereq" />
 
     <CheckedTextView
-        android:id="@+id/ctv_detaila"
+        android:id="@+id/ctv_detaila_detailservicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -52,10 +52,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.122"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_predictprice" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_predictprice_detailservicereq" />
 
     <CheckedTextView
-        android:id="@+id/ctv_detailb"
+        android:id="@+id/ctv_detailb_detailservicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -64,10 +64,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.219"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ctv_detaila" />
+        app:layout_constraintTop_toBottomOf="@+id/ctv_detaila_detailservicereq" />
 
     <CheckedTextView
-        android:id="@+id/ctv_detailc"
+        android:id="@+id/ctv_detailc_detailservicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -76,10 +76,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.219"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ctv_detailb" />
+        app:layout_constraintTop_toBottomOf="@+id/ctv_detailb_detailservicereq" />
 
     <EditText
-        android:id="@+id/et_detailreq"
+        android:id="@+id/et_detailreq_detailservicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
