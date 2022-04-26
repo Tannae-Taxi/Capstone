@@ -22,7 +22,7 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void setViews(){
-        btnEdit = findViewById(R.id.btn_edit_account_edit);
+        btnEdit = findViewById(R.id.btn_edit_account);
         btnSignOut = findViewById(R.id.btn_sign_out_account);
         tvID = findViewById(R.id.tv_id_account);
         tvPW = findViewById(R.id.tv_pw_account);

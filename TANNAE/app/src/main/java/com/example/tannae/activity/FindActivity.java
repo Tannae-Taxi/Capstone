@@ -41,9 +41,9 @@ public class FindActivity extends AppCompatActivity {
     private void setViews(){
         etName = findViewById(R.id.et_name_find);
         etRRN = findViewById(R.id.et_rrn_find);
-        etEmail = findViewById(R.id.et_email_account_edit_find);
-        etPhone = findViewById(R.id.et_phone_account_edit_find);
-        btnFindAccount= findViewById(R.id.btn_find_account_find);
+        etEmail = findViewById(R.id.et_email_find);
+        etPhone = findViewById(R.id.et_phone_find);
+        btnFindAccount= findViewById(R.id.btn_find_find);
         etPinNumber = findViewById(R.id.et_pinnumber_find);
         btnCertificate = findViewById(R.id.btn_Certificate_find);
         tvMyId = findViewById(R.id.tv_myid_find);

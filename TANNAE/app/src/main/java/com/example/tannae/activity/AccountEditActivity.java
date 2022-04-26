@@ -24,8 +24,8 @@ public class AccountEditActivity extends AppCompatActivity {
         etID = findViewById(R.id.et_id_account_edit);
         etPW = findViewById(R.id.et_pw_account_edit);
         etCheckPW = findViewById(R.id.et_checkpw_account_edit);
-        etEmail = findViewById(R.id.et_email_account_edit_find);
-        etPhone = findViewById(R.id.et_phone_account_edit_find);
+        etEmail = findViewById(R.id.et_email_account_edit);
+        etPhone = findViewById(R.id.et_phone_account_edit);
         tvCheckID = findViewById(R.id.tv_checkid_account_edit); // 아이디가 2개로 뜸
         btnEdit = findViewById(R.id.btn_edit_account_edit);
         tvCheckPW = findViewById(R.id.tv_retrypw_account_edit);
