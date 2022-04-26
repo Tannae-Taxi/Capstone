@@ -1,6 +1,7 @@
 package com.example.tannae.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -37,6 +38,10 @@ public class FindActivity extends AppCompatActivity {
         setContentView(R.layout.activity_find);
         setViews();
         setEventListeners();
+
+        Toolbar toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
     private void setViews(){
         etName = findViewById(R.id.et_name_find);
@@ -44,8 +49,6 @@ public class FindActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.et_email_find);
         etPhone = findViewById(R.id.et_phone_find);
         btnFindAccount= findViewById(R.id.btn_find_find);
-        etPinNumber = findViewById(R.id.et_pinnumber_find);
-        btnCertificate = findViewById(R.id.btn_Certificate_find);
         tvMyId = findViewById(R.id.tv_myid_find);
         tvMyPw = findViewById(R.id.tv_mypw_find);
     }
