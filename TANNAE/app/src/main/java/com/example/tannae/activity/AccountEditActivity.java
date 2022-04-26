@@ -1,7 +1,6 @@
 package com.example.tannae.activity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,16 +21,16 @@ public class AccountEditActivity extends AppCompatActivity {
         setEventListeners();
     }
     private void setViews(){
-        etID = findViewById(R.id.et_id);
-        etPW = findViewById(R.id.et_pw);
-        etCheckPW = findViewById(R.id.et_checkpw);
-        etEmail = findViewById(R.id.et_email);
-        etPhone = findViewById(R.id.et_phone);
-        tvCheckID = findViewById(R.id.tv_checkid); // 아이디가 2개로 뜸
-        btnEdit = findViewById(R.id.btn_edit);
-        tvCheckPW = findViewById(R.id.tv_retrypw);
-        btnCheckID = findViewById(R.id.btn_checkid); // 아이디가 2개로 뜸
-        btnEdit = findViewById(R.id.btn_edit);
+        etID = findViewById(R.id.et_id_account_edit);
+        etPW = findViewById(R.id.et_pw_account_edit);
+        etCheckPW = findViewById(R.id.et_checkpw_account_edit);
+        etEmail = findViewById(R.id.et_email_account_edit_find);
+        etPhone = findViewById(R.id.et_phone_account_edit_find);
+        tvCheckID = findViewById(R.id.tv_checkid_account_edit); // 아이디가 2개로 뜸
+        btnEdit = findViewById(R.id.btn_edit_account_edit);
+        tvCheckPW = findViewById(R.id.tv_retrypw_account_edit);
+        btnCheckID = findViewById(R.id.btn_checkid_account_edit); // 아이디가 2개로 뜸
+        btnEdit = findViewById(R.id.btn_edit_account_edit);
     }
     private void setEventListeners(){
     }

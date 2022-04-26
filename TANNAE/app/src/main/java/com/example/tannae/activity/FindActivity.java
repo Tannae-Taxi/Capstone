@@ -1,26 +1,20 @@
 package com.example.tannae.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.NestedScrollView;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.MaterialToolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,15 +39,15 @@ public class FindActivity extends AppCompatActivity {
         setEventListeners();
     }
     private void setViews(){
-        etName = findViewById(R.id.et_name);
-        etRRN = findViewById(R.id.et_rrn);
-        etEmail = findViewById(R.id.et_email);
-        etPhone = findViewById(R.id.et_phone);
-        btnFindAccount= findViewById(R.id.btn_findaccount);
-        etPinNumber = findViewById(R.id.et_pinnumber);
-        btnCertificate = findViewById(R.id.btn_Certificate);
-        tvMyId = findViewById(R.id.tv_myid);
-        tvMyPw = findViewById(R.id.tv_mypw);
+        etName = findViewById(R.id.et_name_find);
+        etRRN = findViewById(R.id.et_rrn_find);
+        etEmail = findViewById(R.id.et_email_account_edit_find);
+        etPhone = findViewById(R.id.et_phone_account_edit_find);
+        btnFindAccount= findViewById(R.id.btn_find_account_find);
+        etPinNumber = findViewById(R.id.et_pinnumber_find);
+        btnCertificate = findViewById(R.id.btn_Certificate_find);
+        tvMyId = findViewById(R.id.tv_myid_find);
+        tvMyPw = findViewById(R.id.tv_mypw_find);
     }
 
     private void setEventListeners(){

@@ -3,6 +3,7 @@ package com.example.tannae.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +12,7 @@ import com.example.tannae.R;
 public class AccountActivity extends AppCompatActivity {
     private Button btnEdit;
     private Button btnSignOut;
+    private TextView tvID, tvPW, tvSex, tvUname, tvBirth, tvEmail, tvPhone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,10 +20,19 @@ public class AccountActivity extends AppCompatActivity {
         setViews();
         setEventListeners();
     }
+
     private void setViews(){
-        btnEdit = findViewById(R.id.btn_edit);
-        btnSignOut = findViewById(R.id.btn_sign_out);
+        btnEdit = findViewById(R.id.btn_edit_account_edit);
+        btnSignOut = findViewById(R.id.btn_sign_out_account);
+        tvID = findViewById(R.id.tv_id_account);
+        tvPW = findViewById(R.id.tv_pw_account);
+        tvSex = findViewById(R.id.tv_sex_account);
+        tvUname = findViewById(R.id.tv_uname_account);
+        tvBirth = findViewById(R.id.tv_birth_account);
+        tvEmail = findViewById(R.id.tv_email_account);
+        tvPhone = findViewById(R.id.tv_phone_account);
     }
+
     private void setEventListeners(){
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override

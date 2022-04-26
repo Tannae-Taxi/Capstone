@@ -33,8 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        etID = findViewById(R.id.et_id);
-        etPW = findViewById(R.id.et_pw);
+        etID = findViewById(R.id.et_id_account_edit);
+        etPW = findViewById(R.id.et_pw_account_edit);
         btnLogin = findViewById(R.id.btn_login);
         btnFind = findViewById(R.id.btn_find);
         btnSignUp = findViewById(R.id.btn_signup);

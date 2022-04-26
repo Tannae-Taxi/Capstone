@@ -28,7 +28,7 @@
 
 
         <Switch
-            android:id="@+id/s_drive"
+            android:id="@+id/s_drive_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -36,29 +36,32 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.882"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ib_map" />
+            app:layout_constraintTop_toBottomOf="@+id/ib_map_main" />
 
         <ImageButton
-            android:id="@+id/ib_map"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/tannae_logo"
+            android:id="@+id/ib_map_main"
+            android:layout_width="290dp"
+            android:layout_height="442dp"
+            android:src="@drawable/map"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="100dp"
+            tools:layout_editor_absoluteX="-28dp"
+            tools:layout_editor_absoluteY="210dp">
+
+            <!-- Scrollable content -->
+
+        </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Note: A RecyclerView can also be used -->
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="100dp">
-
-        <!-- Scrollable content -->
-
-    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"

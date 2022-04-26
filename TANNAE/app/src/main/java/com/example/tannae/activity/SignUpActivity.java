@@ -4,28 +4,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.KeyListener;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,22 +39,26 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         setViews();
         setEventListeners();
+
+        Toolbar toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setViews() {
-        btnCheckID = findViewById(R.id.btn_checkID);
+        btnCheckID = findViewById(R.id.btn_checkID_sign_up);
         btnSignUp = findViewById(R.id.btn_sign_up);
-        rgSex = findViewById(R.id.rg_sex);
-        etID = findViewById(R.id.et_id);
-        etPW = findViewById(R.id.et_pw);
-        etPWR = findViewById(R.id.et_checkpw);
-        etName = findViewById(R.id.et_name);
-        etRRN = findViewById(R.id.et_rrn);
-        etPhone = findViewById(R.id.et_phone);
-        etEmail = findViewById(R.id.et_email);
+        rgSex = findViewById(R.id.rg_sex_sign_up);
+        etID = findViewById(R.id.et_id_sign_up);
+        etPW = findViewById(R.id.et_pw_sign_up);
+        etPWR = findViewById(R.id.et_checkpw_sign_up);
+        etName = findViewById(R.id.et_name_sign_up);
+        etRRN = findViewById(R.id.et_rrn_sign_up);
+        etPhone = findViewById(R.id.et_phone_sign_up);
+        etEmail = findViewById(R.id.et_email_sign_up);
 
-        tvCheckId = findViewById(R.id.tv_checkID);
-        tvCheckPW = findViewById(R.id.tv_retrypw);
+        tvCheckId = findViewById(R.id.tv_checkID_sign_up);
+        tvCheckPW = findViewById(R.id.tv_retrypw_sign_up);
     }
 
     private void setEventListeners() {
@@ -138,7 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
         rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                sexType = (checkedId == R.id.rb_man) ? true : false;
+                sexType = (checkedId == R.id.rb_man_find) ? true : false;
             }
         });
 

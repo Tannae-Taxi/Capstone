@@ -22,12 +22,12 @@ public class DetailServiceReqActivity extends AppCompatActivity {
         setEventListeners();
     }
     private void setViews(){
-        btnBack = findViewById(R.id.btn_back);
-        btnEnd = findViewById(R.id.btn_end);
-        ctvDetaila = findViewById(R.id.ctv_detaila);
-        ctvDetailb = findViewById(R.id.ctv_detailb);
-        ctvDetailc = findViewById(R.id.ctv_detailc);
-        etDetailReq = findViewById(R.id.et_detailreq);
+        btnBack = findViewById(R.id.btn_back_detailservicereq);
+        btnEnd = findViewById(R.id.btn_next_detailservicereq);
+        ctvDetaila = findViewById(R.id.ctv_detaila_detailservicereq);
+        ctvDetailb = findViewById(R.id.ctv_detailb_detailservicereq);
+        ctvDetailc = findViewById(R.id.ctv_detailc_detailservicereq);
+        etDetailReq = findViewById(R.id.et_detailreq_detailservicereq);
     }
     private void setEventListeners(){
     }

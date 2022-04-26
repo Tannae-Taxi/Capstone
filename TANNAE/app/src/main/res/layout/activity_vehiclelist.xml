@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/btn_back"
+        android:id="@+id/btn_back_vehiclelist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_end"
+        android:id="@+id/btn_next_vehiclelist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -29,7 +29,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_vehiclelist"
+        android:id="@+id/rv_vehiclelist_vehiclelist"
         android:layout_width="409dp"
         android:layout_height="601dp"
         tools:layout_editor_absoluteY="65dp" />
