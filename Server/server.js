@@ -373,3 +373,23 @@ app.post('/user/postContent', (req, res) => {
         }
     });
 });
+
+// Socket.io
+app.io.on('connection', (socket) => {
+    // Driver
+    socket.on('serviceOn', (vsn) => {
+        socket.join(vsn);
+    });
+    socket.on('serviceOff', (vsn) => {
+        socket.leave(vsn);
+    });
+    socket.on('serviceEnd', (vsn) => {
+        
+    });
+
+    // Passenger
+    socket.on('serviceReq', (vsn) => {
+        socket.join(vsn);
+    });
+    
+});
