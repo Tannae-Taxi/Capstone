@@ -5,6 +5,7 @@
 let mysql = require('mysql');
 let express = require('express');
 let app = express();
+app.io = require('socket.io')();
 let bodyParser = require('body-parser');
 
 // < Uses >
@@ -172,6 +173,12 @@ app.post('/account/signout', (req, res) => {
             console.log('/account/signout : Account is deleted');
         res.json(JSON.stringify(resType));
     });
+});
+
+// < Passenger >
+// Get available vehicle
+app.get('/passenger/getVehicle', (req, res) => {
+
 });
 
 // < User >
