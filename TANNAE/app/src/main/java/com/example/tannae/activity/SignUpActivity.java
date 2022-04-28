@@ -96,11 +96,11 @@ public class SignUpActivity extends AppCompatActivity {
                 } else if (pw.length() >= 8 && pw.matches(".*[a-zA-Z].*") && pw.matches(".*[0-9].*")
                         && !pw.matches(".*[가-힣].*") && !pw.matches(".*[\\W].*")) {
                     tvCheckPW.setTextColor(0xAA0000FF);
-                    tvCheckPW.setText("사용 가능한 PW 입니다.");
+                    tvCheckPW.setText("사용 가능한 PW 형식입니다.");
                     availablePW = true;
                 } else {
                     tvCheckPW.setTextColor(0xAAFF0000);
-                    tvCheckPW.setText("사용 불가능한 PW 입니다.");
+                    tvCheckPW.setText("사용 불가능한 PW 형식입니다.");
                     availablePW = false;
                 }
             }
@@ -115,7 +115,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String pwr = etPWR.getText().toString();
                 if (!availablePW) {
                     tvCheckPW.setTextColor(0xAAFF0000);
-                    tvCheckPW.setText("사용 불가능한 PW 입니다.");
+                    tvCheckPW.setText("사용 불가능한 PW 형식입니다.");
                     availablePWR = false;
                 } else {
                     if(etPW.getText().toString().equals(pwr)) {
@@ -170,10 +170,10 @@ public class SignUpActivity extends AppCompatActivity {
                             String resType = resObj.getString("resType");
                             if (resType.equals("OK")) {
                                 checkedID = true;
-                                Toast.makeText(getApplicationContext(), "사용 가능한 ID 입니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "사용 가능한 ID 형식입니다.", Toast.LENGTH_SHORT).show();
                             } else {
                                 checkedID = false;
-                                Toast.makeText(getApplicationContext(), "이미 사용 중인 ID 입니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "이미 사용 중인 ID 형식입니다.", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
