@@ -25,7 +25,6 @@
         </activity>
         <activity android:name=".activity.AccountActivity"/>
         <activity android:name=".activity.AccountEditActivity"/>
-        <activity android:name=".activity.DetailServiceReqActivity"/>
         <activity android:name=".activity.FAQActivity"/>
         <activity android:name=".activity.FAQEditActivity"/>
         <activity android:name=".activity.FindActivity"/>
