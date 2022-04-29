@@ -39,6 +39,6 @@ public interface ServiceApi {
     Call<String> postContent(@Body JSONObject content);
 
     /* Passenger */
-    @GET("/passenger/getVehicle")           // Get Vehicles
-    Call<String> getVehicle(@Query("op") String op, @Query("dp") String dp);
+    @GET("/passenger/reqVehicles")          // Request Vehicle list
+    Call<String> getVehicle(@Query("usn") String usn, @Query("op") String op, @Query("dp") String dp);
 }
