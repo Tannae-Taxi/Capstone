@@ -46,7 +46,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String id = etID.getText().toString();
                 String pw = etPW.getText().toString();
-                if(id.length() == 0 || pw.length() == 0) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                /*if(id.length() == 0 || pw.length() == 0) {
                     Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -72,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                         Log.e("Error", t.getMessage());
                     }
-                });
+                });*/
             }
         });
 
