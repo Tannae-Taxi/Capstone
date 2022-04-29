@@ -5,7 +5,8 @@
 let mysql = require('mysql');
 let express = require('express');
 let app = express();
-app.io = require('socket.io')();
+let server = require('http').createServer(app);
+let io = require('socket.io')(server);
 let bodyParser = require('body-parser');
 
 // < Uses >
@@ -22,7 +23,7 @@ connection = mysql.createConnection({
 });
 
 // < Listen >
-app.listen(3000, () => {
+server.listen(3000, () => {
     console.log('Listening on port 3000');
 });
 
@@ -173,12 +174,6 @@ app.post('/account/signout', (req, res) => {
             console.log('/account/signout : Account is deleted');
         res.json(JSON.stringify(resType));
     });
-});
-
-// < Passenger >
-// Get available vehicle
-app.get('/passenger/getVehicle', (req, res) => {
-
 });
 
 // < User >
@@ -374,22 +369,42 @@ app.post('/user/postContent', (req, res) => {
     });
 });
 
-// Socket.io
-app.io.on('connection', (socket) => {
-    // Driver
-    socket.on('serviceOn', (vsn) => {
-        socket.join(vsn);
-    });
-    socket.on('serviceOff', (vsn) => {
-        socket.leave(vsn);
-    });
-    socket.on('serviceEnd', (vsn) => {
-        
+// < Passenger >
+// Get available vehicle
+app.get('/passenger/reqVehicles', (req, res) => {
+
+});
+
+// < Driver >
+
+// << Socket.io >>
+io.on('connection', (socket) => {
+    // < Connection >
+    // Connected
+    console.log(`Socket connected : ${socket.id}`);
+
+    // Disconnected
+    socket.on('disconnect', () => {
+        console.log(`Socket disconnected : ${socket.id}`);
     });
 
-    // Passenger
-    socket.on('serviceReq', (vsn) => {
+    // < Driver >
+    // Start service
+    socket.on('serviceOn', (usn, vsn) => {
+        console.log(`Driver ${usn} started service on vehicle ${vsn}`);
         socket.join(vsn);
     });
-    
+
+    // Stop service
+    socket.on('serviceOff', (usn, vsn) => {
+        console.log(`Drive ${usn} stopped service on vehicle ${vsn}`);
+        socket.leave(vsn);
+    });
+
+    // < Passenger >
+    // Request Service
+    socket.on('Request Service', (usn, vsn) => {
+        console.log(`Passenger ${usn} requested service to vehicle ${vsn}`);
+        socket.join(vsn);
+    });
 });
