@@ -13,7 +13,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE User( USN STRING, " +
+        db.execSQL("CREATE TABLE User(_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "USN STRING," +
                 "ID STRING," +
                 "PW STRING," +
                 "UNAME STRING," +
@@ -28,6 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS User");
+        onCreate(db);
     }
 }
