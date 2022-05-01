@@ -89,11 +89,11 @@ public class SignUpActivity extends AppCompatActivity {
                 } else if (id.length() >= 6 && (id.matches(".*[a-zA-Z].*") || id.matches(".*[0-9].*"))
                         && !id.matches(".*[가-힣].*") && !id.matches(".*[\\W].*")) {
                     tvCheckId.setTextColor(0xAA0000FF);
-                    tvCheckId.setText("사용 가능한 ID 형식입니다.");
+                    tvCheckId.setText("사용 가능한 ID 형식이에요.");
                     availableID = true;
                 } else {
                     tvCheckId.setTextColor(0xAAFF0000);
-                    tvCheckId.setText("사용 불가능한 ID 형식입니다.");
+                    tvCheckId.setText("사용 불가능한 ID 형식이에요.");
                     availableID = false;
                 }
             }
@@ -112,11 +112,11 @@ public class SignUpActivity extends AppCompatActivity {
                 } else if (pw.length() >= 8 && pw.matches(".*[a-zA-Z].*") && pw.matches(".*[0-9].*")
                         && !pw.matches(".*[가-힣].*") && !pw.matches(".*[\\W].*")) {
                     tvCheckPW.setTextColor(0xAA0000FF);
-                    tvCheckPW.setText("사용 가능한 PW 형식입니다.");
+                    tvCheckPW.setText("사용 가능한 PW 형식이에요.");
                     availablePW = true;
                 } else {
                     tvCheckPW.setTextColor(0xAAFF0000);
-                    tvCheckPW.setText("사용 불가능한 PW 형식입니다.");
+                    tvCheckPW.setText("사용 불가능한 PW 형식이에요.");
                     availablePW = false;
                 }
             }
@@ -131,16 +131,16 @@ public class SignUpActivity extends AppCompatActivity {
                 String pwr = etPWR.getText().toString();
                 if (!availablePW) {
                     tvCheckPW.setTextColor(0xAAFF0000);
-                    tvCheckPW.setText("사용 불가능한 PW 형식입니다.");
+                    tvCheckPW.setText("사용 불가능한 PW 형식이에요.");
                     availablePWR = false;
                 } else {
                     if(etPW.getText().toString().equals(pwr)) {
                         tvCheckPW.setTextColor(0xAA0000FF);
-                        tvCheckPW.setText("비밀번호가 일치합니다.");
+                        tvCheckPW.setText("비밀번호가 일치해요.");
                         availablePWR = true;
                     } else {
                         tvCheckPW.setTextColor(0xAAFF0000);
-                        tvCheckPW.setText("비밀번호가 불일치합니다.");
+                        tvCheckPW.setText("비밀번호가 일치하지 않아요.");
                         availablePWR = false;
                     }
                 }
@@ -175,7 +175,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!availableID) {
-                    Toast.makeText(getApplicationContext(), "지원되지 않는 ID 형식입니다. \n다른 ID를 사용해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "지원되지 않는 ID 형식이에요. \n다른 ID를 사용해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Network.service.checkID(etID.getText().toString()).enqueue(new Callback<String>() {
@@ -186,10 +186,10 @@ public class SignUpActivity extends AppCompatActivity {
                             String resType = resObj.getString("resType");
                             if (resType.equals("OK")) {
                                 checkedID = true;
-                                Toast.makeText(getApplicationContext(), "사용 가능한 ID 형식입니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "사용 가능한 ID에요.", Toast.LENGTH_SHORT).show();
                             } else {
                                 checkedID = false;
-                                Toast.makeText(getApplicationContext(), "이미 사용 중인 ID 형식입니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "이미 사용 중인 ID에요.", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -210,11 +210,11 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     if (!availableID || !availablePW)
-                        Toast.makeText(getApplicationContext(), "허용되지 않은 ID or PW 형식입니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "허용되지 않은 ID or PW 형식이에요.", Toast.LENGTH_SHORT).show();
                     else if (!checkedID)
                         Toast.makeText(getApplicationContext(), "ID 중복을 확인하세요.", Toast.LENGTH_SHORT).show();
                     else if (!availablePWR)
-                        Toast.makeText(getApplicationContext(), "PW가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "PW가 일치하지 않아요.", Toast.LENGTH_SHORT).show();
                     else if (etName.getText().toString().length() == 0)
                         Toast.makeText(getApplicationContext(), "이름을 입력하세요.", Toast.LENGTH_SHORT).show();
                     else if (etRRN.getText().toString().length() != 14)
@@ -248,7 +248,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         db.execSQL("INSERT INTO User('phone') values('" + etPhone.getText().toString() + "');");
                                         db.execSQL("INSERT INTO User('email') values('" + etEmail.getText().toString() + "');"); */
 
-                                        Toast.makeText(getApplicationContext(), "가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "가입이 완료되었어요.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         startActivity(intent);

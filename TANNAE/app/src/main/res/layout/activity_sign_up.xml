@@ -156,7 +156,7 @@
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="비밀번호는 8자 이상이어야 합니다."
+        android:text="비밀번호는 8자 이상 입력하세요."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -187,11 +187,11 @@
 
     <EditText
         android:id="@+id/et_rrn_sign_up"
-        android:layout_width="match_parent"
+        android:layout_width="315dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:ems="10"
-        android:hint="RRN ( - 기호를 입력하지 마세요.)"
+        android:hint="주민등록번호 ( - 기호를 입력하지 마세요)"
         android:inputType="number"
         android:maxLength="14"
         app:layout_constraintStart_toStartOf="parent"
