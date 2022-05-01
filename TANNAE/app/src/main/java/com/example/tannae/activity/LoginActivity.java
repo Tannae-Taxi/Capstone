@@ -23,6 +23,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etID, etPW;
     private Button btnLogin, btnFind, btnSignUp;
 
+    private long backKeyPressedTime = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Network.service = RetrofitClient.getClient().create(ServiceApi.class);
@@ -48,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                 String pw = etPW.getText().toString();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+                finish();
                 /*if(id.length() == 0 || pw.length() == 0) {
                     Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
                     return;
@@ -94,5 +97,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+    public void onBackPressed(){
+        if(System.currentTimeMillis() > backKeyPressedTime + 2000){
+            backKeyPressedTime = System.currentTimeMillis();
+            Toast.makeText(this,"\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(System.currentTimeMillis() <= backKeyPressedTime + 2000){
+            finish();
+        }
     }
 }

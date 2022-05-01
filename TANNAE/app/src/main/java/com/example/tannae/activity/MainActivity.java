@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.example.tannae.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private Switch sDrive;
     private ImageButton ibMap;
     private FloatingActionButton reqBtn;
+
+    private long backKeyPressedTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,5 +56,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    public void onBackPressed(){
+        if(System.currentTimeMillis() > backKeyPressedTime + 2000){
+            backKeyPressedTime = System.currentTimeMillis();
+            Toast.makeText(this,"\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(System.currentTimeMillis() <= backKeyPressedTime + 2000){
+            finish();
+        }
     }
 }
