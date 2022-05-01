@@ -3,6 +3,8 @@ package com.example.tannae.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,11 +13,13 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
+import com.example.tannae.sqlite.DBHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,10 +31,15 @@ import retrofit2.Response;
 
 public class FindActivity extends AppCompatActivity {
     private TextView tvMyId, tvMyPw;
-    private EditText etName, etRRN, etEmail, etPhone, etPinNumber;
-    private Button btnFindAccount, btnCertificate;
+    private EditText etName, etRRN, etEmail, etPhone;
+    private Button btnFindAccount;
+    private RadioGroup rgSex;
 
-    private boolean checkedSex;
+    private boolean sexType = true;
+
+    /* private DBHelper dbHelper;
+    private SQLiteDatabase db;
+    private Cursor cursor; */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +54,7 @@ public class FindActivity extends AppCompatActivity {
     }
     private void setViews(){
         etName = findViewById(R.id.et_name_find);
+        rgSex = findViewById(R.id.rg_sex_find);
         etRRN = findViewById(R.id.et_rrn_find);
         etEmail = findViewById(R.id.et_email_find);
         etPhone = findViewById(R.id.et_phone_find);
@@ -68,6 +78,13 @@ public class FindActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) { }
         });
 
+        rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                sexType = (checkedId == R.id.rb_man_find) ? true : false;
+            }
+        });
+
         btnFindAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +97,22 @@ public class FindActivity extends AppCompatActivity {
                 else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
                     Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                 else {
+                    /* dbHelper = new DBHelper(FindActivity.this,1);
+                    db = dbHelper.getReadableDatabase();
+                    cursor = db.rawQuery("SELECT * FROM User",null);
+                    boolean dbSexValue = cursor.getInt(6) > 0;
+
+                    if( etName.getText().toString() == cursor.getString(4)
+                            && sexType == dbSexValue
+                            && etRRN.getText().toString() == cursor.getString(5)
+                            && etEmail.getText().toString() == cursor.getString(8)
+                            && etPhone.getText().toString() == cursor.getString(7)){
+                        tvMyId.setText(cursor.getString(2));
+                        tvMyPw.setText(cursor.getString(3));
+                    }else {
+                        Toast.makeText(getApplicationContext(), "일치하는 회원정보가 없습니다.\n 입력하신 정보가 올바른 지 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    } */
+
                     Network.service.findAccount(etName.getText().toString(), etRRN.getText().toString(), etEmail.getText().toString(), etPhone.getText().toString()).enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
@@ -88,10 +121,10 @@ public class FindActivity extends AppCompatActivity {
                                 JSONObject resObj = resArr.getJSONObject(0);
                                 if(resObj.getString("resType").equals("OK")) {
                                     JSONObject user = resArr.getJSONObject(1);
-                                    tvMyId.setText(user.getString("id"));
-                                    tvMyPw.setText(user.getString("pw"));
+                                    tvMyId.setText("ID: " + user.getString("id"));
+                                    tvMyPw.setText("PW: " + user.getString("pw"));
                                 } else {
-                                    Toast.makeText(getApplicationContext(), resObj.getString("resType"), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "일치하는 회원정보가 없습니다.\n입력하신 정보가 올바른 지 확인해주세요."/* resObj.getString("resType")*/, Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

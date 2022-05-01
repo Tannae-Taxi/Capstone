@@ -76,13 +76,13 @@
                 android:maxLength="14"/>
 
             <RadioGroup
+                android:id="@+id/rg_sex_find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
-                android:id="@+id/rg_sex_find"
                 app:layout_constraintBottom_toTopOf="@+id/et_rrn_find"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_name_find">
@@ -91,6 +91,7 @@
                     android:id="@+id/rb_man_find"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="남" />
 
                 <RadioButton
@@ -123,8 +124,8 @@
                 android:hint="Phone Number"
                 android:inputType="phone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_email_find" />
-
+                app:layout_constraintTop_toBottomOf="@+id/et_email_find"
+                android:maxLength="11" />
 
             <Button
                 android:id="@+id/btn_find_find"
@@ -143,7 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
-                android:text="ThisisMyID"
+                android:text="ID:"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_find_find" />
@@ -153,7 +154,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
-                android:text="ThisIsMyPW"
+                android:text="PW:"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"

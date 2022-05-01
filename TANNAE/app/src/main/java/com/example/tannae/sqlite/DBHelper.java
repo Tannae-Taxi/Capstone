@@ -7,24 +7,24 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class DBHelper extends SQLiteOpenHelper {
-    public DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    public DBHelper(@Nullable Context context, int version) {
+        super(context, "TTdb", null, version);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE User(_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "USN STRING," +
-                "ID STRING," +
-                "PW STRING," +
-                "UNAME STRING," +
-                "RRN STRING," +
-                "SEX BOOLEAN," +
-                "PHONE STRING," +
-                "EMAIL STRING," +
-                "DRIVE BOOLEAN," +
-                "POINTS INT," +
-                "SCORE FLOAT)");
+                "usn STRING," +
+                "id STRING," +
+                "pw STRING," +
+                "uname STRING," +
+                "rrn STRING," +
+                "sex BOOLEAN," +
+                "phone STRING," +
+                "email STRING," +
+                "drive BOOLEAN," +
+                "points INTEGER," +
+                "score FLOAT)");
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.example.tannae.activity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
+import com.example.tannae.sqlite.DBHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,16 +36,29 @@ public class SignUpActivity extends AppCompatActivity {
     private TextView tvCheckId, tvCheckPW;
     private boolean availableID = false, checkedID = false, availablePW = false, availablePWR = false, sexType = true, availableEmail = false, availablePhone = false;
 
+    /* p0rivate DBHelper dbHelper;
+    private SQLiteDatabase db; */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        /* dbHelper = new DBHelper(this,1);
+        try{
+            db = dbHelper.getReadableDatabase();
+        }catch (SQLiteException e) {
+            db = dbHelper.getWritableDatabase();
+        }
+        dbHelper.onCreate(db); */
+
         setViews();
         setEventListeners();
 
         Toolbar toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     private void setViews() {
@@ -137,7 +153,7 @@ public class SignUpActivity extends AppCompatActivity {
         rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                sexType = (checkedId == R.id.rb_man_find) ? true : false;
+                sexType = (checkedId == R.id.rb_man_sign_up) ? true : false;
             }
         });
 
@@ -216,6 +232,7 @@ public class SignUpActivity extends AppCompatActivity {
                         reqObj.put("sex", sexType);
                         reqObj.put("phone", etPhone.getText().toString());
                         reqObj.put("email", etEmail.getText().toString());
+
                         Network.service.signup(reqObj).enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
@@ -223,6 +240,14 @@ public class SignUpActivity extends AppCompatActivity {
                                     JSONObject resObj = new JSONObject(response.body());
                                     String resType = resObj.getString("resType");
                                     if (resType.equals("OK")) {
+                                        /* db.execSQL("INSERT INTO User('id') values('" + etID.getText().toString() + "');");
+                                        db.execSQL("INSERT INTO User('pw') values('" + etPW.getText().toString() + "';");
+                                        db.execSQL("INSERT INTO User('uname') values('" + etName.getText().toString() + "');");
+                                        db.execSQL("INSERT INTO User('rrn') values('" + etRRN.getText().toString() + "');");
+                                        db.execSQL("INSERT INTO User('sex') values('" + sexType + "');");
+                                        db.execSQL("INSERT INTO User('phone') values('" + etPhone.getText().toString() + "');");
+                                        db.execSQL("INSERT INTO User('email') values('" + etEmail.getText().toString() + "');"); */
+
                                         Toast.makeText(getApplicationContext(), "가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
