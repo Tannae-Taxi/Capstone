@@ -40,5 +40,5 @@ public interface ServiceApi {
 
     /* Passenger */
     @GET("/passenger/reqVehicles")          // Request Vehicle list
-    Call<String> getVehicle(@Query("usn") String usn, @Query("op") String op, @Query("dp") String dp);
+    Call<String> getVehicle(@Query("originX") double originX, @Query("originY") double oy, @Query("destX") double destX, @Query("destY") double destY, @Query("share") boolean share);
 }
