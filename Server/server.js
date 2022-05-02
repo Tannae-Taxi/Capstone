@@ -8,6 +8,7 @@ let app = express();
 let server = require('http').createServer(app);
 let io = require('socket.io')(server);
 let bodyParser = require('body-parser');
+let request = require('request');
 
 // < Uses >
 app.use(bodyParser.json());
@@ -37,7 +38,7 @@ app.get('/account/login', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        let [result, field] = await connection.query('select * from User where binary id = ?', data.id);
+        let [result, field] = await connection.query(`select * from User where binary id = ${data.id}`);
         if (result.length === 0) {
             console.log('/account/login : Not a user');
             resType.resType = "등록된 사용자가 아닙니다.";
@@ -60,7 +61,7 @@ app.get('/account/checkID', async (req, res) => {
     let data = req.query;
     let resType = { "resType": "OK" };
     try {
-        let [result, field] = await connection.query('select * from User where binary id = ?', data.id);
+        let [result, field] = await connection.query(`select * from User where binary id = ${data.id}`);
         if (result.length !== 0) {
             console.log('/account/checkID : Used ID');
             resType.resType = "이미 등록된 ID입니다.";
@@ -72,7 +73,6 @@ app.get('/account/checkID', async (req, res) => {
     }
     res.json(JSON.stringify(resType));
 });
-
 
 // Sign Up
 app.post('/account/signup', async (req, res) => {
@@ -98,7 +98,7 @@ app.post('/account/signup', async (req, res) => {
                 usnNew += '0';
             usnNew += usnNum;
         }
-        [result, field] = await connection.query('insert User values(?, ?, ?, ?, ?, ?, ?, ?, false, 0, 4.5)', [usnNew, data.id, data.pw, data.uname, data.rrn, data.sex, data.phone, data.email, false, 0, 4.5]);
+        await connection.query(`insert User values(${usnNew}, ${data.id}, ${data.pw}, ${data.uname}, ${data.rrn}, ${data.sex}, ${data.phone}, ${data.email}, ${false}, ${0}, ${4.5})`);
         console.log('/account/signup : Sign Up complete');
     } catch (err) {
         console.log(err.code);
@@ -112,7 +112,7 @@ app.get('/account/findAccount', async (req, res) => {
     let data = req.query;
     let resType = { "resType": "OK" };
     try {
-        let [result, fields] = await connection.query('select * from User where uname = ?', data.uname);
+        let [result, fields] = await connection.query(`select * from User where uname = ${data.uname}`);
         if (result.length === 0) {
             console.log('/account/findAccount : Not a user');
             resType.resType = "등록된 사용자가 아닙니다.";
@@ -138,7 +138,7 @@ app.post('/account/editAccount', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        let [result, field] = await connection.query('update User set id = ?, pw = ?, email = ?, phone = ? where usn = ?', [data.id, data.pw, data.email, data.phone, data.usn]);
+        await connection.query(`update User set id = ${data.id}, pw = ${data.pw}, email = ${data.email}, phone = ${data.phone} where usn = ${data.usn}`);
         console.log('/account/editAccount : Account is updated');
     } catch (err) {
         console.log(err.code);
@@ -153,7 +153,7 @@ app.post('/account/signout', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        let [result, field] = await connection.query('delete from User where usn = ?', data.usn);
+        await connection.query(`delete from User where usn = ${data.usn}`);
         console.log('/account/signout : Account is deleted');
     } catch (err) {
         console.log(err.code);
@@ -169,7 +169,7 @@ app.post('/user/charge', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        let [result, field] = await connection.query('update User set point = ? where usn = ?', [data.point, data.usn]);
+        await connection.query(`update User set point = ${data.point} where usn = ${data.usn}`);
         console.log('/user/charge : Point us updated');
     } catch (err) {
         console.log(err.code);
@@ -184,7 +184,7 @@ app.get('/user/getHistory', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        let [result, field] = await connection.query('select * from History where usn = ?', data.usn);
+        let [result, field] = await connection.query(`select * from History where usn = ${data.usn}`);
         if (result.length == 0) {
             console.log('/user/getHistory : No history');
             resType.resType = "이용 현황이 없습니다.";
@@ -244,8 +244,8 @@ app.post('/user/postLost', async (req, res) => {
             lsnNew += lsnNum;
         }
 
-        [result, field] = await connection.query('select vsn from Vehicle where usn = ?', data.usn);
-        [result, field] = await connection.query('insert Lost value(?, ?, ?, ?)', [lsnNew, data.date, data.type, result.vsn]);
+        [result, field] = await connection.query(`select vsn from Vehicle where usn = ${data.usn}`);
+        await connection.query(`insert Lost value(${lsnNew}, ${data.date}, ${data.type}, ${result.vsn})`);
         console.log('/user/postLost : Lost inserted');
     } catch (err) {
         console.log(err.code);
@@ -279,7 +279,7 @@ app.post('/user/editContent', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        let [result, field] = await connection.query('update Content set title = ?, cont = ? where usn = ?', [data.title, data.cont, data.usn]);
+        await connection.query(`update Content set title = ${data.title}, cont = ${data.cont} where usn = ${data.usn}`);
         console.log('/user/editContent : Content updated');
     } catch (err) {
         console.log(err.code);
@@ -312,7 +312,7 @@ app.post('/user/postContent', async (req, res) => {
                 lsnNew += '0';
             csnNew += csnNum;
         }
-        [result, field] = await connection.query('insert Content values(?, ?, ?, ?, ?)', [csnNew, data.title, data.cont, null, data.usn]);
+        await connection.query(`insert Content values(${csnNew}, ${data.title}, ${data.cont}, ${null}, ${data.usn})`);
         console.log('/user/postContent : Content inserted');
     } catch (err) {
         console.log(err.code);
@@ -328,32 +328,43 @@ app.get('/passenger/reqVehicles', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        let sql = data.share ? 'select * from Path' : 'select * from Vehicle where state = true and num = 0 and usn is not null';
-        let [result, field] = data.share ? await connection.query(sql) : await connection.query(sql);
         if (data.share) {
-            for (let i = 0; i < result.length; i++) {
-                let [resultP, fieldP] = await connection.query('select pos from Vehicle where vsn = ?', result[i].vpsn);
-                let pos = resultP.pos.split(' ');
-                let distance = Math.sqrt(Math.pow(data.originX - pos[0], 2) + Math.pow(data.originY - pos[1], 2));
-                if (distance < 30)  //////////////////////////////////////////////////// 최대 수치 정하기
-                    delete result[i];
-            }
+            
         } else {
+            let [result, field] = await connection.query('select * from Vehicle where state = true and num = 0');
+            let nearestIndex = -1;
+            let minDistance = Number.MAX_VALUE;
             for (let i = 0; i < result.length; i++) {
                 let pos = result[i].pos.split(' ');
                 let distance = Math.sqrt(Math.pow(data.originX - pos[0], 2) + Math.pow(data.originY - pos[1], 2));
-                if (distance < 30)  //////////////////////////////////////////////////// 최대 수치 정하기
-                    delete result[i];
+                nearestIndex = distance < minDistance ? i : nearestIndex;
+                minDistance = distance < minDistance ? distance : minDistance;
             }
+            result = result[nearestIndex];
+            connection.query(`update Vehicle set num = 1 where vsn = ${result.vsn}`);
+            // Path insert
+            let jsonPath = createPathData();
+            jsonPath.origin.x = result.pos.split(' ')[0];
+            jsonPath.origin.y = result.pos.split(' ')[1];
+            jsonPath.destination.uname = data.destN;
+            jsonPath.destination.x = data.destX;
+            jsonPath.destination.y = data.destY;
+            jsonPath.waypoints = [
+                {
+                    "name": data.originN,
+                    "x": data.originX,
+                    "y": data.originY
+                }
+            ];
+            let jsonReq = createRequest(jsonPath);
+            let waypoints = getPath(jsonReq).summary.waypoints;
+            result.unshift(resType);
+            res.json(JSON.stringify(result));
         }
-        if (result.length == 0) {
-            console.log('/passenger/reqVehicles : No available vehicle exists');
-            resType.resType = "이용 가능한 차량이 없습니다.";
-        }
-        result.unshift(resType);
-        res.json(JSON.stringify(result));
     } catch (err) {
-
+        console.log(err.code);
+        resType.resType = "Error";
+        res.json(JSON.stringify([resType]));
     }
 });
 
@@ -390,3 +401,51 @@ io.on('connection', (socket) => {
         socket.join(vsn);
     });
 });
+
+
+// << Functions >>
+// < Create Path Data >
+function createPathData() {
+    let jsonData = {
+        "origin": {
+            "name": "Vehicle",
+            "x": 0,
+            "y": 0
+        },
+        "destination": {
+            "x": 0,
+            "y": 0
+        },
+        "waypoints": [
+
+        ],
+        "priority": "RECOMMEND",
+        "car_fuel": "GASOLINE",
+        "car_hipass": false,
+        "alternatives": false,
+        "road_details": false,
+        "summary": true
+    }
+    return jsonData;
+}
+
+// < Create Request Data >
+function createRequest(jsonData) {
+    let jsonReq = {
+        headers: {
+            'content-type': 'application/json',
+            'authorization': 'KakaoAK d94b5c67305d6a10b3e43e5da881e7cf'
+        },
+        url: 'https://apis-navi.kakaomobility.com/v1/waypoints/directions',
+        body: jsonData,
+        json: true
+    }
+}
+
+// < Get Path Info >
+function getPath(jsonReq) {
+    request.post(jsonReq, (err, httpResponse, body) => {
+        console.log(body.routes[0]);
+        return body.routes[0];
+    })
+}
