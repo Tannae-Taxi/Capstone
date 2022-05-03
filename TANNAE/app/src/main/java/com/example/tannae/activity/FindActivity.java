@@ -34,10 +34,6 @@ public class FindActivity extends AppCompatActivity {
 
     private boolean genderType = true;
 
-    /* private DBHelper dbHelper;
-    private SQLiteDatabase db;
-    private Cursor cursor; */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,22 +90,6 @@ public class FindActivity extends AppCompatActivity {
                 else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
                     Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                 else {
-                    /* dbHelper = new DBHelper(FindActivity.this,1);
-                    db = dbHelper.getReadableDatabase();
-                    cursor = db.rawQuery("SELECT * FROM User",null);
-                    boolean dbGenderValue = cursor.getInt(6) > 0;
-
-                    if( etName.getText().toString() == cursor.getString(4)
-                            && genderType == dbGenderValue
-                            && etRRN.getText().toString() == cursor.getString(5)
-                            && etEmail.getText().toString() == cursor.getString(8)
-                            && etPhone.getText().toString() == cursor.getString(7)){
-                        tvMyId.setText(cursor.getString(2));
-                        tvMyPw.setText(cursor.getString(3));
-                    }else {
-                        Toast.makeText(getApplicationContext(), "일치하는 회원정보가 없습니다.\n 입력하신 정보가 올바른 지 확인해주세요.", Toast.LENGTH_SHORT).show();
-                    } */
-
                     Network.service.findAccount(etName.getText().toString(), etRRN.getText().toString(), etEmail.getText().toString(), etPhone.getText().toString()).enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {

@@ -33,22 +33,10 @@ public class SignUpActivity extends AppCompatActivity {
     private TextView tvCheckId, tvCheckPW;
     private boolean availableID = false, checkedID = false, availablePW = false, availablePWR = false, genderType = true, availableEmail = false, availablePhone = false;
 
-    /* p0rivate DBHelper dbHelper;
-    private SQLiteDatabase db; */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
-        /* dbHelper = new DBHelper(this,1);
-        try{
-            db = dbHelper.getReadableDatabase();
-        }catch (SQLiteException e) {
-            db = dbHelper.getWritableDatabase();
-        }
-        dbHelper.onCreate(db); */
-
         setViews();
         setEventListeners();
 
@@ -237,14 +225,6 @@ public class SignUpActivity extends AppCompatActivity {
                                     JSONObject resObj = new JSONObject(response.body());
                                     String resType = resObj.getString("resType");
                                     if (resType.equals("OK")) {
-                                        /* db.execSQL("INSERT INTO User('id') values('" + etID.getText().toString() + "');");
-                                        db.execSQL("INSERT INTO User('pw') values('" + etPW.getText().toString() + "';");
-                                        db.execSQL("INSERT INTO User('uname') values('" + etName.getText().toString() + "');");
-                                        db.execSQL("INSERT INTO User('rrn') values('" + etRRN.getText().toString() + "');");
-                                        db.execSQL("INSERT INTO User('gender') values('" + genderType + "');");
-                                        db.execSQL("INSERT INTO User('phone') values('" + etPhone.getText().toString() + "');");
-                                        db.execSQL("INSERT INTO User('email') values('" + etEmail.getText().toString() + "');"); */
-
                                         Toast.makeText(getApplicationContext(), "가입이 완료되었어요.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
