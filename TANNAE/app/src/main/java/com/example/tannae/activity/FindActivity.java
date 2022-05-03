@@ -3,8 +3,6 @@ package com.example.tannae.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,7 +17,6 @@ import android.widget.Toast;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
-import com.example.tannae.sqlite.DBHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,9 +30,9 @@ public class FindActivity extends AppCompatActivity {
     private TextView tvMyId, tvMyPw;
     private EditText etName, etRRN, etEmail, etPhone;
     private Button btnFindAccount;
-    private RadioGroup rgSex;
+    private RadioGroup rgGender;
 
-    private boolean sexType = true;
+    private boolean genderType = true;
 
     /* private DBHelper dbHelper;
     private SQLiteDatabase db;
@@ -54,7 +51,7 @@ public class FindActivity extends AppCompatActivity {
     }
     private void setViews(){
         etName = findViewById(R.id.et_name_find);
-        rgSex = findViewById(R.id.rg_sex_find);
+        rgGender = findViewById(R.id.rg_gender_find);
         etRRN = findViewById(R.id.et_rrn_find);
         etEmail = findViewById(R.id.et_email_find);
         etPhone = findViewById(R.id.et_phone_find);
@@ -78,10 +75,10 @@ public class FindActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) { }
         });
 
-        rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                sexType = (checkedId == R.id.rb_man_find) ? true : false;
+                genderType = (checkedId == R.id.rb_man_find) ? true : false;
             }
         });
 
@@ -100,10 +97,10 @@ public class FindActivity extends AppCompatActivity {
                     /* dbHelper = new DBHelper(FindActivity.this,1);
                     db = dbHelper.getReadableDatabase();
                     cursor = db.rawQuery("SELECT * FROM User",null);
-                    boolean dbSexValue = cursor.getInt(6) > 0;
+                    boolean dbGenderValue = cursor.getInt(6) > 0;
 
                     if( etName.getText().toString() == cursor.getString(4)
-                            && sexType == dbSexValue
+                            && genderType == dbGenderValue
                             && etRRN.getText().toString() == cursor.getString(5)
                             && etEmail.getText().toString() == cursor.getString(8)
                             && etPhone.getText().toString() == cursor.getString(7)){

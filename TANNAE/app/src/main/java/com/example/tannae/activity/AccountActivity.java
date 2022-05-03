@@ -12,7 +12,7 @@ import com.example.tannae.R;
 public class AccountActivity extends AppCompatActivity {
     private Button btnEdit;
     private Button btnSignOut;
-    private TextView tvID, tvPW, tvSex, tvUname, tvBirth, tvEmail, tvPhone;
+    private TextView tvID, tvPW, tvGender, tvUname, tvBirth, tvEmail, tvPhone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +26,7 @@ public class AccountActivity extends AppCompatActivity {
         btnSignOut = findViewById(R.id.btn_sign_out_account);
         tvID = findViewById(R.id.tv_id_account);
         tvPW = findViewById(R.id.tv_pw_account);
-        tvSex = findViewById(R.id.tv_sex_account);
+        tvGender = findViewById(R.id.tv_gender_account);
         tvUname = findViewById(R.id.tv_uname_account);
         tvBirth = findViewById(R.id.tv_birth_account);
         tvEmail = findViewById(R.id.tv_email_account);

@@ -57,7 +57,7 @@
                 android:ems="10"
                 android:hint="Name"
                 android:inputType="textPersonName"
-                app:layout_constraintBottom_toTopOf="@+id/rg_sex_find"
+                app:layout_constraintBottom_toTopOf="@+id/rg_gender_find"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.808" />
@@ -76,7 +76,7 @@
                 android:maxLength="14"/>
 
             <RadioGroup
-                android:id="@+id/rg_sex_find"
+                android:id="@+id/rg_gender_find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"

@@ -1,8 +1,6 @@
 package com.example.tannae.activity;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
-import com.example.tannae.sqlite.DBHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,10 +28,10 @@ import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
     private Button btnCheckID, btnSignUp;
-    private RadioGroup rgSex;
+    private RadioGroup rgGender;
     private EditText etID, etPW, etPWR, etName, etRRN, etPhone, etEmail;
     private TextView tvCheckId, tvCheckPW;
-    private boolean availableID = false, checkedID = false, availablePW = false, availablePWR = false, sexType = true, availableEmail = false, availablePhone = false;
+    private boolean availableID = false, checkedID = false, availablePW = false, availablePWR = false, genderType = true, availableEmail = false, availablePhone = false;
 
     /* p0rivate DBHelper dbHelper;
     private SQLiteDatabase db; */
@@ -64,7 +61,7 @@ public class SignUpActivity extends AppCompatActivity {
     private void setViews() {
         btnCheckID = findViewById(R.id.btn_checkID_sign_up);
         btnSignUp = findViewById(R.id.btn_sign_up);
-        rgSex = findViewById(R.id.rg_sex_sign_up);
+        rgGender = findViewById(R.id.rg_gender_sign_up);
         etID = findViewById(R.id.et_id_sign_up);
         etPW = findViewById(R.id.et_pw_sign_up);
         etPWR = findViewById(R.id.et_checkpw_sign_up);
@@ -150,10 +147,10 @@ public class SignUpActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) { }
         });
 
-        rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                sexType = (checkedId == R.id.rb_man_sign_up) ? true : false;
+                genderType = (checkedId == R.id.rb_man_sign_up) ? true : false;
             }
         });
 
@@ -229,7 +226,7 @@ public class SignUpActivity extends AppCompatActivity {
                         reqObj.put("pw", etPW.getText().toString());
                         reqObj.put("uname", etName.getText().toString());
                         reqObj.put("rrn", etRRN.getText().toString());
-                        reqObj.put("sex", sexType);
+                        reqObj.put("gender", genderType);
                         reqObj.put("phone", etPhone.getText().toString());
                         reqObj.put("email", etEmail.getText().toString());
 
@@ -244,7 +241,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         db.execSQL("INSERT INTO User('pw') values('" + etPW.getText().toString() + "';");
                                         db.execSQL("INSERT INTO User('uname') values('" + etName.getText().toString() + "');");
                                         db.execSQL("INSERT INTO User('rrn') values('" + etRRN.getText().toString() + "');");
-                                        db.execSQL("INSERT INTO User('sex') values('" + sexType + "');");
+                                        db.execSQL("INSERT INTO User('gender') values('" + genderType + "');");
                                         db.execSQL("INSERT INTO User('phone') values('" + etPhone.getText().toString() + "');");
                                         db.execSQL("INSERT INTO User('email') values('" + etEmail.getText().toString() + "');"); */
 
