@@ -321,53 +321,6 @@ app.post('/user/postContent', async (req, res) => {
     res.json(JSON.stringify(resType));
 });
 
-// < Passenger >
-// Get available vehicle
-app.get('/passenger/reqVehicles', async (req, res) => {
-    let data = req.query;
-    let resType = { "resType": "OK" };
-
-    try {
-        if (data.share) {
-            
-        } else {
-            let [result, field] = await connection.query('select * from Vehicle where state = true and num = 0');
-            let nearestIndex = -1;
-            let minDistance = Number.MAX_VALUE;
-            for (let i = 0; i < result.length; i++) {
-                let pos = result[i].pos.split(' ');
-                let distance = Math.sqrt(Math.pow(data.originX - pos[0], 2) + Math.pow(data.originY - pos[1], 2));
-                nearestIndex = distance < minDistance ? i : nearestIndex;
-                minDistance = distance < minDistance ? distance : minDistance;
-            }
-            result = result[nearestIndex];
-            connection.query(`update Vehicle set num = 1 where vsn = ${result.vsn}`);
-            // Path insert
-            let jsonPath = createPathData();
-            jsonPath.origin.x = result.pos.split(' ')[0];
-            jsonPath.origin.y = result.pos.split(' ')[1];
-            jsonPath.destination.uname = data.destN;
-            jsonPath.destination.x = data.destX;
-            jsonPath.destination.y = data.destY;
-            jsonPath.waypoints = [
-                {
-                    "name": data.originN,
-                    "x": data.originX,
-                    "y": data.originY
-                }
-            ];
-            let jsonReq = createRequest(jsonPath);
-            let waypoints = getPath(jsonReq).summary.waypoints;
-            result.unshift(resType);
-            res.json(JSON.stringify(result));
-        }
-    } catch (err) {
-        console.log(err.code);
-        resType.resType = "Error";
-        res.json(JSON.stringify([resType]));
-    }
-});
-
 // < Driver >
 
 // << Socket.io >>
@@ -396,17 +349,49 @@ io.on('connection', (socket) => {
 
     // < Passenger >
     // Request Service
-    socket.on('Request Service', (usn, vsn) => {
-        console.log(`Passenger ${usn} requested service to vehicle ${vsn}`);
-        socket.join(vsn);
+    socket.on('requestVehicle', async (data) => {
+        let resType = { "resType": "OK" };
+        try {
+            if (data.share) {
+
+            } else {
+                // Get Vehicle
+                let [vehicle, field] = await connection.query('select * from Vehicle where state = true and num = 0');
+                let nearestIndex = -1;
+                let minDistance = Number.MAX_VALUE;
+                for (let i = 0; i < vehicle.length; i++) {
+                    let pos = vehicle[i].pos.split(' ');
+                    let distance = Math.sqrt(Math.pow(data.start.x - pos[0], 2) + Math.pow(data.start.y - pos[1], 2));
+                    nearestIndex = distance < minDistance ? i : nearestIndex;
+                    minDistance = distance < minDistance ? distance : minDistance;
+                }
+                vehicle = vehicle[nearestIndex];
+                //await connection.query(`update Vehicle set num = 1 where vsn = "${vehicle.vsn}"`);
+                socket.join(vehicle.vsn);
+
+                // Get Path
+                let path = createPath();
+                path = setSinglePath(path, vehicle, data);
+                let pathReq = createRequest(path);
+                path = await getPath(pathReq);
+                console.log(path);
+
+                // Insert Path
+                let pathDB = getPathDB(path, data, vehicle.vsn);
+                await connection.query(`insert Path values('${vehicle.vsn}', null, '${JSON.stringify(pathDB)}', ${path.summary.fare.taxi}, false)`); // 문자열로 인식하기 때문에 오류 발생
+            }
+        } catch (err) {
+            console.log(err);
+            resType.resType = "Error";
+        }
     });
 });
 
 
 // << Functions >>
 // < Create Path Data >
-function createPathData() {
-    let jsonData = {
+function createPath() {
+    return {
         "origin": {
             "name": "Vehicle",
             "x": 0,
@@ -426,26 +411,83 @@ function createPathData() {
         "road_details": false,
         "summary": true
     }
-    return jsonData;
+}
+
+// < Set Single Path Data >
+function setSinglePath(path, vehicle, data) {
+    let position = vehicle.pos.split(' ');
+    path.origin.x = 127.11024293202674;//position[0];
+    path.origin.y = 37.394348634049784;//position[1];
+    path.destination.name = data.end.name;
+    path.destination.x = data.end.x;
+    path.destination.y = data.end.y;
+    path.waypoints = [
+        {
+            "name": data.start.name,
+            "x": data.start.x,
+            "y": data.start.y
+        }
+    ];
+    return path;
+}
+
+function getPathDB(path, data, vsn) {
+    let summary = path.summary;
+    let sections = path.sections;
+    return [
+        {
+            "name": summary.origin.name,
+            "x": summary.origin.x,
+            "y": summary.origin.y,
+            "distance": 0,
+            "duration": 0,
+            "type": "taxi",
+            "usn": vsn,
+        },
+        {
+            "name": summary.waypoints[0].name,
+            "x": summary.waypoints[0].x,
+            "y": summary.waypoints[0].y,
+            "distance": sections[0].distance,
+            "duration": sections[0].duration,
+            "type": "start",
+            "usn": data.usn
+        },
+        {
+            "name": summary.destination.name,
+            "x": summary.destination.x,
+            "y": summary.destination.y,
+            "distance": sections[1].distance,
+            "duration": sections[1].duration,
+            "type": "end",
+            "usn": data.usn
+        }
+    ]
+
 }
 
 // < Create Request Data >
-function createRequest(jsonData) {
-    let jsonReq = {
+function createRequest(path) {
+    return {
         headers: {
             'content-type': 'application/json',
             'authorization': 'KakaoAK d94b5c67305d6a10b3e43e5da881e7cf'
         },
         url: 'https://apis-navi.kakaomobility.com/v1/waypoints/directions',
-        body: jsonData,
+        body: path,
         json: true
     }
 }
 
 // < Get Path Info >
-function getPath(jsonReq) {
-    request.post(jsonReq, (err, httpResponse, body) => {
-        console.log(body.routes[0]);
-        return body.routes[0];
-    })
+function getPath(pathReq) {
+    return new Promise((resolve, reject) => {
+        request.post(pathReq, (err, httpResponse, body) => {
+            if (!err && httpResponse.statusCode == 200) {
+                resolve(body.routes[0]);
+            } else {
+                reject(err);
+            }
+        });
+    });
 }

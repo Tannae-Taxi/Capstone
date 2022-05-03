@@ -1,48 +1,5 @@
 let request = require('request');
 
-function createPathData() {
-    let jsonData = {
-        "origin": {
-            "name": "Vehicle",
-            "x": 0,
-            "y": 0
-        },
-        "distination": {
-            "x": 0,
-            "y": 0
-        },
-        "waypoints": [
-
-        ],
-        "priority": "RECOMMEND",
-        "car_fuel": "GASOLINE",
-        "car_hipass": false,
-        "alternatives": false,
-        "road_details": false,
-        "summary": true
-    }
-    return jsonData;
-}
-
-function createRequest(jsonData) {
-    let jsonReq = {
-        headers: {
-            'content-type': 'application/json',
-            'authorization': 'KakaoAK d94b5c67305d6a10b3e43e5da881e7cf'
-        },
-        url: 'https://apis-navi.kakaomobility.com/v1/waypoints/directions',
-        body: jsonData,
-        json: true
-    }
-}
-
-function getPath(jsonReq) {
-    request.post(jsonReq, (err, httpResponse, body) => {
-        console.log(body.routes[0]);
-        return body.routes[0];
-    })
-}
-
 let jsonData = {
     "origin": {
         "name": "Vehicle",
@@ -80,5 +37,5 @@ let jsonReq = {
 }
 
 request.post(jsonReq, (err, httpResponse, body) => {
-    console.log(body.routes[0]);
+    console.log(body.routes[0].sections[0]);
 })
