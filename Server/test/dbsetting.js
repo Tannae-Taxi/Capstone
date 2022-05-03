@@ -10,18 +10,10 @@ connection = mysql.createConnection({
 });
 
 // Vehicle tempory setting
-let sql = 'insert Vehicle values(?, false, 0, "0 0", ?, null)';
 for (let i = 0; i < 100; i++) {
     let vsn = 'v';
     for (let j = 0; j < 5 - (i + 1).toString().length; j++)
         vsn += '0';
     vsn += (i + 1).toString();
-    
-    connection.query(sql, [vsn, 'temp' + vsn], (err, result) => {
-        if (err) {
-            console.log(err.code)
-        } else {
-            console.log(vsn);
-        }
-    });
+    connection.query(`insert Vehicle values('${vsn}', false, '0 0', 'temp${vsn}', null, null, 0, null, null, null)`);
 }
