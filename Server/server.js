@@ -36,9 +36,9 @@ server.listen(3000, () => {
 app.get('/account/login', async (req, res) => {
     let data = req.query;
     let resType = { "resType": "OK" };
-
+    console.log(data.id);
     try {
-        let [result, field] = await connection.query(`select * from User where binary id = ${data.id}`);
+        let [result, field] = await connection.query(`select * from User where binary id = '${data.id}'`);
         if (result.length === 0) {
             console.log('/account/login : Not a user');
             resType.resType = "등록된 사용자가 아닙니다.";
@@ -61,7 +61,7 @@ app.get('/account/checkID', async (req, res) => {
     let data = req.query;
     let resType = { "resType": "OK" };
     try {
-        let [result, field] = await connection.query(`select * from User where binary id = ${data.id}`);
+        let [result, field] = await connection.query(`select * from User where binary id = '${data.id}'`);
         if (result.length !== 0) {
             console.log('/account/checkID : Used ID');
             resType.resType = "이미 등록된 ID입니다.";
@@ -98,7 +98,7 @@ app.post('/account/signup', async (req, res) => {
                 usnNew += '0';
             usnNew += usnNum;
         }
-        await connection.query(`insert User values(${usnNew}, ${data.id}, ${data.pw}, ${data.uname}, ${data.rrn}, ${data.gender}, ${data.phone}, ${data.email}, ${false}, ${0}, ${4.5})`);
+        await connection.query(`insert User values('${usnNew}', '${data.id}', '${data.pw}', '${data.uname}', '${data.rrn}', ${data.gender}, '${data.phone}', '${data.email}', false, 0, 4.5)`);
         console.log('/account/signup : Sign Up complete');
     } catch (err) {
         console.log(err.code);
@@ -112,7 +112,7 @@ app.get('/account/findAccount', async (req, res) => {
     let data = req.query;
     let resType = { "resType": "OK" };
     try {
-        let [result, fields] = await connection.query(`select * from User where uname = ${data.uname}`);
+        let [result, fields] = await connection.query(`select * from User where uname = '${data.uname}'`);
         if (result.length === 0) {
             console.log('/account/findAccount : Not a user');
             resType.resType = "등록된 사용자가 아닙니다.";
@@ -138,7 +138,7 @@ app.post('/account/editAccount', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        await connection.query(`update User set id = ${data.id}, pw = ${data.pw}, email = ${data.email}, phone = ${data.phone} where usn = ${data.usn}`);
+        await connection.query(`update User set id = '${data.id}', pw = '${data.pw}', email = '${data.email}', phone = '${data.phone}' where usn = '${data.usn}'`);
         console.log('/account/editAccount : Account is updated');
     } catch (err) {
         console.log(err.code);
@@ -153,7 +153,7 @@ app.post('/account/signout', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        await connection.query(`delete from User where usn = ${data.usn}`);
+        await connection.query(`delete from User where usn = '${data.usn}'`);
         console.log('/account/signout : Account is deleted');
     } catch (err) {
         console.log(err.code);
@@ -169,7 +169,7 @@ app.post('/user/charge', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        await connection.query(`update User set point = ${data.point} where usn = ${data.usn}`);
+        await connection.query(`update User set point = ${data.point} where usn = '${data.usn}'`);
         console.log('/user/charge : Point us updated');
     } catch (err) {
         console.log(err.code);
@@ -184,7 +184,7 @@ app.get('/user/getHistory', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        let [result, field] = await connection.query(`select * from History where usn = ${data.usn}`);
+        let [result, field] = await connection.query(`select * from History where usn = '${data.usn}'`);
         if (result.length == 0) {
             console.log('/user/getHistory : No history');
             resType.resType = "이용 현황이 없습니다.";
@@ -244,8 +244,8 @@ app.post('/user/postLost', async (req, res) => {
             lsnNew += lsnNum;
         }
 
-        [result, field] = await connection.query(`select vsn from Vehicle where usn = ${data.usn}`);
-        await connection.query(`insert Lost value(${lsnNew}, ${data.date}, ${data.type}, ${result.vsn})`);
+        [result, field] = await connection.query(`select vsn from Vehicle where usn = '${data.usn}'`);
+        await connection.query(`insert Lost value('${lsnNew}', ${data.date}, '${data.type}', '${result.vsn}')`);
         console.log('/user/postLost : Lost inserted');
     } catch (err) {
         console.log(err.code);
@@ -279,7 +279,7 @@ app.post('/user/editContent', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        await connection.query(`update Content set title = ${data.title}, cont = ${data.cont} where usn = ${data.usn}`);
+        await connection.query(`update Content set title = '${data.title}', cont = '${data.cont}' where usn = '${data.usn}'`);
         console.log('/user/editContent : Content updated');
     } catch (err) {
         console.log(err.code);
@@ -312,7 +312,7 @@ app.post('/user/postContent', async (req, res) => {
                 lsnNew += '0';
             csnNew += csnNum;
         }
-        await connection.query(`insert Content values(${csnNew}, ${data.title}, ${data.cont}, ${null}, ${data.usn})`);
+        await connection.query(`insert Content values('${csnNew}', '${data.title}', '${data.cont}', Null, '${data.usn}')`);
         console.log('/user/postContent : Content inserted');
     } catch (err) {
         console.log(err.code);

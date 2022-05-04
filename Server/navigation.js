@@ -40,6 +40,7 @@ module.exports.Path = class Path {
             }
             this.vehicle = vehicles[nearestIndex];
         }
+        // vehicle length가 0일 때를 처리
     }
 
     async setPath() {
@@ -48,11 +49,8 @@ module.exports.Path = class Path {
         } else {
             this.path.origin.x = this.vehicle.pos.split(' ')[0];
             this.path.origin.y = this.vehicle.pos.split(' ')[1];
-            this.path.destination.name = this.data.end.name;
-            this.path.destination.x = this.data.end.x;
-            this.path.destination.y = this.data.end.y;
-            let jsonWay = {"name": this.data.start.name, "x": this.data.start.x, "y": this.data.start.y};
-            this.path.waypoints.push(jsonWay);
+            this.path.destination = this.data.end;
+            this.path.waypoints.push(this.data.start);
         }
         this.pathReq.body = this.path;
     }
@@ -70,41 +68,14 @@ module.exports.Path = class Path {
     }
 
     async updateDB() {
-        
+        let summary = this.path.summary;
+        let db = {};
+        db.origin = summary.origin;
+        db.destination = summary.destination;
+        db.waypoints = summary.waypoints;
+        db.distance = summary.distance;
+        db.duration = summary.duration;
+        db.sections = this.path.sections;
+        await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(db)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi} where vsn = '${this.vehicle.vsn}'`);
     }
-}
-
-function getSinglePathDB(path, data, vsn) {
-    let summary = path.summary;
-    let sections = path.sections;
-    return [
-        {
-            "name": summary.origin.name,
-            "x": summary.origin.x,
-            "y": summary.origin.y,
-            "distance": 0,
-            "duration": 0,
-            "type": "taxi",
-            "usn": vsn,
-        },
-        {
-            "name": summary.waypoints[0].name,
-            "x": summary.waypoints[0].x,
-            "y": summary.waypoints[0].y,
-            "distance": sections[0].distance,
-            "duration": sections[0].duration,
-            "type": "start",
-            "usn": data.usn
-        },
-        {
-            "name": summary.destination.name,
-            "x": summary.destination.x,
-            "y": summary.destination.y,
-            "distance": sections[1].distance,
-            "duration": sections[1].duration,
-            "type": "end",
-            "usn": data.usn
-        }
-    ]
-
 }
