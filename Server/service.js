@@ -31,7 +31,9 @@ module.exports.Service = class Service {
             let nearestIndex = -1;
             let minDistance = Number.MAX_VALUE;
             for (let i = 0; i < vehicles.length; i++) {
-
+                if (!this.checkInnerPath(vehicles[i]))
+                    delete vehicles[i];
+                    // 추려진 vechiles 중에 어떤 vehilce을 선택할지 결정
             }
         } else {
             let [vehicles, field] = await this.connection.query(`select * from Vehicle where state = true and num = 0`);
@@ -83,5 +85,56 @@ module.exports.Service = class Service {
         this.path.duration = summary.duration;
         this.path.sections = this.path.sections;
         await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi} where vsn = '${this.vehicle.vsn}'`);
+    }
+
+    checkInnerPath(vehicle) {
+        let start = this.data.start;
+        let end = this.data.end;
+        let path = JSON.parse(vehicle.unpass);
+        let points = path.waypoints;
+        points.unshift(path.origin);
+        points.push(destination);
+
+        let startIndex, endIndex, innerStart, innerEnd;
+
+        // Search starting point range
+        for (let s = 0; s < points.length - 1; s++) {
+            let prePoint = points[s];
+            let postPoint = points[s + 1];
+            innerStart = this.calculateInnerPoint(prePoint, start, postPoint);
+            if (innerStart) {
+                startIndex = s + 1;
+                break;
+            }
+        }
+
+        // Search ending point range
+        for (let e = startIndex - 1; e < points.length - 1; e++) {
+            let prePoint = points[e];
+            let postPoint = points[e + 1];
+            innerEnd = this.calculateInnerPoint(prePoint, end, postPoint);
+            if (innerEnd) {
+                endIndex = e + 1;
+                break;
+            }
+        }
+
+        // Check availability of new point
+        if (innerStart && innerEnd) {
+            let prePoint = points[startIndex - 1];
+            let postPoint = points[endIndex];
+            let preTOstart = Math.pow(prePoint.x - start.x, 2) + Math.pow(prePoint.y - start.y, 2);
+            let preTOend = Math.pow(prePoint.x - end.x, 2) + Math.pow(prePoint.y - end.y, 2);
+            let startTOpost = Math.pow(postPoint.x - start.x, 2) + Math.pow(postPoint.y - start.y, 2);
+            let endTOpost = Math.pow(postPoint.x - end.x, 2) + Math.pow(postPoint.y - end.y, 2);
+            return startIndex == endIndex ? preTOstart < preTOend && startTOpost > endTOpost : true;
+        } else if (innerStart) {
+            // start point는 inner point이지만 end point는 outer point (end point가 마지막 좌표 기준으로 마지막 직전 좌표와 반대 방향에 있으면 true 아니면 false)
+        } else
+            return false;
+    }
+
+    calculateInnerPoint(prePoint, point, postPoint) {
+        // point가 prePoint와 postPoint의 범위 안에 있는지 체크
     }
 }

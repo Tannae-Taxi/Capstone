@@ -8,7 +8,7 @@ let app = express();
 let server = require('http').createServer(app);
 let io = require('socket.io')(server);
 let bodyParser = require('body-parser');
-let nav = require('./navigation.js');
+let nav = require('./service.js');
 
 // < Uses >
 app.use(bodyParser.json());
@@ -349,7 +349,7 @@ io.on('connection', (socket) => {
 
     // < Passenger >
     // Request Service
-    socket.on('requestVehicle', async (data) => {
+    socket.on('requestService', async (data) => {
         let resType = { "resType": "OK" };
         let service = new nav.Service(connection, socket, data);
 
@@ -359,7 +359,7 @@ io.on('connection', (socket) => {
             service.path = await service.reqPath();
             //await service.updateDB();
             //socket.join(service.vehicle.vsn);
-            //io.to(vsn).emit('newService', service.path);
+            //io.to(vsn).emit('responseService', service.path);
         } catch (err) {
             console.log(err);
             resType.resType = "Error";
