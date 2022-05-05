@@ -12,10 +12,16 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
+import com.example.tannae.network.Network;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import io.socket.emitter.Emitter;
 
 public class ServiceReqActivity extends AppCompatActivity {
     private ImageButton ibMap;
-    private EditText etOrigin, etDesti;
+    private EditText etOrigin, etDest;
     private Button btnNext, btnBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +34,7 @@ public class ServiceReqActivity extends AppCompatActivity {
     private void setViews() {
         ibMap = findViewById(R.id.ib_map_servicereq);
         etOrigin = findViewById(R.id.et_origin_servicereq);
-        etDesti = findViewById(R.id.et_Desti_servicereq);
+        etDest = findViewById(R.id.et_Desti_servicereq);
         btnNext = findViewById(R.id.btn_next_detailservicereq);
         btnBack = findViewById(R.id.btn_back_detailservicereq);
     }
@@ -37,38 +43,6 @@ public class ServiceReqActivity extends AppCompatActivity {
         ibMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-            }
-        });
-        etOrigin.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        etDesti.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
 
             }
         });
@@ -83,8 +57,35 @@ public class ServiceReqActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), VehicleListActivity.class);
-                startActivity(intent);
+                try {
+                    Network.socket.connect();
+                    JSONObject start = new JSONObject();
+                    start.put("name", etOrigin.getText().toString());
+                    start.put("x", 127.11024293202674); ////////////////////////////////////// 출발지 이름에 대한 x 좌표 가져오기
+                    start.put("y", 37.394348634049784); ////////////////////////////////////// 출발지 이름에 대한 y 좌표 가져오기
+                    JSONObject end = new JSONObject();
+                    end.put("name", etDest.getText().toString());
+                    end.put("x", 127.11024293202674); //////////////////////////////////////// 목적지 이름에 대한 x 좌표 가져오기
+                    end.put("y", 37.394348634049784); //////////////////////////////////////// 목적지 이름에 대한 y 좌표 가져오기
+                    JSONObject user = new JSONObject();
+                    //////////////////////////////////////////////////// 현재 로그인되어 있는 User(SQLite 에 저장된) 정보를 json 형태로 전환
+                    JSONObject data = new JSONObject();
+                    data.put("start", start);
+                    data.put("end", end);
+                    data.put("share", true); ///////////////////////////////////////////////// Switch button 에서 동승 서비스 여부를 이용할 것인지에 대한 Boolean 값 삽입
+                    data.put("user", user);
+                    Network.socket.emit("requestService", data);
+                    Network.socket.on("responseService", args -> {
+                        JSONObject path = (JSONObject) args[0];
+                        runOnUiThread(() -> {
+                            Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+                            intent.putExtra("path", path.toString());
+                            startActivity(intent);
+                        });
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

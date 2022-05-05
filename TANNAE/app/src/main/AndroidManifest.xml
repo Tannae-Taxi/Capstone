@@ -40,7 +40,6 @@
         <activity android:name=".activity.ServiceReqActivity"/>
         <activity android:name=".activity.ServiceUsingActivity"/>
         <activity android:name=".activity.SignUpActivity"/>
-        <activity android:name=".activity.VehicleListActivity"/>
 
     </application>
 
