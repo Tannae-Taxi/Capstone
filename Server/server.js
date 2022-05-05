@@ -351,14 +351,15 @@ io.on('connection', (socket) => {
     // Request Service
     socket.on('requestVehicle', async (data) => {
         let resType = { "resType": "OK" };
-        let path = new nav.Path(connection, socket, data);
+        let service = new nav.Service(connection, socket, data);
 
         try {
-            await path.setVehicle();
-            await path.setPath();
-            path.path = await path.reqPath();
-            await path.updateDB();
-            console.log(path.path);
+            await service.setVehicle();
+            await service.setPath();
+            service.path = await service.reqPath();
+            //await service.updateDB();
+            //socket.join(service.vehicle.vsn);
+            //io.to(vsn).emit('newService', service.path);
         } catch (err) {
             console.log(err);
             resType.resType = "Error";

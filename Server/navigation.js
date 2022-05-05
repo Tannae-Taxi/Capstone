@@ -2,7 +2,7 @@
 let request = require('request');
 
 // << Path Class >>
-module.exports.Path = class Path {
+module.exports.Service = class Service {
     // < Construct Path >
     constructor(connection, socket, data) {
         this.connection = connection;
@@ -27,7 +27,12 @@ module.exports.Path = class Path {
 
     async setVehicle() {
         if (this.data.share) {
-            let [vehicles, field] = await this.connection.query(`select * from Vehicle where num != 3 and num != 0 and gender = ${this.data.user.gender}`);
+            let [vehicles, field] = await this.connection.query(`select * from Vehicle where state = true and num != 3 and num != 0 and share = 1 and gender = ${this.data.user.gender}`);
+            let nearestIndex = -1;
+            let minDistance = Number.MAX_VALUE;
+            for (let i = 0; i < vehicles.length; i++) {
+
+            }
         } else {
             let [vehicles, field] = await this.connection.query(`select * from Vehicle where state = true and num = 0`);
             let nearestIndex = -1;
@@ -40,7 +45,8 @@ module.exports.Path = class Path {
             }
             this.vehicle = vehicles[nearestIndex];
         }
-        // vehicle length가 0일 때를 처리
+
+        // vehicle length가 0일 때를 처리 => 서비스 요청 거부
     }
 
     async setPath() {
@@ -69,13 +75,13 @@ module.exports.Path = class Path {
 
     async updateDB() {
         let summary = this.path.summary;
-        let db = {};
-        db.origin = summary.origin;
-        db.destination = summary.destination;
-        db.waypoints = summary.waypoints;
-        db.distance = summary.distance;
-        db.duration = summary.duration;
-        db.sections = this.path.sections;
-        await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(db)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi} where vsn = '${this.vehicle.vsn}'`);
+        this.path = {};
+        this.path.origin = summary.origin;
+        this.path.destination = summary.destination;
+        this.path.waypoints = summary.waypoints;
+        this.path.distance = summary.distance;
+        this.path.duration = summary.duration;
+        this.path.sections = this.path.sections;
+        await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi} where vsn = '${this.vehicle.vsn}'`);
     }
 }
