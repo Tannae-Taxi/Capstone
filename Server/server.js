@@ -355,11 +355,14 @@ io.on('connection', (socket) => {
 
         try {
             await service.setVehicle();
-            await service.setPath();
-            service.path = await service.reqPath();
-            //await service.updateDB();
-            //socket.join(service.vehicle.vsn);
-            //io.to(vsn).emit('responseService', service.path);
+            if (service.vehicle != null) {
+                await service.setPath();
+                service.path = await service.reqPath();
+                //await service.updateDB();
+                //socket.join(service.vehicle.vsn);
+                //io.to(vsn).emit('responseService', true, service.path);
+            } else
+                socket.emit('responseService', false);
         } catch (err) {
             console.log(err);
             resType.resType = "Error";

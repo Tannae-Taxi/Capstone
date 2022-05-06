@@ -15,54 +15,74 @@ module.exports.Service = class Service {
             "priority": "RECOMMEND", "car_fuel": "GASOLINE", "car_hipass": false, "alternatives": false, "road_details": false, "summary": true
         }
         this.pathReq = {
-            headers: {
-                'content-type': 'application/json',
-                'authorization': 'KakaoAK d94b5c67305d6a10b3e43e5da881e7cf'
-            },
+            headers: { 'content-type': 'application/json', 'authorization': 'KakaoAK d94b5c67305d6a10b3e43e5da881e7cf' },
             url: 'https://apis-navi.kakaomobility.com/v1/waypoints/directions',
             body: null,
             json: true
         }
     }
 
+    // < Set vehicle >
     async setVehicle() {
-        if (this.data.share) {
-            let [vehicles, field] = await this.connection.query(`select * from Vehicle where state = true and num != 3 and num != 0 and share = 1 and gender = ${this.data.user.gender}`);
-            let nearestIndex = -1;
-            let minDistance = Number.MAX_VALUE;
-            for (let i = 0; i < vehicles.length; i++) {
-                if (!this.checkInnerPath(vehicles[i]))
-                    delete vehicles[i];
-                    // 추려진 vechiles 중에 어떤 vehilce을 선택할지 결정
+        // Search vehicles available
+        let sql = this.data.share ? `select * from Vehicle where state = true and num != 3 and num != 0 and share = 1 and gender = ${this.data.user.gender}` : `select * from Vehicle where state = true and num = 0`;
+        let [vehicles, field] = await this.connection.query(sql);
+        let nearestIndex = -1;
+        let minDistance = Number.MAX_VALUE;
+
+        this.pointss = [];
+        // Select nearest vehicle which is available
+        for (let i = 0; i < vehicles.length; i++) {
+            if (this.data.share) {
+                let [flag, points] = this.checkInnerPath(vehicles[i]);
+                pointss.push(points);
+                if (!flag)
+                    continue;
             }
-        } else {
-            let [vehicles, field] = await this.connection.query(`select * from Vehicle where state = true and num = 0`);
-            let nearestIndex = -1;
-            let minDistance = Number.MAX_VALUE;
+            let position = vehicles[i].pos.split(' ');
+            let distance = Math.sqrt(Math.pow(this.data.start.x - position[0], 2) + Math.pow(this.data.start.y - position[1], 2));
+            nearestIndex = minDistance > distance ? i : nearestIndex;
+            minDistance = minDistance > distance ? distance : minDistance;
+        }
+
+        // Search if share request has no vehicle
+        if (this.data.share && nearestIndex == -1) {
+            [vehicles, field] = await this.connection.query(`select * from Vehicle where state = true and num = 0`);
             for (let i = 0; i < vehicles.length; i++) {
                 let position = vehicles[i].pos.split(' ');
                 let distance = Math.sqrt(Math.pow(this.data.start.x - position[0], 2) + Math.pow(this.data.start.y - position[1], 2));
                 nearestIndex = minDistance > distance ? i : nearestIndex;
                 minDistance = minDistance > distance ? distance : minDistance;
             }
-            this.vehicle = vehicles[nearestIndex];
         }
 
-        // vehicle length가 0일 때를 처리 => 서비스 요청 거부
+        // Set vehicle
+        if (nearestIndex != -1) {
+            this.vehicle = vehicles[nearestIndex];
+            this.pointss = this.pointss[nearestIndex];
+        } else {
+            this.vehicle = null;
+        }
+        this.vehicle = nearestIndex != -1 ? vehicles[nearestIndex] : null;
     }
 
+    // < Set path >
     async setPath() {
         if (this.data.share) {
-
+            let points = this.pointss;
+            this.path.origin = points[0];
+            this.path.destination = points[points.length - 1];
+            this.path.waypoints = points.slice(1, points.length - 1);
         } else {
             this.path.origin.x = this.vehicle.pos.split(' ')[0];
             this.path.origin.y = this.vehicle.pos.split(' ')[1];
             this.path.destination = this.data.end;
-            this.path.waypoints.push(this.data.start);
+            this.path.waypoints.unshift(this.data.start);
         }
         this.pathReq.body = this.path;
     }
 
+    // < Request path info >
     reqPath() {
         return new Promise((resolve, reject) => {
             request.post(this.pathReq, (err, httpResponse, body) => {
@@ -75,6 +95,7 @@ module.exports.Service = class Service {
         });
     }
 
+    // < Update Database >
     async updateDB() {
         let summary = this.path.summary;
         this.path = {};
@@ -87,13 +108,14 @@ module.exports.Service = class Service {
         await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi} where vsn = '${this.vehicle.vsn}'`);
     }
 
+    // < Check if user coordinates are available >
     checkInnerPath(vehicle) {
         let start = this.data.start;
         let end = this.data.end;
         let path = JSON.parse(vehicle.unpass);
         let points = path.waypoints;
         points.unshift(path.origin);
-        points.push(destination);
+        points.push(path.destination);
 
         let startIndex, endIndex, innerStart, innerEnd;
 
@@ -121,19 +143,44 @@ module.exports.Service = class Service {
 
         // Check availability of new point
         if (innerStart && innerEnd) {
+            // Get pre/post point
             let prePoint = points[startIndex - 1];
             let postPoint = points[endIndex];
+            // Calculate distance (Prepoint)
             let preTOstart = Math.pow(prePoint.x - start.x, 2) + Math.pow(prePoint.y - start.y, 2);
             let preTOend = Math.pow(prePoint.x - end.x, 2) + Math.pow(prePoint.y - end.y, 2);
+            // Calculate distance (Postpoint)
             let startTOpost = Math.pow(postPoint.x - start.x, 2) + Math.pow(postPoint.y - start.y, 2);
             let endTOpost = Math.pow(postPoint.x - end.x, 2) + Math.pow(postPoint.y - end.y, 2);
-            return startIndex == endIndex ? preTOstart < preTOend && startTOpost > endTOpost : true;
+            // Return (When start point is far than end point) ? true : false
+            if (startIndex == endIndex && !(preTOstart < preTOend && startTOpost > endTOpost))
+                return [false, null];
+            else {
+                points.splice(endIndex, 0, end);
+                points.splice(startIndex, 0, start);
+                return [true, points];
+            }
         } else if (innerStart) {
-            // start point는 inner point이지만 end point는 outer point (end point가 마지막 좌표 기준으로 마지막 직전 좌표와 반대 방향에 있으면 true 아니면 false)
+            // Get last point end pre last point
+            let lastPoint = points[points.length - 1];
+            let preLastPoint = points[points.length - 2];
+            // Get vector of prelast->last and last->end
+            let uva = [lastPoint.x - preLastPoint.x, lastPoint.y - preLastPoint.y];
+            let uvb = [end.x - lastPoint.x, end.y - lastPoint.y];
+            // Get angle between prelast->last asd last->end
+            let theta = Math.acos((uva[0] * uvb[0] + uva[1] * uvb[1]) / Math.sqrt(Math.pow(uva[0], 2) + Math.pow(uva[1], 2)) * Math.sqrt(Math.pow(uvb[0], 2) + Math.pow(uvb[1], 2)));
+            // Available when angle is smaller than 45 degree
+            if (theta < Math.PI / 4) {
+                points.push(end);
+                points.splice(startIndex, 0, start);
+                return [true, points];
+            } else
+                return [false, null];
         } else
-            return false;
+            return [false, null];
     }
 
+    // < Calculate if coordinate is in single path >
     calculateInnerPoint(prePoint, point, postPoint) {
         // point가 prePoint와 postPoint의 범위 안에 있는지 체크
     }
