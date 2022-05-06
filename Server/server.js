@@ -356,7 +356,7 @@ io.on('connection', (socket) => {
         try {
             await service.setVehicle();
             if (service.vehicle != null) {
-                await service.setPath();
+                service.setPath();
                 service.path = await service.reqPath();
                 //await service.updateDB();
                 //socket.join(service.vehicle.vsn);

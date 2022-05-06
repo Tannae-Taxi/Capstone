@@ -67,7 +67,7 @@ module.exports.Service = class Service {
     }
 
     // < Set path >
-    async setPath() {
+    setPath() {
         if (this.data.share) {
             let points = this.pointss;
             this.path.origin = points[0];
@@ -168,8 +168,8 @@ module.exports.Service = class Service {
             let uva = [lastPoint.x - preLastPoint.x, lastPoint.y - preLastPoint.y];
             let uvb = [end.x - lastPoint.x, end.y - lastPoint.y];
             // Get angle between prelast->last asd last->end
-            let theta = Math.acos((uva[0] * uvb[0] + uva[1] * uvb[1]) / Math.sqrt(Math.pow(uva[0], 2) + Math.pow(uva[1], 2)) * Math.sqrt(Math.pow(uvb[0], 2) + Math.pow(uvb[1], 2)));
-            // Available when angle is smaller than 45 degree
+            let theta = Math.acos((uva[0] * uvb[0] + uva[1] * uvb[1]) / (Math.sqrt(Math.pow(uva[0], 2) + Math.pow(uva[1], 2)) * Math.sqrt(Math.pow(uvb[0], 2) + Math.pow(uvb[1], 2))));
+            // Available when angle is smaller than 45 degrees
             if (theta < Math.PI / 4) {
                 points.push(end);
                 points.splice(startIndex, 0, start);
@@ -182,6 +182,15 @@ module.exports.Service = class Service {
 
     // < Calculate if coordinate is in single path >
     calculateInnerPoint(prePoint, point, postPoint) {
-        // point가 prePoint와 postPoint의 범위 안에 있는지 체크
+        // Set vectors
+        let preTOpostV = [postPoint.x - prePoint.x, postPoint.y - prePoint.y];
+        let postTOpreV = [prePoint.x - postPoint.x, prePoint.y - postPoint.y];
+        let preTOpointV = [point.x - prePoint.x, point.y - prePoint.y];
+        let postTOpointV = [point.x - postPoint.x, point.y - postPoint.y];
+
+        // Available when angle is smaller than 30 degrees
+        let preTheta = Math.acos((preTOpostV[0] * preTOpointV[0] + preTOpostV[1] * preTOpointV[1]) / (Math.sqrt(Math.pow(preTOpostV[0], 2) + Math.pow(preTOpostV[1], 2)) * Math.sqrt(Math.pow(preTOpointV[0], 2) + Math.pow(preTOpointV[1], 2))));
+        let postTheta = Math.acos((postTOpreV[0] * postTOpointV[0] + postTOpreV[1] * postTOpointV[1]) / (Math.sqrt(Math.pow(postTOpreV[0], 2) + Math.pow(postTOpreV[1], 2)) * Math.sqrt(Math.pow(postTOpointV[0], 2) + Math.pow(postTOpointV[1], 2))));
+        return preTheta < Math.PI / 6 && postTheta < Math.PI / 6 ? true : false;
     }
 }
