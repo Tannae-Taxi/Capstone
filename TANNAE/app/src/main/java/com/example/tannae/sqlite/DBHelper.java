@@ -8,28 +8,20 @@ import androidx.annotation.Nullable;
 
 public class DBHelper extends SQLiteOpenHelper {
     public DBHelper(@Nullable Context context, int version) {
-        super(context, "TTdb", null, version);
+        super(context, "TT.db", null, version);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE User(_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "usn STRING," +
-                "id STRING," +
-                "pw STRING," +
-                "uname STRING," +
-                "rrn STRING," +
-                "sex BOOLEAN," +
-                "phone STRING," +
-                "email STRING," +
-                "drive BOOLEAN," +
-                "points INTEGER," +
-                "score FLOAT)");
+        db.execSQL("create table User ( _id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "usn integer, " +
+                "id text, " +
+                "pw text )");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS User");
+        db.execSQL("drop table if exists User");
         onCreate(db);
     }
 }

@@ -2,6 +2,7 @@ package com.example.tannae.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,8 @@ import com.example.tannae.R;
 import com.example.tannae.network.Network;
 import com.example.tannae.network.RetrofitClient;
 import com.example.tannae.network.ServiceApi;
+import com.example.tannae.sqlite.DBHelper;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,12 +28,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private long backKeyPressedTime = 0;
 
+    DBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Network.service = RetrofitClient.getClient().create(ServiceApi.class);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setViews();
+
+        dbHelper = new DBHelper(this,1 );
+
         setEventListeners();
     }
 
@@ -51,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
-                /*if(id.length() == 0 || pw.length() == 0) {
+                /* if(id.length() == 0 || pw.length() == 0) {
                     Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -63,6 +71,14 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject resObj = resArr.getJSONObject(0);
                             String resType = resObj.getString("resType");
                             if (resType.equals("OK")) {
+
+                                //로그인에 성공했을 경우 내부 db(=TT.db)에 로그인한 회원의 ID와 PW 정보를 삽입하는 코드.
+                                //usn 정보는 어떤 방식으로 삽입해야 할 지 서칭하는 중
+                                //SQLiteDatabase db = dbHelper.getWritableDatabase();
+                                //db.execSQL("insert into TT values (null, '" + usn + "', '" + id + "', '"+ pw +"')");
+
+
+
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
                             } else
@@ -77,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                         Log.e("Error", t.getMessage());
                     }
-                });*/
+                }); */
             }
         });
 
