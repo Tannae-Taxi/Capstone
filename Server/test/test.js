@@ -1,10 +1,5 @@
-let i = false;
+let data = {"name" : "안녕"};
 
-function test() {
-    console.log('Hello');
-    return true;
-}
-
-if (i && test()) {
-    console.log('world');
-}
+let json = {};
+json[data.name] = 3;
+console.log(json);

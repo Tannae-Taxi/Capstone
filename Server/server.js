@@ -71,7 +71,7 @@ app.get('/account/checkID', async (req, res) => {
         console.log(err.code);
         resType.resType = "Error";
     }
-    res.json(JSON.stringify(resType));
+    res.json(JSON.stringify([resType]));
 });
 
 // Sign Up
@@ -336,15 +336,41 @@ io.on('connection', (socket) => {
 
     // < Driver >
     // Start service
-    socket.on('serviceOn', (usn, vsn) => {
-        console.log(`Driver ${usn} started service on vehicle ${vsn}`);
-        socket.join(vsn);
+    socket.on('serviceOn', async (user) => {
+        let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${user.usn}'`);
+        console.log(`Driver ${user.usn} started service on vehicle ${vehicles[0].vsn}`);
+        socket.join(vehicles[0].vsn);
     });
 
-    // Stop service
-    socket.on('serviceOff', (usn, vsn) => {
-        console.log(`Drive ${usn} stopped service on vehicle ${vsn}`);
-        socket.leave(vsn);
+    // Pass Waypoint
+    socket.on('passWaypoint', async (user) => {
+        let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${user.usn}'`);
+        let pass = JSON.parse(vehicles[0].pass);
+        let unpass = JSON.parse(vehicles[0].unpass);
+
+        if (unpass.origin.name.equals('Vehicle')) {
+            pass.waypoints = [];
+            pass.sections = [];
+        }
+        // Set pass
+        pass.waypoints.push(unpass.origin);
+        pass.sections.push(unpass.sections.pop());
+        pass.distance = unpass.distance;
+        pass.duration = unpass.duration;
+
+        // Set unpass
+    });
+
+    // Change service availability state
+    socket.on('changeServiceState', async (user, state) => {
+        await connection.query(`update Vehilce set state = ${state} where usn = '${user.usn}'`);
+        console.log(`Driver ${user.usn} stopped servicing`);
+    });
+
+    // End service
+    socket.on('serviceEnd', async (user) => {
+        let [result, field] = await connection.query(`select * from Vehicle where usn = '${user.usn}'`);
+        ////////////////////////////////////////// 운행 종료
     });
 
     // < Passenger >
@@ -358,9 +384,9 @@ io.on('connection', (socket) => {
             if (service.vehicle != null) {
                 service.setPath();
                 service.path = await service.reqPath();
-                //await service.updateDB();
-                //socket.join(service.vehicle.vsn);
-                //io.to(vsn).emit('responseService', true, service.path);
+                await service.updateDB();
+                socket.join(service.vehicle.vsn);
+                io.to(service.vehicle.vsn).emit('responseService', true, service.path);
             } else
                 socket.emit('responseService', false);
         } catch (err) {

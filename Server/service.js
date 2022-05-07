@@ -95,19 +95,6 @@ module.exports.Service = class Service {
         });
     }
 
-    // < Update Database >
-    async updateDB() {
-        let summary = this.path.summary;
-        this.path = {};
-        this.path.origin = summary.origin;
-        this.path.destination = summary.destination;
-        this.path.waypoints = summary.waypoints;
-        this.path.distance = summary.distance;
-        this.path.duration = summary.duration;
-        this.path.sections = this.path.sections;
-        await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi} where vsn = '${this.vehicle.vsn}'`);
-    }
-
     // < Check if user coordinates are available >
     checkInnerPath(vehicle) {
         let start = this.data.start;
@@ -192,5 +179,24 @@ module.exports.Service = class Service {
         let preTheta = Math.acos((preTOpostV[0] * preTOpointV[0] + preTOpostV[1] * preTOpointV[1]) / (Math.sqrt(Math.pow(preTOpostV[0], 2) + Math.pow(preTOpostV[1], 2)) * Math.sqrt(Math.pow(preTOpointV[0], 2) + Math.pow(preTOpointV[1], 2))));
         let postTheta = Math.acos((postTOpreV[0] * postTOpointV[0] + postTOpreV[1] * postTOpointV[1]) / (Math.sqrt(Math.pow(postTOpreV[0], 2) + Math.pow(postTOpreV[1], 2)) * Math.sqrt(Math.pow(postTOpointV[0], 2) + Math.pow(postTOpointV[1], 2))));
         return preTheta < Math.PI / 6 && postTheta < Math.PI / 6 ? true : false;
+    }
+    
+    // < Update Database >
+    async updateDB() {
+        let summary = this.path.summary;
+        this.path = {};
+        this.path.origin = summary.origin;
+        this.path.destination = summary.destination;
+        this.path.waypoints = summary.waypoints;
+        this.path.distance = summary.distance;
+        this.path.duration = summary.duration;
+        this.path.sections = this.path.sections;
+        let names = {};
+        if (this.data.share) {
+            names = JSON.parse(this.vehicle.name);
+            names[this.data.start.name] = this.data.user.usn;
+            names[this.data.end.name] = this.data.user.usn;
+        }
+        await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi}${this.data.share ? `, names = '${JSON.stringify(names)}'` : ''} where vsn = '${this.vehicle.vsn}'`);
     }
 }
