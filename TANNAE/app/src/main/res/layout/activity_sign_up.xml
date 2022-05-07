@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout3"
@@ -20,195 +21,154 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RadioGroup
-        android:id="@+id/rg_gender_sign_up"
-        android:layout_width="175dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_name_sign_up">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:orientation="vertical">
 
-        <RadioButton
-            android:id="@+id/rb_man_sign_up"
+        <TextView
+            android:id="@+id/tv_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginBottom="16dp"
-            android:checked="true"
-            android:text="남" />
+            android:text="Account"
+            android:layout_gravity="center"
+            android:textSize="30sp" />
 
-        <RadioButton
-            android:id="@+id/rb_woman_sign_up"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_id_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="ID"
+                android:inputType="textPersonName" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btn_checkID_sign_up"
+                style="@style/Widget.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="중복검사"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appBarLayout3" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_checkID_sign_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginBottom="16dp"
-            android:text="여" />
-    </RadioGroup>
+            android:text="영문과 숫자를 사용하여 6자리 이상 작성하세요." />
 
-    <EditText
-        android:id="@+id/et_email_sign_up"
-        android:layout_width="214dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_rrn_sign_up" />
+        <EditText
+            android:id="@+id/et_pw_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword" />
 
-    <TextView
-        android:id="@+id/tv_personal_sign_up"
-        android:layout_width="124dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="24dp"
-        android:text="Personal"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_retrypw_sign_up" />
+        <EditText
+            android:id="@+id/et_checkpw_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Password Check"
+            android:inputType="textPassword"/>
 
-    <EditText
-        android:id="@+id/et_phone_sign_up"
-        android:layout_width="222dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Phone Number"
-        android:maxLength="11"
-        android:inputType="phone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_email_sign_up" />
+        <TextView
+            android:id="@+id/tv_retrypw_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비밀번호는 8자 이상 입력하세요." />
 
-    <EditText
-        android:id="@+id/et_id_sign_up"
-        android:layout_width="wrap_content"
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
-        android:ems="10"
-        android:hint="ID"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toStartOf="@+id/btn_checkID_sign_up"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout3" />
+        android:layout_margin="25dp"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_checkID_sign_up"
-        style="@style/Widget.Button.TextButton"
-        android:layout_width="96dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="40dp"
-        android:text="중복검사"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout3" />
+        <TextView
+            android:id="@+id/tv_personal_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Personal"
+            android:textSize="30sp" />
 
-    <TextView
-        android:id="@+id/tv_checkID_sign_up"
-        android:layout_width="273dp"
-        android:layout_height="27dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="영문, 숫자를 조합하여 6자리 이상 작성하세요."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_id_sign_up" />
+        <EditText
+            android:id="@+id/et_name_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Name"/>
 
-    <EditText
-        android:id="@+id/et_pw_sign_up"
-        android:layout_width="287dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_checkID_sign_up" />
+        <EditText
+            android:id="@+id/et_rrn_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:hint="주민등록번호 ( - 기호 자동입력)"
+            android:inputType="number"
+            android:maxLength="14"/>
 
-    <EditText
-        android:id="@+id/et_checkpw_sign_up"
-        android:layout_width="294dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Password Check"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_pw_sign_up" />
+        <RadioGroup
+            android:id="@+id/rg_gender_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tv_retrypw_sign_up"
-        android:layout_width="215dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="비밀번호는 8자 이상 입력하세요."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_checkpw_sign_up" />
+            <RadioButton
+                android:id="@+id/rb_man_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="남" />
 
-    <TextView
-        android:id="@+id/tv_account"
-        android:layout_width="136dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="8dp"
-        android:text="Account"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout3" />
+            <RadioButton
+                android:id="@+id/rb_woman_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="여" />
+        </RadioGroup>
 
-    <EditText
-        android:id="@+id/et_name_sign_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Name"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_personal_sign_up" />
+        <EditText
+            android:id="@+id/et_email_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
 
-    <EditText
-        android:id="@+id/et_rrn_sign_up"
-        android:layout_width="315dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:ems="10"
-        android:hint="주민등록번호 ( - 기호를 입력하지 마세요)"
-        android:inputType="number"
-        android:maxLength="14"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rg_gender_sign_up" />
+        <EditText
+            android:id="@+id/et_phone_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:maxLength="11" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_sign_up"
         style="@style/Widget.Button.TextButton"
-        android:layout_width="112dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="8dp"
-        android:text="Sign Up"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_phone_sign_up"
-        app:layout_constraintVertical_bias="0.0" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Sign Up"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

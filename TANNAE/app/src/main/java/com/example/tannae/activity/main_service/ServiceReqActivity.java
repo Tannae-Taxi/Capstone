@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,7 +33,7 @@ public class ServiceReqActivity extends AppCompatActivity {
     // < Register views >
     private void setViews() {
         etOrigin = findViewById(R.id.et_origin_servicereq);
-        etDest = findViewById(R.id.et_Desti_servicereq);
+        etDest = findViewById(R.id.et_dest_servicereq);
         btnNext = findViewById(R.id.btn_next_detailservicereq);
         btnBack = findViewById(R.id.btn_back_detailservicereq);
     }
