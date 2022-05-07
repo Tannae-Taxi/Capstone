@@ -64,6 +64,9 @@ public class LoginActivity extends AppCompatActivity {
                 String pw = etPW.getText().toString();
                 if(id.length() == 0 || pw.length() == 0) {
                     Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);                    // 임시 코드
+                    startActivity(intent);                                                                      // 임시 코드
+                    finish();                                                                                   // 임시 코드
                     return;
                 }
                 // Check if entered ID/PW is a user
@@ -105,9 +108,6 @@ public class LoginActivity extends AppCompatActivity {
                     public void onFailure(Call<String> call, Throwable t) {
                         Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                         Log.e("Error", t.getMessage());
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);                    // 임시 코드
-                        startActivity(intent);                                                                      // 임시 코드
-                        finish();                                                                                   // 임시 코드
                     }
                 });
             }
