@@ -8,6 +8,9 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
+import com.example.tannae.network.Network;
+
+import org.json.JSONObject;
 
 public class NavigationActivity extends AppCompatActivity {
     private Button btnBack, btnNext;
@@ -19,6 +22,12 @@ public class NavigationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_navigation);
         setViews();
         setEventListeners();
+        Network.socket.on("responseService", args -> {
+            JSONObject path = (JSONObject) args[0];
+            runOnUiThread(() -> {
+                // 받은 path 정보를 바탕으로 navi or map 설정
+            });
+        });
     }
 
     private void setViews() {

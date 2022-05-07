@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -75,11 +76,14 @@ public class ServiceReqActivity extends AppCompatActivity {
                     data.put("share", true); ///////////////////////////////////////////////// Switch button 에서 동승 서비스 여부를 이용할 것인지에 대한 Boolean 값 삽입
                     data.put("user", user);
                     Network.socket.emit("requestService", data);
-                    Network.socket.on("responseService", args -> {
-                        JSONObject path = (JSONObject) args[0];
+                    Network.socket.on("responseFail", args -> {
+                        runOnUiThread(() -> {
+                            Toast.makeText(getApplicationContext(), "이용 가능한 차량이 없습니다.", Toast.LENGTH_SHORT).show();
+                        });
+                    });
+                    Network.socket.on("startNavigation", args -> {
                         runOnUiThread(() -> {
                             Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
-                            intent.putExtra("path", path.toString());
                             startActivity(intent);
                         });
                     });
