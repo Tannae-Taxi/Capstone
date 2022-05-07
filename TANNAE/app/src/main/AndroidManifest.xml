@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -43,6 +44,7 @@
         <activity android:name=".activity.user_service.FAQActivity"/>
         <activity android:name=".activity.user_service.FAQEditActivity"/>
 
+        <meta-data android:name="com.kakao.sdk.AppKey" android:value="9baed5ab6907b4f6a2a5ce8fb2a0df03"/>
     </application>
 
 </manifest>
