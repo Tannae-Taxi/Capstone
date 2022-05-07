@@ -27,8 +27,8 @@
         tools:layout_editor_absoluteY="56dp">
 
 
-        <Switch
-            android:id="@+id/s_drive_main"
+        <Button
+            android:id="@+id/btn_drive_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

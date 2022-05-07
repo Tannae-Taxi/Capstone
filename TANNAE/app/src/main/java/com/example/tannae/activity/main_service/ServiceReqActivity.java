@@ -1,14 +1,11 @@
-package com.example.tannae.activity;
+package com.example.tannae.activity.main_service;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,48 +15,45 @@ import com.example.tannae.network.Network;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import io.socket.emitter.Emitter;
-
+// << ServiceReq Activity >>
 public class ServiceReqActivity extends AppCompatActivity {
-    private ImageButton ibMap;
     private EditText etOrigin, etDest;
     private Button btnNext, btnBack;
+
+    // < onCreate >
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Create Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_servicereq);
+        // Setting
         setViews();
         setEventListeners();
     }
 
+    // < Register views >
     private void setViews() {
-        ibMap = findViewById(R.id.ib_map_servicereq);
         etOrigin = findViewById(R.id.et_origin_servicereq);
         etDest = findViewById(R.id.et_Desti_servicereq);
         btnNext = findViewById(R.id.btn_next_detailservicereq);
         btnBack = findViewById(R.id.btn_back_detailservicereq);
     }
 
+    // < Register event listeners >
     private void setEventListeners() {
-        ibMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        // Back button
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                onBackPressed();
             }
         });
+        // Request Service [SOCKET]
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    Network.socket.connect();
+                    // Create JSON
                     JSONObject start = new JSONObject();
                     start.put("name", etOrigin.getText().toString());
                     start.put("x", 127.11024293202674); ////////////////////////////////////// 출발지 이름에 대한 x 좌표 가져오기
@@ -77,12 +71,20 @@ public class ServiceReqActivity extends AppCompatActivity {
                     data.put("user", user);
                     Network.socket.emit("requestService", data);
                     Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+                    intent.putExtra("type", false);
                     startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
 
+    // < BackPress >
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }

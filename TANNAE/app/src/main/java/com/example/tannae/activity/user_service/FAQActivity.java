@@ -1,4 +1,4 @@
-package com.example.tannae.activity;
+package com.example.tannae.activity.user_service;
 
 import android.os.Bundle;
 
@@ -13,5 +13,15 @@ public class FAQActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faq);
 
+    }
+
+    public static class HistoryActivity extends AppCompatActivity {
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_history);
+
+        }
     }
 }

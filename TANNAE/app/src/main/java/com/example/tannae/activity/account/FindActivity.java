@@ -1,8 +1,9 @@
-package com.example.tannae.activity;
+package com.example.tannae.activity.account;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,7 +12,6 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,37 +26,41 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+// << FindActivity >>
 public class FindActivity extends AppCompatActivity {
     private TextView tvMyId, tvMyPw;
     private EditText etName, etRRN, etEmail, etPhone;
     private Button btnFindAccount;
-    private RadioGroup rgGender;
+    private Toolbar toolbar;
 
-    private boolean genderType = true;
-
+    // < onCreate >
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Create Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find);
+        // Setting
         setViews();
         setEventListeners();
-
-        Toolbar toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+    // < Register views >
     private void setViews(){
         etName = findViewById(R.id.et_name_find);
-        rgGender = findViewById(R.id.rg_gender_find);
         etRRN = findViewById(R.id.et_rrn_find);
         etEmail = findViewById(R.id.et_email_find);
         etPhone = findViewById(R.id.et_phone_find);
         btnFindAccount= findViewById(R.id.btn_find_find);
         tvMyId = findViewById(R.id.tv_myid_find);
         tvMyPw = findViewById(R.id.tv_mypw_find);
+        toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    // < Register event listeners >
     private void setEventListeners(){
+        // Store RRN by user input
         etRRN.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -71,16 +75,11 @@ public class FindActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) { }
         });
 
-        rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                genderType = (checkedId == R.id.rb_man_find) ? true : false;
-            }
-        });
-
+        // Find account [RETROFIT]
         btnFindAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Check if entered info's are available
                 if (etName.getText().toString().length() == 0)
                     Toast.makeText(getApplicationContext(), "이름을 입력하세요.", Toast.LENGTH_SHORT).show();
                 else if (etRRN.getText().toString().length() != 14)
@@ -89,6 +88,7 @@ public class FindActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Email 을 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                 else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
                     Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
+                // If available request server to find account [RETROFIT]
                 else {
                     Network.service.findAccount(etName.getText().toString(), etRRN.getText().toString(), etEmail.getText().toString(), etPhone.getText().toString()).enqueue(new Callback<String>() {
                         @Override
@@ -98,6 +98,7 @@ public class FindActivity extends AppCompatActivity {
                                 JSONObject resObj = resArr.getJSONObject(0);
                                 if(resObj.getString("resType").equals("OK")) {
                                     JSONObject user = resArr.getJSONObject(1);
+                                    // Show ID and PW at screen
                                     tvMyId.setText("ID: " + user.getString("id"));
                                     tvMyPw.setText("PW: " + user.getString("pw"));
                                 } else {
@@ -115,8 +116,14 @@ public class FindActivity extends AppCompatActivity {
                         }
                     });
                 }
-
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
     }
 }

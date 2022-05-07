@@ -1,8 +1,7 @@
-package com.example.tannae.activity;
+package com.example.tannae.activity.account;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.example.tannae.R;
+import com.example.tannae.activity.main_service.MainActivity;
 import com.example.tannae.network.Network;
 import com.example.tannae.network.RetrofitClient;
 import com.example.tannae.network.ServiceApi;
@@ -22,26 +22,29 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+// < Login Activity >
 public class LoginActivity extends AppCompatActivity {
     private EditText etID, etPW;
     private Button btnLogin, btnFind, btnSignUp;
-
     private long backKeyPressedTime = 0;
-
     DBHelper dbHelper;
 
+    // < onCreate >
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Create Retrofit Client
         Network.service = RetrofitClient.getClient().create(ServiceApi.class);
+        ///////////////////////////////////////////// User 정보가 등록되어 있다면 자동 로그인
+        // Create Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        setViews();
-
+        // Setting
         dbHelper = new DBHelper(this,1 );
-
+        setViews();
         setEventListeners();
     }
 
+    // < Register views >
     private void setViews() {
         etID = findViewById(R.id.et_id_account_edit);
         etPW = findViewById(R.id.et_pw_account_edit);
@@ -50,16 +53,20 @@ public class LoginActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.btn_signup);
     }
 
+    // < Register event listeners >
     private void setEventListeners() {
+        // Login [RETROFIT]
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Check if ID and PW is entered
                 String id = etID.getText().toString();
                 String pw = etPW.getText().toString();
                 if(id.length() == 0 || pw.length() == 0) {
                     Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                // Check if entered ID/PW is a user
                 Network.service.login(id, pw).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
@@ -98,11 +105,15 @@ public class LoginActivity extends AppCompatActivity {
                     public void onFailure(Call<String> call, Throwable t) {
                         Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                         Log.e("Error", t.getMessage());
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);                    // 임시 코드
+                        startActivity(intent);                                                                      // 임시 코드
+                        finish();                                                                                   // 임시 코드
                     }
                 });
             }
         });
 
+        // Start Find Activity
         btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // Start Sign up Activity
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +132,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
+    // < BackPress >
     public void onBackPressed(){
         if(System.currentTimeMillis() > backKeyPressedTime + 2000){
             backKeyPressedTime = System.currentTimeMillis();

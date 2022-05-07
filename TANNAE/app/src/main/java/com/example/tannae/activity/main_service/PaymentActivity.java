@@ -1,4 +1,4 @@
-package com.example.tannae.activity;
+package com.example.tannae.activity.main_service;
 
 import android.os.Bundle;
 import android.view.View;

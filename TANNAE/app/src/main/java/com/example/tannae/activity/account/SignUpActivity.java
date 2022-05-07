@@ -1,4 +1,4 @@
-package com.example.tannae.activity;
+package com.example.tannae.activity.account;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,26 +27,27 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+// << Sign Up Activity >>
 public class SignUpActivity extends AppCompatActivity {
     private Button btnCheckID, btnSignUp;
     private RadioGroup rgGender;
     private EditText etID, etPW, etPWR, etName, etRRN, etPhone, etEmail;
     private TextView tvCheckId, tvCheckPW;
+    private Toolbar toolbar;
     private boolean availableID = false, checkedID = false, availablePW = false, availablePWR = false, genderType = true, availableEmail = false, availablePhone = false;
 
+    // < onCreate >
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Create
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        // Setting
         setViews();
         setEventListeners();
-
-        Toolbar toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
+    // < Register views >
     private void setViews() {
         btnCheckID = findViewById(R.id.btn_checkID_sign_up);
         btnSignUp = findViewById(R.id.btn_sign_up);
@@ -61,9 +62,14 @@ public class SignUpActivity extends AppCompatActivity {
 
         tvCheckId = findViewById(R.id.tv_checkID_sign_up);
         tvCheckPW = findViewById(R.id.tv_retrypw_sign_up);
+        toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    // < Register event listeners >
     private void setEventListeners() {
+        // Check if ID type is available
         etID.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -88,6 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) { }
         });
 
+        // Check if PW type is available
         etPW.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String pw = etPW.getText().toString();
@@ -111,6 +118,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) { }
         });
 
+        // Check if PWR is identical with PW
         etPWR.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -136,6 +144,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) { }
         });
 
+        // Change gender type by user input
         rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -143,6 +152,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+        // Store RRN by user input
         etRRN.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -157,13 +167,16 @@ public class SignUpActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) { }
         });
 
+        // Check if id entered is available [RETROFIT]
         btnCheckID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Check if ID type is available
                 if (!availableID) {
                     Toast.makeText(getApplicationContext(), "지원되지 않는 ID 형식입니다. \n다른 ID를 사용해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                // Request if ID is not user [RETROFIT]
                 Network.service.checkID(etID.getText().toString()).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
@@ -192,10 +205,12 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+        // Sing Up [RETROFIT]
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
+                    // Check if entered info's are available
                     if (!availableID || !availablePW)
                         Toast.makeText(getApplicationContext(), "허용되지 않은 ID or PW 형식입니다.", Toast.LENGTH_SHORT).show();
                     else if (!checkedID)
@@ -210,7 +225,9 @@ public class SignUpActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Email 을 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                     else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
                         Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
+                    // If available request sign up [RETROFIT]
                     else {
+                        // Create User JSON
                         JSONObject reqObj = new JSONObject();
                         reqObj.put("id", etID.getText().toString());
                         reqObj.put("pw", etPW.getText().toString());
@@ -220,6 +237,7 @@ public class SignUpActivity extends AppCompatActivity {
                         reqObj.put("phone", etPhone.getText().toString());
                         reqObj.put("email", etEmail.getText().toString());
 
+                        // Request sign up [RETROFIT]
                         Network.service.signup(reqObj).enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
