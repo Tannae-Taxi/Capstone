@@ -104,7 +104,7 @@ app.post('/account/signup', async (req, res) => {
         console.log(err.code);
         resType.resType = "Error";
     }
-    res.json(JSON.stringify(resType));
+    res.json(JSON.stringify([resType]));
 });
 
 // Find Account
@@ -144,7 +144,7 @@ app.post('/account/editAccount', async (req, res) => {
         console.log(err.code);
         resType.resType = "Error";
     }
-    res.json(JSON.stringify(resType));
+    res.json(JSON.stringify([resType]));
 });
 
 // Sign Out
@@ -159,7 +159,7 @@ app.post('/account/signout', async (req, res) => {
         console.log(err.code);
         resType.resType = "Error";
     }
-    res.json(JSON.stringify(resType));
+    res.json(JSON.stringify([resType]));
 });
 
 // < User >
@@ -175,7 +175,7 @@ app.post('/user/charge', async (req, res) => {
         console.log(err.code);
         resType.resType = "Error";
     }
-    res.json(JSON.stringify(resType));
+    res.json(JSON.stringify([resType]));
 });
 
 // Get History
@@ -251,7 +251,7 @@ app.post('/user/postLost', async (req, res) => {
         console.log(err.code);
         resType.resType = "Error";
     }
-    res.json(JSON.stringify(resType));
+    res.json(JSON.stringify([resType]));
 })
 
 // Get Content
@@ -285,7 +285,7 @@ app.post('/user/editContent', async (req, res) => {
         console.log(err.code);
         resType.resType = "Error";
     }
-    res.json(JSON.stringify(resType));
+    res.json(JSON.stringify([resType]));
 });
 
 // Post Content
@@ -318,7 +318,7 @@ app.post('/user/postContent', async (req, res) => {
         console.log(err.code);
         resType.resType = "Error";
     }
-    res.json(JSON.stringify(resType));
+    res.json(JSON.stringify([resType]));
 });
 
 // < Driver >
