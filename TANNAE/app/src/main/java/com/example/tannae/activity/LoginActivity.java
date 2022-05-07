@@ -56,10 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String id = etID.getText().toString();
                 String pw = etPW.getText().toString();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
-                /* if(id.length() == 0 || pw.length() == 0) {
+                if(id.length() == 0 || pw.length() == 0) {
                     Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -71,8 +68,8 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject resObj = resArr.getJSONObject(0);
                             String resType = resObj.getString("resType");
                             if (resType.equals("OK")) {
-
-                                //로그인에 성공했을 경우 내부 db(=TT.db)에 로그인한 회원의 ID와 PW 정보를 삽입하는 코드.
+                                JSONObject user = resArr.getJSONObject(1); // 이게 User data
+                                /*//로그인에 성공했을 경우 내부 db(=TT.db)에 로그인한 회원의 ID와 PW 정보를 삽입하는 코드.
                                 //usn 정보는 어떤 방식으로 삽입해야 할 지 서칭하는 중
                                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                                 db.execSQL("insert into TT values (null, '"
@@ -86,12 +83,10 @@ public class LoginActivity extends AppCompatActivity {
                                         + email + "', '"
                                         + drive + "', '"
                                         + points + "', '"
-                                        + score +"')");
-
-
-
+                                        + score +"')");*/
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
+                                finish();
                             } else
                                 Toast.makeText(getApplicationContext(), resType, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
@@ -105,7 +100,6 @@ public class LoginActivity extends AppCompatActivity {
                         Log.e("Error", t.getMessage());
                     }
                 });
-                */
             }
         });
 
