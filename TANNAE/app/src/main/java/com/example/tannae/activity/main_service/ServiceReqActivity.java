@@ -3,6 +3,7 @@ package com.example.tannae.activity.main_service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
+import net.daum.mf.map.api.MapView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +30,11 @@ public class ServiceReqActivity extends AppCompatActivity {
         // Setting
         setViews();
         setEventListeners();
+
+        MapView mapView = new MapView(this);
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
+        mapViewContainer.addView(mapView);
+
     }
 
     // < Register views >

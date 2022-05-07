@@ -44,7 +44,7 @@
         <activity android:name=".activity.user_service.FAQActivity"/>
         <activity android:name=".activity.user_service.FAQEditActivity"/>
 
-        <meta-data android:name="com.kakao.sdk.AppKey" android:value="9baed5ab6907b4f6a2a5ce8fb2a0df03"/>
+        <meta-data android:name="com.kakao.sdk.AppKey" android:value="857b6b465c82b532bee663ce98f9e214"/>
     </application>
 
 </manifest>
