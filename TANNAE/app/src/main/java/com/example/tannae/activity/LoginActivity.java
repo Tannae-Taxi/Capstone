@@ -74,8 +74,19 @@ public class LoginActivity extends AppCompatActivity {
 
                                 //로그인에 성공했을 경우 내부 db(=TT.db)에 로그인한 회원의 ID와 PW 정보를 삽입하는 코드.
                                 //usn 정보는 어떤 방식으로 삽입해야 할 지 서칭하는 중
-                                //SQLiteDatabase db = dbHelper.getWritableDatabase();
-                                //db.execSQL("insert into TT values (null, '" + usn + "', '" + id + "', '"+ pw +"')");
+                                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                                db.execSQL("insert into TT values (null, '"
+                                        + usn + "', '"
+                                        + id + "', '"
+                                        + pw + "', '"
+                                        + uname + "', '"
+                                        + rrn + "', '"
+                                        + gender + "', '"
+                                        + phone + "', '"
+                                        + email + "', '"
+                                        + drive + "', '"
+                                        + points + "', '"
+                                        + score +"')");
 
 
 
@@ -93,7 +104,8 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                         Log.e("Error", t.getMessage());
                     }
-                }); */
+                });
+                */
             }
         });
 

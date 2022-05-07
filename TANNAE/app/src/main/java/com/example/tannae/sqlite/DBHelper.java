@@ -13,10 +13,18 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table User ( _id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "usn integer, " +
+        db.execSQL("create table User ( _id integer primary key autoincrement," +
+                "usn text, " +
                 "id text, " +
-                "pw text )");
+                "pw text, " +
+                "uname text, " +
+                "rrn text, " +
+                "gender integer, " +
+                "phone text, " +
+                "email text, " +
+                "drive boolean, " +
+                "points integer, " +
+                "score real )");
     }
 
     @Override
