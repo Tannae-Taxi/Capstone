@@ -1,5 +1,4 @@
-let data = {"name" : "안녕"};
-
-let json = {};
-json[data.name] = 3;
-console.log(json);
+let data = {};
+data.wa = [];
+data.wa.push(3);
+console.log(data.wa);

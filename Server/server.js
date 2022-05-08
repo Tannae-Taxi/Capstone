@@ -36,7 +36,7 @@ server.listen(3000, () => {
 app.get('/account/login', async (req, res) => {
     let data = req.query;
     let resType = { "resType": "OK" };
-    console.log(data.id);
+
     try {
         let [result, field] = await connection.query(`select * from User where binary id = '${data.id}'`);
         if (result.length === 0) {
@@ -349,16 +349,14 @@ io.on('connection', (socket) => {
         let unpass = JSON.parse(vehicles[0].unpass);
 
         if (unpass.origin.name.equals('Vehicle')) {
+            pass = {}
             pass.waypoints = [];
             pass.sections = [];
         }
-        // Set pass
+        // Set pass & unpass
         pass.waypoints.push(unpass.origin);
-        pass.sections.push(unpass.sections.pop());
-        pass.distance = unpass.distance;
-        pass.duration = unpass.duration;
-
-        // Set unpass
+        pass.sections.push(unpass.sections.shift());
+        unpass.origin = unpass.waypoints.shift();
     });
 
     // Change service availability state
