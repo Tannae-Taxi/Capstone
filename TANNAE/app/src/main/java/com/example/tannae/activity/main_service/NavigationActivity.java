@@ -22,6 +22,8 @@ import org.json.JSONObject;
 public class NavigationActivity extends AppCompatActivity {
     private Button btnEndService, btnPass;
     private Switch switchDrive;
+    private MapView mapView;
+    private ViewGroup mapViewContainer;
 
     // < onCreate >
     @Override
@@ -46,12 +48,21 @@ public class NavigationActivity extends AppCompatActivity {
             btnEndService.setVisibility(View.INVISIBLE);
             switchDrive.setVisibility(View.INVISIBLE);
         }
+    }
 
-        MapView mapView = new MapView(this);
-        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view_navigation);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView = new MapView(this);
+        mapViewContainer = (ViewGroup) findViewById(R.id.map_view_navigation);
         mapViewContainer.addView(mapView);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapViewContainer.removeView(mapView);
+    }
 
     // < Set Socket.io >
     private void setNetworks() {

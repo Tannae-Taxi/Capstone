@@ -19,7 +19,9 @@ import org.json.JSONObject;
 // << ServiceReq Activity >>
 public class ServiceReqActivity extends AppCompatActivity {
     private EditText etOrigin, etDest;
-    private Button btnNext, btnBack;
+    private Button btnServiceReq, btnBack;
+    private MapView mapView;
+    private ViewGroup mapViewContainer;
 
     // < onCreate >
     @Override
@@ -30,26 +32,27 @@ public class ServiceReqActivity extends AppCompatActivity {
         // Setting
         setViews();
         setEventListeners();
+    }
 
-        MapView mapView = new MapView(this);
-        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view_servicereq);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView = new MapView(this);
+        mapViewContainer = (ViewGroup) findViewById(R.id.map_view_servicereq);
         mapViewContainer.addView(mapView);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MapView mapView = new MapView(this);
-        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view_servicereq);
         mapViewContainer.removeView(mapView);
     }
-
 
     // < Register views >
     private void setViews() {
         etOrigin = findViewById(R.id.et_origin_servicereq);
         etDest = findViewById(R.id.et_dest_servicereq);
-        btnNext = findViewById(R.id.btn_next_servicereq);
+        btnServiceReq = findViewById(R.id.btn_next_servicereq);
         btnBack = findViewById(R.id.btn_back_servicereq);
     }
 
@@ -63,7 +66,7 @@ public class ServiceReqActivity extends AppCompatActivity {
             }
         });
         // Request Service [SOCKET]
-        btnNext.setOnClickListener(new View.OnClickListener() {
+        btnServiceReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
