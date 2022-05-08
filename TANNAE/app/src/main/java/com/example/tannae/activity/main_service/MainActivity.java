@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     // < Register views >
     private void setViews() {
         btnDrive = findViewById(R.id.btn_drive_main);
-        reqBtn = findViewById(R.id.req_button);
+        reqBtn = findViewById(R.id.req_button_main);
         toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
