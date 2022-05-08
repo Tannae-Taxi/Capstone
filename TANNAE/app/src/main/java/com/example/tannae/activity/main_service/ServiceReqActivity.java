@@ -32,7 +32,7 @@ public class ServiceReqActivity extends AppCompatActivity {
         setEventListeners();
 
         MapView mapView = new MapView(this);
-        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view_servicereq);
         mapViewContainer.addView(mapView);
 
     }
@@ -41,8 +41,8 @@ public class ServiceReqActivity extends AppCompatActivity {
     private void setViews() {
         etOrigin = findViewById(R.id.et_origin_servicereq);
         etDest = findViewById(R.id.et_dest_servicereq);
-        btnNext = findViewById(R.id.btn_next_detailservicereq);
-        btnBack = findViewById(R.id.btn_back_detailservicereq);
+        btnNext = findViewById(R.id.btn_next_servicereq);
+        btnBack = findViewById(R.id.btn_back_servicereq);
     }
 
     // < Register event listeners >

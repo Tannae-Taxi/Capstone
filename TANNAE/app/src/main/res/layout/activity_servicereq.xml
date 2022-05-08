@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/btn_back_detailservicereq"
+        android:id="@+id/btn_back_servicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -20,7 +20,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/map_view"
+            android:id="@+id/map_view_servicereq"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -56,7 +56,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_next_detailservicereq"
+        android:id="@+id/btn_next_servicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
