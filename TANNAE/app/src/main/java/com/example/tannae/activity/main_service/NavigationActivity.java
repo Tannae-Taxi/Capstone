@@ -13,7 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
-import com.google.android.gms.maps.MapView;
+
+import net.daum.mf.map.api.MapView;
 
 import org.json.JSONObject;
 
@@ -50,6 +51,7 @@ public class NavigationActivity extends AppCompatActivity {
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view_navigation);
         mapViewContainer.addView(mapView);
     }
+
 
     // < Set Socket.io >
     private void setNetworks() {

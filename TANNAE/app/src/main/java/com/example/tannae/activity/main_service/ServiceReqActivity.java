@@ -34,8 +34,16 @@ public class ServiceReqActivity extends AppCompatActivity {
         MapView mapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view_servicereq);
         mapViewContainer.addView(mapView);
-
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MapView mapView = new MapView(this);
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view_servicereq);
+        mapViewContainer.removeView(mapView);
+    }
+
 
     // < Register views >
     private void setViews() {
