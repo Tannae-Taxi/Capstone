@@ -13,8 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
-
-import net.daum.mf.map.api.MapView;
+import com.google.android.gms.maps.MapView;
 
 import org.json.JSONObject;
 
