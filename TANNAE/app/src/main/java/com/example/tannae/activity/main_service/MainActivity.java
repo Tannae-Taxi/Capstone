@@ -1,6 +1,7 @@
 package com.example.tannae.activity.main_service;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnDrive;
     private FloatingActionButton reqBtn;
     private long backKeyPressedTime = 0;
+    private Toolbar toolbar;
 
     // < onCreate >
     @Override
@@ -35,8 +37,11 @@ public class MainActivity extends AppCompatActivity {
     private void setViews() {
         btnDrive = findViewById(R.id.btn_drive_main);
         reqBtn = findViewById(R.id.req_button);
+        toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
     }
-
     // < Register event listeners >
     private void setEventListeners() {
         // Service on
