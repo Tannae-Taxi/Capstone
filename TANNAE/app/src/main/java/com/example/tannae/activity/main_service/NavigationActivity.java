@@ -3,6 +3,7 @@ package com.example.tannae.activity.main_service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -12,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
+
+import net.daum.mf.map.api.MapView;
 
 import org.json.JSONObject;
 
@@ -43,6 +46,10 @@ public class NavigationActivity extends AppCompatActivity {
             btnEndService.setVisibility(View.INVISIBLE);
             switchDrive.setVisibility(View.INVISIBLE);
         }
+
+        MapView mapView = new MapView(this);
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view_navigation);
+        mapViewContainer.addView(mapView);
     }
 
     // < Set Socket.io >
