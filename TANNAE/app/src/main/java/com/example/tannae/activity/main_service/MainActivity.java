@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.tannae.R;
+import com.example.tannae.activity.account.LoginActivity;
+import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -41,7 +43,16 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
+                intent.putExtra("type", false);
+                startActivity(intent);
+            }
+        });
     }
+
     // < Register event listeners >
     private void setEventListeners() {
         // Service on

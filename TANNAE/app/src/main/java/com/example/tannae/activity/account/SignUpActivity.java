@@ -17,6 +17,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
+import com.example.tannae.activity.main_service.MainActivity;
+import com.example.tannae.activity.main_service.NavigationActivity;
 import com.example.tannae.network.Network;
 
 import org.json.JSONArray;
@@ -65,6 +67,14 @@ public class SignUpActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.putExtra("type", false);
+                startActivity(intent);
+            }
+        });
     }
 
     // < Register event listeners >

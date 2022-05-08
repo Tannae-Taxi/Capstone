@@ -36,6 +36,7 @@
         <activity android:name=".activity.main_service.NavigationActivity"/>
         <activity android:name=".activity.main_service.PaymentActivity"/>
 
+        <activity android:name=".activity.user_service.UserServiceListActivity"/>
         <activity android:name=".activity.user_service.LostFoundActivity"/>
         <activity android:name=".activity.user_service.HistoryActivity"/>
         <activity android:name=".activity.user_service.PointActivity"/>

@@ -56,6 +56,14 @@ public class FindActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.putExtra("type", false);
+                startActivity(intent);
+            }
+        });
     }
 
     // < Register event listeners >
