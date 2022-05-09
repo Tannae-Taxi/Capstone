@@ -98,7 +98,7 @@ app.post('/account/signup', async (req, res) => {
                 usnNew += '0';
             usnNew += usnNum;
         }
-        await connection.query(`insert User values('${usnNew}', '${data.id}', '${data.pw}', '${data.uname}', '${data.rrn}', ${data.gender}, '${data.phone}', '${data.email}', false, 0, 4.5)`);
+        await connection.query(`insert User values('${usnNew}', '${data.id}', '${data.pw}', '${data.uname}', '${data.rrn}', ${data.gender}, '${data.phone}', '${data.email}', false, 0, 4.5, false)`);
         console.log('/account/signup : Sign Up complete');
     } catch (err) {
         console.log(err.code);
@@ -185,7 +185,7 @@ app.get('/user/getHistory', async (req, res) => {
 
     try {
         let [result, field] = await connection.query(`select * from History where usn = '${data.usn}'`);
-        if (result.length == 0) {
+        if (result.length === 0) {
             console.log('/user/getHistory : No history');
             resType.resType = "이용 현황이 없습니다.";
         } else
@@ -205,7 +205,7 @@ app.get('/user/getLost', async (req, res) => {
 
     try {
         let [result, field] = await connection.query('select * from Lost');
-        if (result.length == 0) {
+        if (result.length === 0) {
             console.log('/user/getLost : No Lost');
             resType.resType = "등록된 분실물이 없습니다.";
         } else
@@ -259,7 +259,7 @@ app.get('/user/getContent', async (req, res) => {
     let resType = { "resType": "OK" };
     try {
         let [result, field] = await connection.query('select * from Content');
-        if (result.length == 0) {
+        if (result.length === 0) {
             console.log('/user/getContent : No Content');
             resType.resType = "등록된 컨텐츠가 없습니다.";
         } else
@@ -396,7 +396,13 @@ io.on('connection', (socket) => {
         let count = 0;
         let result = [];
         let users = [];
+
         for (let i = 0; i < pass.waypoints.length - 1; i++) {
+            let waypoint = pass.waypoints[i];
+            let point = names[waypoint.name];
+            let usn = point.user;
+            let type = point.type;
+            type === 'start' ? `${users.push(usn)}` : `${users.splice(users.indexOf(usn), 1)}`;
             
         }
     });
@@ -404,22 +410,24 @@ io.on('connection', (socket) => {
     // < Passenger >
     // Request Service
     socket.on('requestService', async (data) => {
-        let resType = { "resType": "OK" };
-        let service = new nav.Service(connection, socket, data);
+        if (!data.user.state) {
+            socket.emit('responseService', false);
+        } else {
+            let service = new nav.Service(connection, socket, data);
 
-        try {
-            await service.setVehicle();
-            if (service.vehicle != null) {
-                service.setPath();
-                service.path = await service.reqPath();
-                await service.updateDB();
-                socket.join(service.vehicle.vsn);
-                io.to(service.vehicle.vsn).emit('responseService', true, service.path);
-            } else
-                socket.emit('responseService', false);
-        } catch (err) {
-            console.log(err);
-            resType.resType = "Error";
+            try {
+                await service.setVehicle();
+                if (service.vehicle != null) {
+                    service.setPath();
+                    service.path = await service.reqPath();
+                    await service.updateDB();
+                    socket.join(service.vehicle.vsn);
+                    io.to(service.vehicle.vsn).emit('responseService', true, service.path);
+                } else
+                    socket.emit('responseService', false);
+            } catch (err) {
+                console.log(err);
+            }
         }
     });
 });
