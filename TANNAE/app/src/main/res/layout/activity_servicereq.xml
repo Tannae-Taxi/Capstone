@@ -30,26 +30,43 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="25dp"
         android:orientation="horizontal">
-        <EditText
-            android:id="@+id/et_origin_servicereq"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="25dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="출발지"
-            android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/et_dest_servicereq"
+        <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="25dp"
+            android:orientation="vertical">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="출발지"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="목적지"/>
+        </RadioGroup>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:ems="10"
-            android:hint="목적지"
-            android:inputType="textPersonName" />
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_origin_servicereq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="   출발지"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"/>
+            <TextView
+                android:id="@+id/tv_destination_servicereq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="   목적지"
+                android:gravity="left|center_vertical"/>
+        </LinearLayout>
         <Switch
             android:id="@+id/switch_share_servicereq"
             android:layout_width="wrap_content"

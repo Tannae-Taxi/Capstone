@@ -1,16 +1,15 @@
 package com.example.tannae.activity.main_service;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.example.tannae.R;
-import com.example.tannae.activity.account.LoginActivity;
 import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
         setViews();
         setEventListeners();
         // Connect Socket.io
-        Network.socket.connect();
+        if (!Network.socket.isActive())
+            Network.socket.connect();
     }
 
     // < Register views >
