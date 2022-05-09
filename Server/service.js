@@ -193,9 +193,9 @@ module.exports.Service = class Service {
         this.path.sections = this.path.sections;
 
         let names = {};
-        names = this.data.share ? JSON.parse(this.vehicle.name) : {};
-        names[this.data.start.name] = {'user': this.data.user.usn, 'type': 'start'};
-        names[this.data.end.name] = {'user': this.data.user.usn, 'type': 'end'};
+        names = this.data.share ? JSON.parse(this.vehicle.names) : {};
+        names[`${this.data.start.x}_${this.data.start.y}`] = {'user': this.data.user.usn, 'type': 'start'};
+        names[`${this.data.end.x}_${this.data.end.y}`] = {'user': this.data.user.usn, 'type': 'end'};
 
         await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi}, names = '${JSON.stringify(names)}' where vsn = '${this.vehicle.vsn}'`);
     }

@@ -387,19 +387,17 @@ io.on('connection', (socket) => {
         let cost = vehicles[0].cost;
         let names = JSON.parse(vehicles[0].names);
 
+        cost -= cost * pass.sections[0].distance / pass.distance;
+        pass.distance -= pass.sections[0].distance;
+        pass.duration -= pass.sections[0].duration;
+        pass.waypoints.shift();
+        pass.sections.shift();
+
         let count = 0;
+        let result = [];
         let users = [];
         for (let i = 0; i < pass.waypoints.length - 1; i++) {
-            let point = pass.waypoints[i].name;
-            if (point.equals('Vehicle')) {
-                cost -= cost * pass.sections[0].distance / pass.distance;
-                pass.distance -= pass.sections[0].distance;
-                pass.duration -= pass.sections[0].duration;
-                continue;
-            }
-
-            let user = names[point].user;
-            let type = names[point].type;
+            
         }
     });
 
