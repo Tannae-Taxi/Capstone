@@ -1,6 +1,7 @@
 package com.example.tannae.activity.main_service;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton reqBtn;
     private long backKeyPressedTime = 0;
     private Toolbar toolbar;
+
+    static SharedPreferences sp;
+    static SharedPreferences.Editor editor;
 
     // < onCreate >
     @Override
@@ -68,8 +72,14 @@ public class MainActivity extends AppCompatActivity {
         reqBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ServiceReqActivity.class);
-                startActivity(intent);
+                if(sp.getInt("state", 0) == 1){
+                    Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+                    startActivity(intent);
+                } // 탑승자가 탑승 상태일 경우(state == 1일 경우) ServiceReq로 가지 않고 바로 Navigation으로 화면 전환
+                else {
+                    Intent intent = new Intent(getApplicationContext(), ServiceReqActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -85,5 +95,10 @@ public class MainActivity extends AppCompatActivity {
             Network.socket.disconnect();
             finish();
         }
+    }
+
+    public void setPreferences(){
+        sp = getSharedPreferences("TTdb", MODE_PRIVATE);
+        editor = sp.edit();
     }
 }
