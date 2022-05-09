@@ -335,11 +335,19 @@ io.on('connection', (socket) => {
     });
 
     // < Driver >
-    // Start service
+    // Service On
     socket.on('serviceOn', async (user) => {
+        await connection.query(`update Vehicle set state true where usn = '${user.usn}'`)
         let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${user.usn}'`);
         console.log(`Driver ${user.usn} started service on vehicle ${vehicles[0].vsn}`);
         socket.join(vehicles[0].vsn);
+    });
+
+    // Service Off
+    socket.on('serviceOff', async (user, state) => {
+        await connection.query(`update Vehilce set state = ${state} where usn = '${user.usn}'`);
+        let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${user.usn}'`);
+        console.log(`Driver ${user.usn} stopped servicing on vehicle = ${vehicles[0].vsn}`);
     });
 
     // Pass Waypoint
@@ -353,22 +361,46 @@ io.on('connection', (socket) => {
             pass.waypoints = [];
             pass.sections = [];
         }
-        // Set pass & unpass
-        pass.waypoints.push(unpass.origin);
-        pass.sections.push(unpass.sections.shift());
-        unpass.origin = unpass.waypoints.shift();
-    });
 
-    // Change service availability state
-    socket.on('changeServiceState', async (user, state) => {
-        await connection.query(`update Vehilce set state = ${state} where usn = '${user.usn}'`);
-        console.log(`Driver ${user.usn} stopped servicing`);
+        // Set pass & unpass
+        if (unpass.waypoints.length != 0) {
+            pass.waypoints.push(unpass.origin);
+            pass.sections.push(unpass.sections.shift());
+            unpass.origin = unpass.waypoints.shift();
+        } else {
+            pass.waypoints.push(unpass.origin);
+            pass.waypoints.push(unpass.destination);
+            unpass = null;
+        }
+
+        // Update DB
+        await connection.query(`update Vehicle set pass = '${JSON.stringify(pass)}', unpass = ${unpass != null ? `'${JSON.stringify(unpass)}'` : null} where vsn = '${vehicles[0].vsn}'`);
+
+        // Send new path to users using vehicle
+        io.to(vehicles[0].vsn).emit('responseService', true, unpass);
     });
 
     // End service
     socket.on('serviceEnd', async (user) => {
-        let [result, field] = await connection.query(`select * from Vehicle where usn = '${user.usn}'`);
-        ////////////////////////////////////////// 운행 종료
+        let [vehicles, field] = await connection.query(`select pass, cost, names from Vehicle where usn = '${user.usn}'`);
+        let pass = JSON.parse(vehicles[0].pass);
+        let cost = vehicles[0].cost;
+        let names = JSON.parse(vehicles[0].names);
+
+        let count = 0;
+        let users = [];
+        for (let i = 0; i < pass.waypoints.length - 1; i++) {
+            let point = pass.waypoints[i].name;
+            if (point.equals('Vehicle')) {
+                cost -= cost * pass.sections[0].distance / pass.distance;
+                pass.distance -= pass.sections[0].distance;
+                pass.duration -= pass.sections[0].duration;
+                continue;
+            }
+
+            let user = names[point].user;
+            let type = names[point].type;
+        }
     });
 
     // < Passenger >
