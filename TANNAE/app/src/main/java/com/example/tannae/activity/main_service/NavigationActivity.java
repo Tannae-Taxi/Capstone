@@ -35,15 +35,9 @@ public class NavigationActivity extends AppCompatActivity {
         setViews();
         setEventListeners();
         setNetworks();
-        switchDrive.setChecked(true);
         // If main -> navigation ? true : false
         boolean type = getIntent().getBooleanExtra("type", false);
-        if (type) {
-            JSONObject user = new JSONObject();
-            Network.socket.emit("serviceOn");   ///////////////////////////////////////////////////// User 정보를 JSONObject 형태로 전송
-        }
-        // If not driver than set driver views invisible
-        else {
+        if (!type) {
             btnPass.setVisibility(View.INVISIBLE);
             btnEndService.setVisibility(View.INVISIBLE);
             switchDrive.setVisibility(View.INVISIBLE);
@@ -113,8 +107,9 @@ public class NavigationActivity extends AppCompatActivity {
         switchDrive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                JSONObject user = new JSONObject();     /////////////////////////////////////////////////////////// User 정보를 json 형태로 저장
-                Network.socket.emit("changeServiceState", user, isChecked);
+                JSONObject user = new JSONObject();
+                ///////////////////////////////////////////////// user에 운전자의 user 정보 삽입
+                Network.socket.emit(isChecked ? "serviceOn" : "serviceOff", user);
             }
         });
     }
