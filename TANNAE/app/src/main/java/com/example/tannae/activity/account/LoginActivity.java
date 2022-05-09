@@ -2,6 +2,7 @@ package com.example.tannae.activity.account;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,11 +14,13 @@ import com.example.tannae.activity.main_service.MainActivity;
 import com.example.tannae.network.Network;
 import com.example.tannae.network.RetrofitClient;
 import com.example.tannae.network.ServiceApi;
-import com.example.tannae.sqlite.DBHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.math.BigDecimal;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,7 +30,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etID, etPW;
     private Button btnLogin, btnFind, btnSignUp;
     private long backKeyPressedTime = 0;
-    DBHelper dbHelper;
+    static SharedPreferences sp;
+    static SharedPreferences.Editor editor;
 
     // < onCreate >
     @Override
@@ -39,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Setting
-        dbHelper = new DBHelper(this,1 );
+        setPreferences();
         setViews();
         setEventListeners();
     }
@@ -77,26 +81,45 @@ public class LoginActivity extends AppCompatActivity {
                             JSONArray resArr = new JSONArray(response.body());
                             JSONObject resObj = resArr.getJSONObject(0);
                             String resType = resObj.getString("resType");
+
                             if (resType.equals("OK")) {
+
                                 JSONObject user = resArr.getJSONObject(1); // 이게 User data
-                                /*//로그인에 성공했을 경우 내부 db(=TT.db)에 로그인한 회원의 ID와 PW 정보를 삽입하는 코드.
-                                //usn 정보는 어떤 방식으로 삽입해야 할 지 서칭하는 중
-                                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                                db.execSQL("insert into TT values (null, '"
-                                        + usn + "', '"
-                                        + id + "', '"
-                                        + pw + "', '"
-                                        + uname + "', '"
-                                        + rrn + "', '"
-                                        + gender + "', '"
-                                        + phone + "', '"
-                                        + email + "', '"
-                                        + drive + "', '"
-                                        + points + "', '"
-                                        + score +"')");*/
+
+                                editor.putString("usn", user.getString("usn"));
+                                editor.putString("id", etID.getText().toString());
+                                editor.putString("pw", etPW.getText().toString());
+                                editor.putString("uname", user.getString("uname"));
+                                editor.putString("rrn", user.getString("rrn"));
+                                editor.putInt("gender", user.getInt("gender"));
+                                editor.putString("phone", user.getString("phone"));
+                                editor.putString("email", user.getString("email"));
+                                editor.putInt("drive", user.getInt("drive"));
+                                editor.putInt("points", user.getInt("points"));
+                                editor.putFloat("score", BigDecimal.valueOf(user.getDouble("score")).floatValue());
+                                editor.putInt("state", user.getInt("state"));
+                                editor.apply();
+
+                                /* System.out.println("usn이름:"+sp.getString("usn",""));
+                                System.out.println("id이름:"+sp.getString("id",""));
+                                System.out.println("pw이름:"+sp.getString("pw",""));
+                                System.out.println("uname이름:"+sp.getString("uname",""));
+                                System.out.println("rrn이름:"+sp.getString("rrn",""));
+                                System.out.println("gender이름:"+sp.getInt("gender",0));
+                                System.out.println("phone이름:"+sp.getString("phone",""));
+                                System.out.println("email이름:"+sp.getString("email",""));
+                                System.out.println("drive이름:"+sp.getInt("drive",0));
+                                System.out.println("points이름:"+sp.getInt("points",22));
+                                System.out.println("score이름:"+sp.getFloat("score",(float) 4.5));
+                                System.out.println("state이름:"+sp.getInt("state",0)); */  // sp가 잘 구현 되었는지 테스트용 코드. 잘 됨!
+
+                                editor.clear(); // sp의 내용들을 초기화 시키는 코드로, 로그아웃이 구현되었을 때 사용할 코드임
+                                editor.apply();
+
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
                                 finish();
+
                             } else
                                 Toast.makeText(getApplicationContext(), resType, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
@@ -143,5 +166,10 @@ public class LoginActivity extends AppCompatActivity {
         if(System.currentTimeMillis() <= backKeyPressedTime + 2000){
             finish();
         }
+    }
+
+    public void setPreferences(){
+        sp = getSharedPreferences("TTdb", MODE_PRIVATE);
+        editor = sp.edit();
     }
 }
