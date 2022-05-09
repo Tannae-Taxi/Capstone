@@ -52,7 +52,7 @@ public class ServiceReqActivity extends AppCompatActivity {
     private void setViews() {
         etOrigin = findViewById(R.id.et_origin_servicereq);
         etDest = findViewById(R.id.et_dest_servicereq);
-        btnServiceReq = findViewById(R.id.btn_next_servicereq);
+        btnServiceReq = findViewById(R.id.btn_request_servicereq);
         btnBack = findViewById(R.id.btn_back_servicereq);
     }
 
