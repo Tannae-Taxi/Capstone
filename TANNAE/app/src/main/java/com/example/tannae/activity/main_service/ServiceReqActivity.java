@@ -35,7 +35,7 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
     private MapPOIItem marker;
     private boolean locationType = true;
     private String originLocation = "", destinationLocation = "";
-    private double originLat= 0, originLong = 0, destinationLat = 0, destinationLong = 0;
+    private double originX= 0, originY = 0, destinationX = 0, destinationY = 0;
 
     // < onCreate >
     @Override
@@ -110,13 +110,13 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
                     // Create JSON
                     JSONObject start = new JSONObject();
                     start.put("name", originLocation);
-                    start.put("lat", originLat);
-                    start.put("long", originLong);
+                    start.put("x", originX);
+                    start.put("y", originY);
 
                     JSONObject end = new JSONObject();
                     end.put("name", destinationLocation);
-                    end.put("lat", destinationLat);
-                    end.put("long", destinationLong);
+                    end.put("x", destinationX);
+                    end.put("y", destinationY);
 
                     JSONObject user = new JSONObject(); // 현재 로그인되어 있는 User(SharedPreferences에 저장된) 정보를 json 형태로 전환
                     user.put("usn", LoginActivity.sp.getString("usn",""));
@@ -166,12 +166,13 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         mapGeoCoder.startFindingAddress();
 
         if (locationType) {
-            originLat = mapPoint.getMapPointGeoCoord().latitude;
-            originLong = mapPoint.getMapPointGeoCoord().longitude;
+            originX = mapPoint.getMapPointGeoCoord().longitude;
+            originY = mapPoint.getMapPointGeoCoord().latitude;
         } else {
-            destinationLat = mapPoint.getMapPointGeoCoord().latitude;
-            destinationLong = mapPoint.getMapPointGeoCoord().longitude;
+            destinationX = mapPoint.getMapPointGeoCoord().longitude;
+            destinationY = mapPoint.getMapPointGeoCoord().latitude;
         }
+
         marker.setMapPoint(mapPoint);
         mapView.addPOIItem(marker);
     }
@@ -184,12 +185,13 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         mapGeoCoder.startFindingAddress();
 
         if (locationType) {
-            originLat = mapPoint.getMapPointGeoCoord().latitude;
-            originLong = mapPoint.getMapPointGeoCoord().longitude;
+            originX = mapPoint.getMapPointGeoCoord().longitude;
+            originY = mapPoint.getMapPointGeoCoord().latitude;
         } else {
-            destinationLat = mapPoint.getMapPointGeoCoord().latitude;
-            destinationLong = mapPoint.getMapPointGeoCoord().longitude;
+            destinationX = mapPoint.getMapPointGeoCoord().longitude;
+            destinationY = mapPoint.getMapPointGeoCoord().latitude;
         }
+
         marker.setMapPoint(mapPoint);
     }
 
