@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (LoginActivity.sp.getInt("state", 0) == 1) {
                     Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+                    intent.putExtra("type", false);
                     startActivity(intent);
                 } // 탑승자가 탑승 상태일 경우(state == 1일 경우) ServiceReq로 가지 않고 바로 Navigation으로 화면 전환
                 else {
