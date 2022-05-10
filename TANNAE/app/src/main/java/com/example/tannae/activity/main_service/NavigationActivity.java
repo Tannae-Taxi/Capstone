@@ -64,18 +64,17 @@ public class NavigationActivity extends AppCompatActivity {
         Network.socket.on("responseService", args -> {
             runOnUiThread(() -> {
                 int flag = (int) args[0];
-                if (flag == 1) {
-                    Toast.makeText(getApplicationContext(), "배차가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                String message = flag == -1 ? "배차 오류가 발생하였습니다.\n고객센터에 문의하세요." : (flag == 0 ? "이용 가능한 차량이 없습니다." :
+                        (flag == 1 ? "동승 가능한 차량이 배차되었습니다." : (flag == 2 ? "동승 가능한 차량이 없습니다.\n일반 차량이 배차되었습니다." : "일반 차량이 배차되었습니다.")));
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                if (flag == 1 || flag == 2 || flag == 3) {
                     JSONObject path = (JSONObject) args[1];
-                    
                     ////////////////////////////////////////////////////////////// path 정보를 바탕으로 navigation 화면 수정
-                } else if (flag == 0){
-                    Toast.makeText(getApplicationContext(), "이용 가능한 차량이 없습니다.", Toast.LENGTH_SHORT).show();
+                } else {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
-                } else {
-                    Toast.makeText(getApplicationContext(), "배차 오류가 발생하였습니다.\n고객센터에 문의하세요.", Toast.LENGTH_SHORT).show();
                 }
             });
 
