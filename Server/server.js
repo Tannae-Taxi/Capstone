@@ -38,11 +38,12 @@ app.get('/account/login', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
-        let [result, field] = await connection.query(`select * from User where binary id = '${data.id}'`);
+        let [result, field] = await connection.query(`select usn, cast(id as char) as id, cast(pw as char) as pw, uname, rrn, gender, phone, email, drive, points, score, state from User where binary id = '${data.id}'`);
+        console.log(result);
         if (result.length === 0) {
             console.log('/account/login : Not a user');
             resType.resType = "등록된 사용자가 아닙니다.";
-        } else if (req.query.pw !== result[0].pw.toString('utf-8')) {
+        } else if (req.query.pw !== result[0].pw) {
             console.log('/account/login : Password mismatch');
             resType.resType = "비밀번호가 잘못되었습니다.";
         } else
@@ -411,24 +412,23 @@ io.on('connection', (socket) => {
     // Request Service
     socket.on('requestService', async (data) => {
         let service = new nav.Service(connection, socket, data);
+        console.log(data);
 
         try {
-            await service.setVehicle();
+            let flag = await service.setVehicle();
             if (service.vehicle != null) {
                 service.setPath();
                 service.path = await service.reqPath();
-                console.log(service.path);
-                console.log(service.path.summary.waypoints);
-                await service.updateDB();
+                //await service.updateDB();
                 socket.join(service.vehicle.vsn);
-                io.to(service.vehicle.vsn).emit('responseService', true, service.path);
+                io.to(service.vehicle.vsn).emit('responseService', service.flag, service.path);
             } else {
-                console.log("FAIL");
-                socket.emit('responseService', false);
+                console.log(`No vehicle is available for user ${data.user.usn}(Start : ${data.start.name} / End : ${data.end.name})`);
+                socket.emit('responseService', 0);
             }
         } catch (err) {
             console.log(err + "ERROR");
-            socket.emit('responseService', false);
+            socket.emit('responseService', -1);
         }
     });
 });

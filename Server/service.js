@@ -5,15 +5,18 @@ let request = require('request');
 module.exports.Service = class Service {
     // < Construct Path >
     constructor(connection, socket, data) {
+        // Basic setting
         this.connection = connection;
         this.socket = socket;
         this.data = data;
+        // Set path structure
         this.path = {
             "origin": { "name": "Vehicle", "x": 0, "y": 0 },
             "destination": { "name": null, "x": 0, "y": 0 },
             "waypoints": [],
             "priority": "RECOMMEND", "car_fuel": "GASOLINE", "car_hipass": false, "alternatives": false, "road_details": false, "summary": true
         }
+        // Set path reqeust
         this.pathReq = {
             headers: { 'content-type': 'application/json', 'authorization': 'KakaoAK d94b5c67305d6a10b3e43e5da881e7cf' },
             url: 'https://apis-navi.kakaomobility.com/v1/waypoints/directions',
@@ -24,21 +27,26 @@ module.exports.Service = class Service {
 
     // < Set vehicle >
     async setVehicle() {
-        // Search vehicles available
+        // Search vehicles available (share ? check available vehicles which is serving : check available vehicles which is on service but not serving)
         let sql = this.data.share ? `select * from Vehicle where state = true and num != 3 and num != 0 and share = 1 and gender = ${this.data.user.gender}` : `select * from Vehicle where state = true and num = 0`;
         let [vehicles, field] = await this.connection.query(sql);
         let nearestIndex = -1;
         let minDistance = Number.MAX_VALUE;
+        this.flag = 0;       // 0 : No vehicle / 1 : Share vehicle / 2 : Non share vehicle for share user / 3 : Non share vehicle for non-share user
 
         this.pointss = [];
         // Select nearest vehicle which is available
         for (let i = 0; i < vehicles.length; i++) {
+            // If share than check if requested path is available on vehicle's path
             if (this.data.share) {
-                let [flag, points] = this.checkInnerPath(vehicles[i]);
+                let [flagP, points] = this.checkInnerPath(vehicles[i]);
                 pointss.push(points);
-                if (!flag)
+                // If not available than don't check current vehicle
+                if (!flagP)
                     continue;
+                this.flag = 1;
             }
+            // Check current vehicle and see if is the nearest one
             let position = vehicles[i].pos.split(' ');
             let distance = Math.sqrt(Math.pow(this.data.start.x - position[0], 2) + Math.pow(this.data.start.y - position[1], 2));
             nearestIndex = minDistance > distance ? i : nearestIndex;
@@ -60,6 +68,7 @@ module.exports.Service = class Service {
         if (nearestIndex != -1) {
             this.vehicle = vehicles[nearestIndex];
             this.pointss = this.pointss[nearestIndex];
+            this.flag = this.flag === 0 ? (this.data.share ? 2 : 3) : 1;
         } else {
             this.vehicle = null;
         }
@@ -68,7 +77,7 @@ module.exports.Service = class Service {
 
     // < Set path >
     setPath() {
-        if (this.data.share) {
+        if (this.flag === 1) {   ///////////////////////////////////////////////////////////////////////
             let points = this.pointss;
             this.path.origin = points[0];
             this.path.destination = points[points.length - 1];
@@ -193,7 +202,7 @@ module.exports.Service = class Service {
         this.path.sections = this.path.sections;
 
         let names = {};
-        names = this.data.share ? JSON.parse(this.vehicle.names) : {};
+        names = this.flag === 1 ? JSON.parse(this.vehicle.names) : {};  ///////////////////////////////
         names[`${this.data.start.x}_${this.data.start.y}_${this.data.start.name}`] = {'user': this.data.user.usn, 'type': 'start'};
         names[`${this.data.end.x}_${this.data.end.y}_${this.data.end.name}`] = {'user': this.data.user.usn, 'type': 'end'};
 
