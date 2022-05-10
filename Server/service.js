@@ -40,7 +40,7 @@ module.exports.Service = class Service {
                     continue;
             }
             let position = vehicles[i].pos.split(' ');
-            let distance = Math.sqrt(Math.pow(this.data.start.x - position[0], 2) + Math.pow(this.data.start.y - position[1], 2));
+            let distance = Math.sqrt(Math.pow(this.data.start.lat - position[0], 2) + Math.pow(this.data.start.long - position[1], 2));
             nearestIndex = minDistance > distance ? i : nearestIndex;
             minDistance = minDistance > distance ? distance : minDistance;
         }
@@ -50,7 +50,7 @@ module.exports.Service = class Service {
             [vehicles, field] = await this.connection.query(`select * from Vehicle where state = true and num = 0`);
             for (let i = 0; i < vehicles.length; i++) {
                 let position = vehicles[i].pos.split(' ');
-                let distance = Math.sqrt(Math.pow(this.data.start.x - position[0], 2) + Math.pow(this.data.start.y - position[1], 2));
+                let distance = Math.sqrt(Math.pow(this.data.start.lat - position[0], 2) + Math.pow(this.data.start.long - position[1], 2));
                 nearestIndex = minDistance > distance ? i : nearestIndex;
                 minDistance = minDistance > distance ? distance : minDistance;
             }
@@ -194,8 +194,8 @@ module.exports.Service = class Service {
 
         let names = {};
         names = this.data.share ? JSON.parse(this.vehicle.names) : {};
-        names[`${this.data.start.x}_${this.data.start.y}_${this.data.start.name}`] = {'user': this.data.user.usn, 'type': 'start'};
-        names[`${this.data.end.x}_${this.data.end.y}_${this.data.end.name}`] = {'user': this.data.user.usn, 'type': 'end'};
+        names[`${this.data.start.lat}_${this.data.start.long}_${this.data.start.name}`] = {'user': this.data.user.usn, 'type': 'start'};
+        names[`${this.data.end.lat}_${this.data.end.long}_${this.data.end.name}`] = {'user': this.data.user.usn, 'type': 'end'};
 
         await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi}, names = '${JSON.stringify(names)}' where vsn = '${this.vehicle.vsn}'`);
         await this.connection.query(`update User set state = true where usn = ${this.data.user.usn}`);

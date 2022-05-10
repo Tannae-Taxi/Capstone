@@ -403,31 +403,31 @@ io.on('connection', (socket) => {
             let usn = point.user;
             let type = point.type;
             type === 'start' ? `${users.push(usn)}` : `${users.splice(users.indexOf(usn), 1)}`;
-            
+
         }
     });
 
     // < Passenger >
     // Request Service
     socket.on('requestService', async (data) => {
-        if (!data.user.state) {
-            socket.emit('responseService', false);
-        } else {
-            let service = new nav.Service(connection, socket, data);
+        console.log(data);
+        let service = new nav.Service(connection, socket, data);
 
-            try {
-                await service.setVehicle();
-                if (service.vehicle != null) {
-                    service.setPath();
-                    service.path = await service.reqPath();
-                    await service.updateDB();
-                    socket.join(service.vehicle.vsn);
-                    io.to(service.vehicle.vsn).emit('responseService', true, service.path);
-                } else
-                    socket.emit('responseService', false);
-            } catch (err) {
-                console.log(err);
+        try {
+            await service.setVehicle();
+            if (service.vehicle != null) {
+                service.setPath();
+                service.path = await service.reqPath();
+                await service.updateDB();
+                socket.join(service.vehicle.vsn);
+                io.to(service.vehicle.vsn).emit('responseService', true, service.path);
+            } else {
+                console.log("FAIL");
+                socket.emit('responseService', false);
             }
+        } catch (err) {
+            console.log(err + "ERROR");
+            socket.emit('responseService', false);
         }
     });
 });
