@@ -410,7 +410,6 @@ io.on('connection', (socket) => {
     // < Passenger >
     // Request Service
     socket.on('requestService', async (data) => {
-        console.log(data);
         let service = new nav.Service(connection, socket, data);
 
         try {
@@ -418,6 +417,8 @@ io.on('connection', (socket) => {
             if (service.vehicle != null) {
                 service.setPath();
                 service.path = await service.reqPath();
+                console.log(service.path);
+                console.log(service.path.summary.waypoints);
                 await service.updateDB();
                 socket.join(service.vehicle.vsn);
                 io.to(service.vehicle.vsn).emit('responseService', true, service.path);
