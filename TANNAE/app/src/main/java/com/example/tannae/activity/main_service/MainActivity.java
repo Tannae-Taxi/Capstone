@@ -1,7 +1,6 @@
 package com.example.tannae.activity.main_service;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
+import com.example.tannae.activity.account.LoginActivity;
 import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,9 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private long backKeyPressedTime = 0;
     private Toolbar toolbar;
 
-    static SharedPreferences sp;
-    static SharedPreferences.Editor editor;
-
     // < onCreate >
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // Setting
-        setPreferences();
         setViews();
         setEventListeners();
         // Connect Socket.io
@@ -73,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         reqBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(sp.getInt("state", 0) == 1){
+                if (LoginActivity.sp.getInt("state", 0) == 1) {
                     Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
                     startActivity(intent);
                 } // 탑승자가 탑승 상태일 경우(state == 1일 경우) ServiceReq로 가지 않고 바로 Navigation으로 화면 전환
@@ -96,10 +92,5 @@ public class MainActivity extends AppCompatActivity {
             Network.socket.disconnect();
             finish();
         }
-    }
-
-    public void setPreferences(){
-        sp = getSharedPreferences("TTdb", MODE_PRIVATE);
-        editor = sp.edit();
     }
 }

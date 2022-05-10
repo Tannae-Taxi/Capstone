@@ -1,6 +1,5 @@
 package com.example.tannae.activity.account;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.tannae.R;
 import com.example.tannae.activity.main_service.MainActivity;
 import com.example.tannae.network.Network;
@@ -30,8 +32,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etID, etPW;
     private Button btnLogin, btnFind, btnSignUp;
     private long backKeyPressedTime = 0;
-    static SharedPreferences sp;
-    static SharedPreferences.Editor editor;
+    public static SharedPreferences sp;
+    public static SharedPreferences.Editor editor;
 
     // < onCreate >
     @Override

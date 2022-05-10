@@ -61,16 +61,21 @@ public class NavigationActivity extends AppCompatActivity {
     // < Set Socket.io >
     private void setNetworks() {
         Network.socket.on("responseService", args -> {
-            boolean flag = (boolean) args[0];
-            if (flag) {
-                JSONObject path = (JSONObject) args[1];
-                ////////////////////////////////////////////////////////////// path 정보를 바탕으로 navigation 화면 수정
-            } else {
-                Toast.makeText(getApplicationContext(), "이용 가능한 차량이 없습니다.", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
+            runOnUiThread(() -> {
+                boolean flag = (boolean) args[0];
+                if (flag) {
+                    Toast.makeText(getApplicationContext(), "배차가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                    JSONObject path = (JSONObject) args[1];
+                    
+                    ////////////////////////////////////////////////////////////// path 정보를 바탕으로 navigation 화면 수정
+                } else {
+                    Toast.makeText(getApplicationContext(), "이용 가능한 차량이 없습니다.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            });
+
         });
     }
 

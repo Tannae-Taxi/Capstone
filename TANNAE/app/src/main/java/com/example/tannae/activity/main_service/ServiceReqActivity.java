@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
 
-import net.daum.android.map.MapViewEventListener;
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapReverseGeoCoder;
@@ -22,26 +22,19 @@ import net.daum.mf.map.api.MapView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-//class ReqLocation {
-//    double orgin_X = 0;
-//    double orgin_Y = 0;
-//    double destination_X = 0;
-//    double destination_Y = 0;
-//
-//    String origin_Location = "";
-//    String destination_Location = "";
-//}
-
 // << ServiceReq Activity >>
-public class ServiceReqActivity extends AppCompatActivity implements MapView.MapViewEventListener, MapView.POIItemEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
-    private RadioGroup rglocation;
+public class ServiceReqActivity extends AppCompatActivity implements MapView.MapViewEventListener, MapView.POIItemEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
+    private RadioGroup rgLocation;
     private TextView tvOrigin, tvDestination;
     private Button btnServiceReq, btnBack;
-    private boolean locationType = true;
+    private Switch switchShare;
     private MapView mapView;
     private ViewGroup mapViewContainer;
     private MapPoint mapPoint;
     private MapPOIItem marker;
+    private boolean locationType = true;
+    private String originLocation = "", destinationLocation = "";
+    private double originLat= 0, originLong = 0, destinationLat = 0, destinationLong = 0;
 
     // < onCreate >
     @Override
@@ -82,11 +75,12 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
 
     // < Register views >
     private void setViews() {
-        rglocation = findViewById(R.id.rg_location_servicereq);
+        rgLocation = findViewById(R.id.rg_location_servicereq);
         btnServiceReq = findViewById(R.id.btn_request_servicereq);
         btnBack = findViewById(R.id.btn_back_servicereq);
         tvOrigin = findViewById(R.id.tv_origin_servicereq);
         tvDestination = findViewById(R.id.tv_destination_servicereq);
+        switchShare = findViewById(R.id.switch_share_servicereq);
     }
 
     // < Register event listeners >
@@ -99,7 +93,7 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
             }
         });
 
-        rglocation.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        rgLocation.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 locationType = (checkedId == R.id.rb_origin_servicereq) ? true : false;
@@ -114,19 +108,19 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
                 try {
                     // Create JSON
                     JSONObject start = new JSONObject();
-                    start.put("name", tvOrigin.getText().toString());
-                    start.put("x", 127.11024293202674); ////////////////////////////////////// 출발지 이름에 대한 x 좌표 가져오기
-                    start.put("y", 37.394348634049784); ////////////////////////////////////// 출발지 이름에 대한 y 좌표 가져오기
+                    start.put("name", originLocation);
+                    start.put("lat", originLat);
+                    start.put("long", originLong);
                     JSONObject end = new JSONObject();
-                    end.put("name", tvDestination.getText().toString());
-                    end.put("x", 127.11024293202674); //////////////////////////////////////// 목적지 이름에 대한 x 좌표 가져오기
-                    end.put("y", 37.394348634049784); //////////////////////////////////////// 목적지 이름에 대한 y 좌표 가져오기
+                    end.put("name", destinationLocation);
+                    end.put("lat", destinationLat);
+                    end.put("long", destinationLong);
                     JSONObject user = new JSONObject();
                     //////////////////////////////////////////////////// 현재 로그인되어 있는 User(SQLite 에 저장된) 정보를 json 형태로 전환
                     JSONObject data = new JSONObject();
                     data.put("start", start);
                     data.put("end", end);
-                    data.put("share", true); ///////////////////////////////////////////////// Switch button 에서 동승 서비스 여부를 이용할 것인지에 대한 Boolean 값 삽입
+                    data.put("share", switchShare.isChecked());
                     data.put("user", user);
                     Network.socket.emit("requestService", data);
                     Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
@@ -147,45 +141,59 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         startActivity(intent);
     }
 
+    // < Map Methods >
     @Override
     public void onMapViewInitialized(MapView mapView) {
-
         mapPoint = mapView.getMapCenterPoint();
         MapReverseGeoCoder mapGeoCoder = new MapReverseGeoCoder("be32c53145962ae88db090324e2223b0",
                 mapPoint, this, ServiceReqActivity.this);
         mapGeoCoder.startFindingAddress();
 
-//        if(locationType == true){
-//            ReqLocation.orgin_Y = mapPoint.getMapPointGeoCoord().longitude;
-//            ReqLocation.orgin_X = mapPoint.getMapPointGeoCoord().latitude;
-//        }
-//        else{
-//            ReqLocation.destination_Y = mapPoint.getMapPointGeoCoord().longitude;
-//            ReqLocation.destination_X = mapPoint.getMapPointGeoCoord().latitude;
-//        }
+        if (locationType) {
+            originLat = mapPoint.getMapPointGeoCoord().latitude;
+            originLong = mapPoint.getMapPointGeoCoord().longitude;
+        } else {
+            destinationLat = mapPoint.getMapPointGeoCoord().latitude;
+            destinationLong = mapPoint.getMapPointGeoCoord().longitude;
+        }
         marker.setMapPoint(mapPoint);
         mapView.addPOIItem(marker);
     }
 
     @Override
     public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
-
-        // this
         mapPoint = mapView.getMapCenterPoint();
         MapReverseGeoCoder mapGeoCoder = new MapReverseGeoCoder("be32c53145962ae88db090324e2223b0",
                 mapPoint, this, ServiceReqActivity.this);
         mapGeoCoder.startFindingAddress();
 
-//        if(locationType == true){
-//            ReqLocation.orgin_Y = mapPoint.getMapPointGeoCoord().longitude;
-//            ReqLocation.orgin_X = mapPoint.getMapPointGeoCoord().latitude;
-//        }
-//        else{
-//            ReqLocation.destination_Y = mapPoint.getMapPointGeoCoord().longitude;
-//            ReqLocation.destination_X = mapPoint.getMapPointGeoCoord().latitude;
-//        }
-
+        if (locationType) {
+            originLat = mapPoint.getMapPointGeoCoord().latitude;
+            originLong = mapPoint.getMapPointGeoCoord().longitude;
+        } else {
+            destinationLat = mapPoint.getMapPointGeoCoord().latitude;
+            destinationLong = mapPoint.getMapPointGeoCoord().longitude;
+        }
         marker.setMapPoint(mapPoint);
+    }
+
+    @Override
+    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
+        if (locationType) {
+            tvOrigin.setText(s);
+            originLocation = s;
+        } else {
+            tvDestination.setText(s);
+            destinationLocation = s;
+        }
+    }
+
+    @Override
+    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
+        if (locationType)
+            tvOrigin.setText("올바른 지역이 아닙니다.");
+        else
+            tvDestination.setText("올바른 지역이 아닙니다.");
     }
 
     @Override
@@ -240,28 +248,6 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
 
     @Override
     public void onDraggablePOIItemMoved(MapView mapView, MapPOIItem mapPOIItem, MapPoint mapPoint) {
-
-    }
-
-    @Override
-    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
-        if(locationType == true){
-            tvOrigin.setText(s);
-//            ReqLocation.origin_Location = s;
-        }
-        else{
-            tvDestination.setText(s);
-//            ReqLocation.destination_Location = s;
-        }
-
-    }
-
-    @Override
-    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
-        if(locationType == true)
-            tvOrigin.setText("올바른 지역이 아닙니다.");
-        else
-            tvDestination.setText("올바른 지역이 아닙니다.");
 
     }
 }
