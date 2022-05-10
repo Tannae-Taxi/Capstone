@@ -47,6 +47,14 @@
         android:text="QnA" />
 
     <Button
+        android:id="@+id/btn_history_userservicelist"
+        style="@style/Widget.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="History" />
+
+    <Button
         android:id="@+id/btn_lost_found_userservicelist"
         style="@style/Widget.Button.TextButton"
         android:layout_width="match_parent"
@@ -61,4 +69,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="FAQ" />
+
+    <Button
+        android:id="@+id/btn_payment_userservicelist"
+        style="@style/Widget.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Payment" />
 </LinearLayout>
