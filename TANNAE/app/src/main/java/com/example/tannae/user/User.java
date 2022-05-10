@@ -41,17 +41,17 @@ public class User extends AppCompatActivity {
     }
 
     public static void setUserInTOOut(JSONObject user) throws JSONException {
-            user.put("usn", sp.getString("usn",""));
-            user.put("id", sp.getString("id", ""));
-            user.put("pw", sp.getString("pw", ""));
-            user.put("uname", sp.getString("uname", ""));
-            user.put("rrn", sp.getString("rrn", ""));
-            user.put("gender", sp.getInt("gender", 1));
-            user.put("phone", sp.getString("phone", ""));
-            user.put("email", sp.getString("email", ""));
-            user.put("drive", sp.getInt("drive", 0));
-            user.put("points", sp.getInt("points", 0));
-            user.put("score", sp.getFloat("score", (float)0.0));
-            user.put("state", sp.getInt("state", 0));
+        user.put("usn", sp.getString("usn", ""));
+        user.put("id", sp.getString("id", ""));
+        user.put("pw", sp.getString("pw", ""));
+        user.put("uname", sp.getString("uname", ""));
+        user.put("rrn", sp.getString("rrn", ""));
+        user.put("gender", sp.getInt("gender", 1));
+        user.put("phone", sp.getString("phone", ""));
+        user.put("email", sp.getString("email", ""));
+        user.put("drive", sp.getInt("drive", 0));
+        user.put("points", sp.getInt("points", 0));
+        user.put("score", sp.getFloat("score", (float) 0.0));
+        user.put("state", sp.getInt("state", 0));
     }
 }
