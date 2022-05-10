@@ -3,6 +3,7 @@ package com.example.tannae.activity.main_service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -15,12 +16,17 @@ import com.example.tannae.network.Network;
 import com.example.tannae.user.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.daum.android.map.MapViewController;
+import net.daum.mf.map.api.MapView;
+
 // << Main Activity >>
 public class MainActivity extends AppCompatActivity {
     private Button btnDrive;
     private FloatingActionButton reqBtn;
     private long backKeyPressedTime = 0;
     private Toolbar toolbar;
+    private MapView mapView;
+    private ViewGroup mapViewContainer;
 
     // < onCreate >
     @Override
@@ -34,6 +40,20 @@ public class MainActivity extends AppCompatActivity {
         // Connect Socket.io
         if (!Network.socket.isActive())
             Network.socket.connect();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView = new MapView(this);
+        mapViewContainer = (ViewGroup) findViewById(R.id.map_view_main);
+        mapViewContainer.addView(mapView);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapViewContainer.removeView(mapView);
     }
 
     // < Register views >
