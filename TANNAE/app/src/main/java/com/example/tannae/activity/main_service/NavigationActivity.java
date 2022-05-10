@@ -17,6 +17,7 @@ import com.example.tannae.user.User;
 
 import net.daum.mf.map.api.MapView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // << Navigation Activity >>
@@ -60,7 +61,7 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     // < Set Socket.io >
-    private void setNetworks() {
+    private void setNetworks() { /////////////////////////////////////// 탑승자 유저가 배차가 성공하였을 경우 state 값을 1로 변경하기
         Network.socket.on("responseService", args -> {
             runOnUiThread(() -> {
                 int flag = (int) args[0];
@@ -95,7 +96,14 @@ public class NavigationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 JSONObject user = new JSONObject();
+
                 /////////////////////////////////////////////////////// user에 운전자의 user 정보 삽입
+                /* try {
+                    User.setUserInTOOut(user);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } */ // user에 운전자의 user 정보를 삽입하는 코드. 잘 한건지 몰라서 일단 주석 처리해둠 SC
+
                 Network.socket.emit("passWaypoint", user);
             }
         });
@@ -108,11 +116,18 @@ public class NavigationActivity extends AppCompatActivity {
             }
         });
         // Change service availability [SOCKET]
-        switchDrive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchDrive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {  /////////////// 운전자 유저의 drive 값을 변경해주기
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 JSONObject user = new JSONObject();
+
                 ///////////////////////////////////////////////// user에 운전자의 user 정보 삽입
+                /* try {
+                    User.setUserInTOOut(user);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } */ // user에 운전자의 user 정보를 삽입하는 코드. 잘 한건지 몰라서 일단 주석 처리해둠 SC
+
                 Network.socket.emit(isChecked ? "serviceOn" : "serviceOff", user);
             }
         });
@@ -122,11 +137,14 @@ public class NavigationActivity extends AppCompatActivity {
     public void onBackPressed() {
         /////////////////////////////// Navigation 화면에 있는데 state 가 0인 사람은 운전자이고 1인 사람은 탑승자임을 알 수 있슴.
         /////////////////////////////// 운전자는 안전상의 이유로 운행 중일 때는 Navigation 종료 불가
-        /////////////////////////////// 사용자는 Main 화면으로 복귀
-        if(User.sp.getInt("state", 0) == 0)
-            Toast.makeText(getApplicationContext(), "운행중에는 내비게이션을 종료할 수 없습니다.", Toast.LENGTH_SHORT).show();
+        /////////////////////////////// 탑승자는 Main 화면으로 복귀
+        if(User.sp.getInt("state", 0) == 0 && User.sp.getInt("drive",0) == 1) // 내비게이션 화면에 있는데 운전자(state값이 0)이며 운행중(drive 값이 1)상태인경우에는
+            Toast.makeText(getApplicationContext(), "운행중에는 내비게이션을 종료할 수 없습니다.", Toast.LENGTH_SHORT).show(); // 내비 종료 불가
         else {
             /////////////////////////// Main 화면으로 복귀
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent); // 탑승자인 경우 Main 화면으로 복귀하는 코드. FLAG_ACTIVITY_CLEAR_TOP을 사용하였기 때문에 내비게이션 화면 정보를 유지해주어야 함
         }
     }
 }
