@@ -115,8 +115,6 @@ public class LoginActivity extends AppCompatActivity {
                                 System.out.println("score이름:"+sp.getFloat("score",(float) 4.5));
                                 System.out.println("state이름:"+sp.getInt("state",0)); */  // sp가 잘 구현 되었는지 테스트용 코드. 잘 됨!
 
-                                editor.clear(); // sp의 내용들을 초기화 시키는 코드로, 로그아웃이 구현되었을 때 사용할 코드임
-                                editor.apply();
 
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);

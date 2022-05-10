@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
+import com.example.tannae.activity.account.LoginActivity;
 import com.example.tannae.network.Network;
 
 import net.daum.mf.map.api.MapPOIItem;
@@ -111,17 +112,32 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
                     start.put("name", originLocation);
                     start.put("lat", originLat);
                     start.put("long", originLong);
+
                     JSONObject end = new JSONObject();
                     end.put("name", destinationLocation);
                     end.put("lat", destinationLat);
                     end.put("long", destinationLong);
-                    JSONObject user = new JSONObject();
-                    //////////////////////////////////////////////////// 현재 로그인되어 있는 User(SQLite 에 저장된) 정보를 json 형태로 전환
+
+                    JSONObject user = new JSONObject(); // 현재 로그인되어 있는 User(SharedPreferences에 저장된) 정보를 json 형태로 전환
+                    user.put("usn", LoginActivity.sp.getString("usn",""));
+                    user.put("id", LoginActivity.sp.getString("id", ""));
+                    user.put("pw", LoginActivity.sp.getString("pw", ""));
+                    user.put("uname", LoginActivity.sp.getString("uname", ""));
+                    user.put("rrn", LoginActivity.sp.getString("rrn", ""));
+                    user.put("gender", LoginActivity.sp.getInt("gender", 1));
+                    user.put("phone", LoginActivity.sp.getString("phone", ""));
+                    user.put("email", LoginActivity.sp.getString("email", ""));
+                    user.put("drive", LoginActivity.sp.getInt("drive", 0));
+                    user.put("points", LoginActivity.sp.getInt("points", 0));
+                    user.put("score", LoginActivity.sp.getFloat("score", (float)0.0));
+                    user.put("state", LoginActivity.sp.getInt("state", 0));
+
                     JSONObject data = new JSONObject();
                     data.put("start", start);
                     data.put("end", end);
                     data.put("share", switchShare.isChecked());
                     data.put("user", user);
+
                     Network.socket.emit("requestService", data);
                     Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
                     intent.putExtra("type", false);
