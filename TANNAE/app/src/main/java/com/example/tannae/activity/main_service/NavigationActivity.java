@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
+import com.example.tannae.user.User;
 
 import net.daum.mf.map.api.MapView;
 
@@ -62,17 +63,19 @@ public class NavigationActivity extends AppCompatActivity {
     private void setNetworks() {
         Network.socket.on("responseService", args -> {
             runOnUiThread(() -> {
-                boolean flag = (boolean) args[0];
-                if (flag) {
+                int flag = (int) args[0];
+                if (flag == 1) {
                     Toast.makeText(getApplicationContext(), "배차가 완료되었습니다.", Toast.LENGTH_SHORT).show();
                     JSONObject path = (JSONObject) args[1];
                     
                     ////////////////////////////////////////////////////////////// path 정보를 바탕으로 navigation 화면 수정
-                } else {
+                } else if (flag == 0){
                     Toast.makeText(getApplicationContext(), "이용 가능한 차량이 없습니다.", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "배차 오류가 발생하였습니다.\n고객센터에 문의하세요.", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -114,5 +117,17 @@ public class NavigationActivity extends AppCompatActivity {
                 Network.socket.emit(isChecked ? "serviceOn" : "serviceOff", user);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        /////////////////////////////// Navigation 화면에 있는데 state 가 0인 사람은 운전자이고 1인 사람은 탑승자임을 알 수 있슴.
+        /////////////////////////////// 운전자는 안전상의 이유로 운행 중일 때는 Navigation 종료 불가
+        /////////////////////////////// 사용자는 Main 화면으로 복귀
+        if(User.sp.getInt("state", 0) == 0)
+            Toast.makeText(getApplicationContext(), "운행중에는 내비게이션을 종료할 수 없습니다.", Toast.LENGTH_SHORT).show();
+        else {
+            /////////////////////////// Main 화면으로 복귀
+        }
     }
 }

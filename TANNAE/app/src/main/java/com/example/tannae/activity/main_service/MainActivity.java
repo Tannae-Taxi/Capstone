@@ -10,9 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
-import com.example.tannae.activity.account.LoginActivity;
 import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
+import com.example.tannae.user.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 // << Main Activity >>
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         reqBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (LoginActivity.sp.getInt("state", 0) == 1) {
+                if (User.sp.getInt("state", 0) == 1) {
                     Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
                     intent.putExtra("type", false);
                     startActivity(intent);

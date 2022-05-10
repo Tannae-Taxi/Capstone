@@ -1,7 +1,6 @@
 package com.example.tannae.activity.account;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,12 +15,11 @@ import com.example.tannae.activity.main_service.MainActivity;
 import com.example.tannae.network.Network;
 import com.example.tannae.network.RetrofitClient;
 import com.example.tannae.network.ServiceApi;
+import com.example.tannae.user.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.math.BigDecimal;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,20 +30,18 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etID, etPW;
     private Button btnLogin, btnFind, btnSignUp;
     private long backKeyPressedTime = 0;
-    public static SharedPreferences sp;
-    public static SharedPreferences.Editor editor;
 
     // < onCreate >
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Create Retrofit Client
         Network.service = RetrofitClient.getClient().create(ServiceApi.class);
+        new User(getApplicationContext()).setSharedPreferences();
         ///////////////////////////////////////////// User 정보가 등록되어 있다면 자동 로그인
         // Create Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Setting
-        setPreferences();
         setViews();
         setEventListeners();
     }
@@ -85,36 +81,8 @@ public class LoginActivity extends AppCompatActivity {
                             String resType = resObj.getString("resType");
 
                             if (resType.equals("OK")) {
-
                                 JSONObject user = resArr.getJSONObject(1); // 이게 User data
-
-                                editor.putString("usn", user.getString("usn"));
-                                editor.putString("id", etID.getText().toString());
-                                editor.putString("pw", etPW.getText().toString());
-                                editor.putString("uname", user.getString("uname"));
-                                editor.putString("rrn", user.getString("rrn"));
-                                editor.putInt("gender", user.getInt("gender"));
-                                editor.putString("phone", user.getString("phone"));
-                                editor.putString("email", user.getString("email"));
-                                editor.putInt("drive", user.getInt("drive"));
-                                editor.putInt("points", user.getInt("points"));
-                                editor.putFloat("score", BigDecimal.valueOf(user.getDouble("score")).floatValue());
-                                editor.putInt("state", user.getInt("state"));
-                                editor.apply();
-
-                                /* System.out.println("usn이름:"+sp.getString("usn",""));
-                                System.out.println("id이름:"+sp.getString("id",""));
-                                System.out.println("pw이름:"+sp.getString("pw",""));
-                                System.out.println("uname이름:"+sp.getString("uname",""));
-                                System.out.println("rrn이름:"+sp.getString("rrn",""));
-                                System.out.println("gender이름:"+sp.getInt("gender",0));
-                                System.out.println("phone이름:"+sp.getString("phone",""));
-                                System.out.println("email이름:"+sp.getString("email",""));
-                                System.out.println("drive이름:"+sp.getInt("drive",0));
-                                System.out.println("points이름:"+sp.getInt("points",22));
-                                System.out.println("score이름:"+sp.getFloat("score",(float) 4.5));
-                                System.out.println("state이름:"+sp.getInt("state",0)); */  // sp가 잘 구현 되었는지 테스트용 코드. 잘 됨!
-
+                                User.setUserOutTOIn(user);
 
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
@@ -166,10 +134,5 @@ public class LoginActivity extends AppCompatActivity {
         if(System.currentTimeMillis() <= backKeyPressedTime + 2000){
             finish();
         }
-    }
-
-    public void setPreferences(){
-        sp = getSharedPreferences("TTdb", MODE_PRIVATE);
-        editor = sp.edit();
     }
 }

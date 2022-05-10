@@ -110,7 +110,7 @@ public class FindActivity extends AppCompatActivity {
                                     tvMyId.setText("ID: " + user.getString("id"));
                                     tvMyPw.setText("PW: " + user.getString("pw"));
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "일치하는 회원정보가 없어요.\n입력하신 정보가 올바른 지 확인해주세요."/* resObj.getString("resType")*/, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "일치하는 회원정보가 없습니다.\n입력하신 정보가 올바른 지 확인해주세요."/* resObj.getString("resType")*/, Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
