@@ -66,6 +66,7 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
         marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
 
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord( 37.566406178655534, 126.97786868931414), true);
         mapViewContainer.addView(mapView);
     }
 
