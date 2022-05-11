@@ -19,7 +19,6 @@ public class UserServiceListActivity extends AppCompatActivity {
 
     private Button btnAccount, btnPoint, btnQnA, btnHistory, btnLostFound, btnFAQ;
     private Button btnPayment;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +36,6 @@ public class UserServiceListActivity extends AppCompatActivity {
         btnLostFound = findViewById(R.id.btn_lost_found_userservicelist);
         btnFAQ = findViewById(R.id.btn_faq_userservicelist);
         btnPayment = findViewById(R.id.btn_payment_userservicelist);
-        toolbar = findViewById(R.id.topAppBar);
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("type", false);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
     }
 
     private void setEventListeners() {

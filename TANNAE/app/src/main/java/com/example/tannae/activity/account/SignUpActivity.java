@@ -64,7 +64,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         tvCheckId = findViewById(R.id.tv_checkID_sign_up);
         tvCheckPW = findViewById(R.id.tv_retrypw_sign_up);
-        toolbar = findViewById(R.id.topAppBar);
+        toolbar = findViewById(R.id.topAppBar_sign_up);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

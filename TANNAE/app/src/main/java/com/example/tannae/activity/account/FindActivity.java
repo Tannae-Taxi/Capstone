@@ -53,7 +53,7 @@ public class FindActivity extends AppCompatActivity {
         btnFindAccount= findViewById(R.id.btn_find_find);
         tvMyId = findViewById(R.id.tv_myid_find);
         tvMyPw = findViewById(R.id.tv_mypw_find);
-        toolbar = findViewById(R.id.topAppBar);
+        toolbar = findViewById(R.id.topAppBar_find);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

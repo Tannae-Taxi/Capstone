@@ -1,18 +1,22 @@
 package com.example.tannae.activity.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
+import com.example.tannae.activity.main_service.MainActivity;
 
 public class AccountActivity extends AppCompatActivity {
     private Button btnEdit;
     private Button btnSignOut;
     private TextView tvID, tvPW, tvGender, tvUname, tvBirth, tvEmail, tvPhone;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +35,17 @@ public class AccountActivity extends AppCompatActivity {
         tvBirth = findViewById(R.id.tv_birth_account);
         tvEmail = findViewById(R.id.tv_email_account);
         tvPhone = findViewById(R.id.tv_phone_account);
+        toolbar = findViewById(R.id.topAppBar_account);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("type", false);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setEventListeners(){

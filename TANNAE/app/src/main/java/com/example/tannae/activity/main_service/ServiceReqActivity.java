@@ -243,7 +243,20 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
 
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
+        mapPoint = mapView.getMapCenterPoint();
+        MapReverseGeoCoder mapGeoCoder = new MapReverseGeoCoder("be32c53145962ae88db090324e2223b0",
+                mapPoint, this, ServiceReqActivity.this);
+        mapGeoCoder.startFindingAddress();
 
+        if (locationType) {
+            originX = mapPoint.getMapPointGeoCoord().longitude;
+            originY = mapPoint.getMapPointGeoCoord().latitude;
+        } else {
+            destinationX = mapPoint.getMapPointGeoCoord().longitude;
+            destinationY = mapPoint.getMapPointGeoCoord().latitude;
+        }
+
+        marker.setMapPoint(mapPoint);
     }
 
     @Override
