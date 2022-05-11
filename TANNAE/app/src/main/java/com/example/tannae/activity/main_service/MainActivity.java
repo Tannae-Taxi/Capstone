@@ -13,10 +13,9 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.tannae.R;
 import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
-import com.example.tannae.user.User;
+import com.example.tannae.sub.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import net.daum.android.map.MapViewController;
 import net.daum.mf.map.api.MapView;
 
 // << Main Activity >>

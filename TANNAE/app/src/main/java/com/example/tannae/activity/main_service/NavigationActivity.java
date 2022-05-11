@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
-import com.example.tannae.user.User;
+import com.example.tannae.sub.User;
 
 import net.daum.mf.map.api.MapView;
 
@@ -25,6 +25,7 @@ public class NavigationActivity extends AppCompatActivity {
     private Switch switchDrive;
     private MapView mapView;
     private ViewGroup mapViewContainer;
+    private boolean type;
 
     // < onCreate >
     @Override
@@ -37,7 +38,7 @@ public class NavigationActivity extends AppCompatActivity {
         setEventListeners();
         setNetworks();
         // If main -> navigation ? true : false
-        boolean type = getIntent().getBooleanExtra("type", false);
+        type = getIntent().getBooleanExtra("type", false);
         if (!type) {
             btnPass.setVisibility(View.INVISIBLE);
             btnEndService.setVisibility(View.INVISIBLE);
@@ -106,7 +107,12 @@ public class NavigationActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+        });
+        Network.socket.on("serviceEnd", args -> {
+            runOnUiThread(() -> {
+                JSONObject receipt = (JSONObject) args[0];
 
+            });
         });
     }
 
@@ -152,6 +158,7 @@ public class NavigationActivity extends AppCompatActivity {
                 ///////////////////////////////////////////////// user에 운전자의 user 정보 삽입
                 /* try {
                     User.setUserInTOOut(user);
+                    user.put("service", isChecked);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } */ // user에 운전자의 user 정보를 삽입하는 코드. 잘 한건지 몰라서 일단 주석 처리해둠 SC
@@ -166,7 +173,7 @@ public class NavigationActivity extends AppCompatActivity {
         /////////////////////////////// Navigation 화면에 있는데 state 가 0인 사람은 운전자이고 1인 사람은 탑승자임을 알 수 있슴.
         /////////////////////////////// 운전자는 안전상의 이유로 운행 중일 때는 Navigation 종료 불가
         /////////////////////////////// 탑승자는 Main 화면으로 복귀
-        if (User.sp.getInt("state", 0) == 0 && User.sp.getInt("drive", 0) == 1) // 내비게이션 화면에 있는데 운전자(state값이 0)이며 운행중(drive 값이 1)상태인경우에는
+        if (type) // 내비게이션 화면에 있는데 운전자(state값이 0)이며 운행중(drive 값이 1)상태인경우에는
             Toast.makeText(getApplicationContext(), "운행중에는 내비게이션을 종료할 수 없습니다.", Toast.LENGTH_SHORT).show(); // 내비 종료 불가
         else {
             /////////////////////////// Main 화면으로 복귀

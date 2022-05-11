@@ -1,4 +1,4 @@
-package com.example.tannae.activity.main_service;
+package com.example.tannae.sub;
 
 public class Receipt {
 

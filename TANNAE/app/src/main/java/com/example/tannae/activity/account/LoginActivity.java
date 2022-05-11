@@ -15,7 +15,7 @@ import com.example.tannae.activity.main_service.MainActivity;
 import com.example.tannae.network.Network;
 import com.example.tannae.network.RetrofitClient;
 import com.example.tannae.network.ServiceApi;
-import com.example.tannae.user.User;
+import com.example.tannae.sub.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;

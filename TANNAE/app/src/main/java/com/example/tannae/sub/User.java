@@ -1,4 +1,4 @@
-package com.example.tannae.user;
+package com.example.tannae.sub;
 
 import android.content.Context;
 import android.content.SharedPreferences;

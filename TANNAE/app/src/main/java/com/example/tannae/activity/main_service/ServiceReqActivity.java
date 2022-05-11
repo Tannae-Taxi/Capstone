@@ -8,12 +8,13 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
-import com.example.tannae.user.User;
+import com.example.tannae.sub.User;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -34,7 +35,7 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
     private MapPoint mapPoint;
     private MapPOIItem marker;
     private boolean locationType = true;
-    private String originLocation = "", destinationLocation = "";
+    private String originLocation, destinationLocation;
     private double originX= 0, originY = 0, destinationX = 0, destinationY = 0;
 
     // < onCreate >
@@ -106,33 +107,37 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         btnServiceReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    // Create JSON
-                    JSONObject start = new JSONObject();
-                    start.put("name", originLocation);
-                    start.put("x", originX);
-                    start.put("y", originY);
+                if (!(originLocation == null  || destinationLocation == null)) {
+                    try {
+                        // Create JSON
+                        JSONObject start = new JSONObject();
+                        start.put("name", originLocation);
+                        start.put("x", originX);
+                        start.put("y", originY);
 
-                    JSONObject end = new JSONObject();
-                    end.put("name", destinationLocation);
-                    end.put("x", destinationX);
-                    end.put("y", destinationY);
+                        JSONObject end = new JSONObject();
+                        end.put("name", destinationLocation);
+                        end.put("x", destinationX);
+                        end.put("y", destinationY);
 
-                    JSONObject user = new JSONObject(); // 현재 로그인되어 있는 User(SharedPreferences에 저장된) 정보를 json 형태로 전환
-                    User.setUserInTOOut(user);
+                        JSONObject user = new JSONObject(); // 현재 로그인되어 있는 User(SharedPreferences에 저장된) 정보를 json 형태로 전환
+                        User.setUserInTOOut(user);
 
-                    JSONObject data = new JSONObject();
-                    data.put("start", start);
-                    data.put("end", end);
-                    data.put("share", switchShare.isChecked());
-                    data.put("user", user);
+                        JSONObject data = new JSONObject();
+                        data.put("start", start);
+                        data.put("end", end);
+                        data.put("share", switchShare.isChecked());
+                        data.put("user", user);
 
-                    Network.socket.emit("requestService", data);
-                    Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
-                    intent.putExtra("type", false);
-                    startActivity(intent);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                        Network.socket.emit("requestService", data);
+                        Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+                        intent.putExtra("type", false);
+                        startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "주변에 정차할 수 있는 도로가 없습니다.\n올바른 위치를 입력해주세요." , Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -197,10 +202,13 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
 
     @Override
     public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
-        if (locationType)
+        if (locationType) {
             tvOrigin.setText("올바른 지역이 아닙니다.");
-        else
+            originLocation = null;
+        } else {
             tvDestination.setText("올바른 지역이 아닙니다.");
+            destinationLocation = null;
+        }
     }
 
     @Override
