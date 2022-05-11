@@ -1,7 +1,7 @@
-// <<< Server >>>
+// <<<< Server >>>>
 
-// << Settings >>
-// < Require >
+// <<< Settings >>>
+// << Require >>
 let mysql = require('mysql2');
 let express = require('express');
 let app = express();
@@ -10,11 +10,11 @@ let io = require('socket.io')(server);
 let bodyParser = require('body-parser');
 let nav = require('./service.js');
 
-// < Uses >
+// << Uses >>
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// < MySQL Connection >
+// << MySQL Connection >>
 connection = mysql.createConnection({
     host: 'localhost',
     user: 'capstone',
@@ -22,17 +22,16 @@ connection = mysql.createConnection({
     password: 'zoqtmxhs17',
     port: 3306
 });
-
 connection = connection.promise();
 
-// < Listen >
+// << Listen >>
 server.listen(3000, () => {
     console.log('Listening on port 3000');
 });
 
-// << Reqeust & Response >>
-// < Account >
-// Login
+// <<< Reqeust & Response >>>
+// << Account >>
+// < Login >
 app.get('/account/login', async (req, res) => {
     let data = req.query;
     let resType = { "resType": "OK" };
@@ -57,7 +56,7 @@ app.get('/account/login', async (req, res) => {
     }
 });
 
-// Check ID
+// < Check ID >
 app.get('/account/checkID', async (req, res) => {
     let data = req.query;
     let resType = { "resType": "OK" };
@@ -75,7 +74,7 @@ app.get('/account/checkID', async (req, res) => {
     res.json(JSON.stringify([resType]));
 });
 
-// Sign Up
+// < Sign Up >
 app.post('/account/signup', async (req, res) => {
     let data = req.body.nameValuePairs;
     let resType = { "resType": "OK" };
@@ -108,7 +107,7 @@ app.post('/account/signup', async (req, res) => {
     res.json(JSON.stringify([resType]));
 });
 
-// Find Account
+// < Find Account >
 app.get('/account/findAccount', async (req, res) => {
     let data = req.query;
     let resType = { "resType": "OK" };
@@ -133,7 +132,7 @@ app.get('/account/findAccount', async (req, res) => {
     }
 });
 
-// Edit Account
+// < Edit Account >
 app.post('/account/editAccount', async (req, res) => {
     let data = req.body.nameValuePairs;
     let resType = { "resType": "OK" };
@@ -148,7 +147,7 @@ app.post('/account/editAccount', async (req, res) => {
     res.json(JSON.stringify([resType]));
 });
 
-// Sign Out
+// < Sign Out >
 app.post('/account/signout', async (req, res) => {
     let data = req.body.nameValuePairs;
     let resType = { "resType": "OK" };
@@ -163,8 +162,8 @@ app.post('/account/signout', async (req, res) => {
     res.json(JSON.stringify([resType]));
 });
 
-// < User >
-// Charge Point
+// << User >>
+// < Charge Point >
 app.post('/user/charge', async (req, res) => {
     let data = req.body.nameValuePairs;
     let resType = { "resType": "OK" };
@@ -179,7 +178,7 @@ app.post('/user/charge', async (req, res) => {
     res.json(JSON.stringify([resType]));
 });
 
-// Get History
+// < Get History >
 app.get('/user/getHistory', async (req, res) => {
     let data = req.query;
     let resType = { "resType": "OK" };
@@ -200,7 +199,7 @@ app.get('/user/getHistory', async (req, res) => {
     }
 });
 
-// Get Lost
+// < Get Lost >
 app.get('/user/getLost', async (req, res) => {
     let resType = { "resType": "OK" };
 
@@ -220,7 +219,7 @@ app.get('/user/getLost', async (req, res) => {
     }
 });
 
-// Post Lost
+// < Post Lost >
 app.post('/user/postLost', async (req, res) => {
     let data = req.body.nameValuePairs;
     let resType = { "resType": "OK" };
@@ -255,7 +254,7 @@ app.post('/user/postLost', async (req, res) => {
     res.json(JSON.stringify([resType]));
 })
 
-// Get Content
+// < Get Content >
 app.get('/user/getContent', async (req, res) => {
     let resType = { "resType": "OK" };
     try {
@@ -274,7 +273,7 @@ app.get('/user/getContent', async (req, res) => {
     }
 });
 
-// Edit Content
+// < Edit Content >
 app.post('/user/editContent', async (req, res) => {
     let data = req.body.nameValuePairs;
     let resType = { "resType": "OK" };
@@ -289,7 +288,7 @@ app.post('/user/editContent', async (req, res) => {
     res.json(JSON.stringify([resType]));
 });
 
-// Post Content
+// < Post Content >
 app.post('/user/postContent', async (req, res) => {
     let data = req.body.nameValuePairs;
     let resType = { "resType": "OK" };
@@ -322,41 +321,43 @@ app.post('/user/postContent', async (req, res) => {
     res.json(JSON.stringify([resType]));
 });
 
-// < Driver >
-
-// << Socket.io >>
+// <<< Socket.io >>>
 io.on('connection', (socket) => {
-    // < Connection >
-    // Connected
+    // << Connection >>
+    // < Connected >
     console.log(`Socket connected : ${socket.id}`);
 
-    // Disconnected
+    // < Disconnected >
     socket.on('disconnect', () => {
         console.log(`Socket disconnected : ${socket.id}`);
     });
 
-    // < Driver >
-    // Service On
-    socket.on('serviceOn', async (user) => {
-        await connection.query(`update Vehicle set state true where usn = '${user.usn}'`)
-        let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${user.usn}'`);
-        console.log(`Driver ${user.usn} started service on vehicle ${vehicles[0].vsn}`);
-        socket.join(vehicles[0].vsn);
+    // << Driver >>
+    // < Service On >
+    socket.on('serviceOn', async (driver) => {
+        await connection.query(`update Vehicle set state true where usn = '${driver.usn}'`);                    // Update state of vehicle to true
+        let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${driver.usn}'`);    // Select vehicle which driver started service
+        socket.join(vehicles[0].vsn);                                                                           // Join vsn room
+        console.log(`Driver ${driver.usn} started service on vehicle ${vehicles[0].vsn}`);                      // LOG
     });
 
-    // Service Off
-    socket.on('serviceOff', async (user, state) => {
-        await connection.query(`update Vehilce set state = ${state} where usn = '${user.usn}'`);
-        let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${user.usn}'`);
-        console.log(`Driver ${user.usn} stopped servicing on vehicle = ${vehicles[0].vsn}`);
+    // < Service Off >
+    socket.on('serviceOff', async (driver) => {
+        await connection.query(`update Vehilce set state = false where usn = '${driver.usn}'`);                 // Update state of vehicle to false
+        let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${driver.usn}'`);    // Select vehicle which driver ended service
+        console.log(`Driver ${driver.usn} stopped servicing on vehicle = ${vehicles[0].vsn}`);                  // LOG
     });
 
-    // Pass Waypoint
-    socket.on('passWaypoint', async (user) => {
-        let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${user.usn}'`);
-        let pass = JSON.parse(vehicles[0].pass);
-        let unpass = JSON.parse(vehicles[0].unpass);
+    // < Pass Waypoint >
+    socket.on('passWaypoint', async (driver) => {
+        // Setting
+        let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${driver.usn}'`);    // Select vehicle driver is driving
+        let vehicle = vehicles[0];                                                                              // Set vehicle
+        let pass = JSON.parse(vehicle.pass);                                                                    // Get passed points of vehilce
+        let unpass = JSON.parse(vehicle.unpass);                                                                // Get unpassed points of vehicle
+        let passPoint = unapass.waypoints.length == 0 ? unpass.waypoints[0] : unpass.destination;               // Get point just passed
 
+        // If passed point is init point (vehicle) than init set 
         if (unpass.origin.name.equals('Vehicle')) {
             pass = {}
             pass.waypoints = [];
@@ -364,24 +365,32 @@ io.on('connection', (socket) => {
         }
 
         // Set pass & unpass
-        if (unpass.waypoints.length != 0) {
-            pass.waypoints.push(unpass.origin);
-            pass.sections.push(unpass.sections.shift());
-            unpass.origin = unpass.waypoints.shift();
-        } else {
-            pass.waypoints.push(unpass.origin);
-            pass.waypoints.push(unpass.destination);
-            unpass = null;
+        if (unpass.waypoints.length != 0) {                 // If no waypoints are left == vehicle arrived at destination
+            pass.waypoints.push(unpass.origin);             // Push unpass origin to pass waypoints
+            pass.sections.push(unpass.sections.shift());    // Push unpass sections[0] to pass sections
+            unpass.origin = unpass.waypoints.shift();       // Set unpass origin to unpass waypoints[0]
+        } else {                                            // If waypoints are left == vehicle arrived at waypoint
+            pass.waypoints.push(unpass.origin);             // Push unpass origin to pass wapoints
+            pass.waypoints.push(unpass.destination);        // Push unpass destination to pass waypoint
+            unpass = null;                                  // Set unpass as null
         }
 
-        // Update DB
-        await connection.query(`update Vehicle set pass = '${JSON.stringify(pass)}', unpass = ${unpass != null ? `'${JSON.stringify(unpass)}'` : null} where vsn = '${vehicles[0].vsn}'`);
+        // Get passenger of current waypoint
+        let point = JSON.parse(vehicle.names)[`${passPoint.x}_${passPoint.y}_${passPoint.name}`];   // Get point json names data just passed
+        let usn = point.user;                                                                       // Get usn of point
+        let type = point.type                                                                       // Get type of point
 
-        // Send new path to users using vehicle
-        io.to(vehicles[0].vsn).emit('responseService', true, unpass);
+        // Update DB
+        let pos = `${passPoint.x} ${passPoint.y}`;                              // New position
+        let num = type.equals('start') ? vehicle.num + 1 : vehicle.num - 1;     // New number of passengers
+        await connection.query(`update Vehicle set pos = '${pos}', num = ${num}, pass = '${JSON.stringify(pass)}', unpass = ${unpass != null ? `'${JSON.stringify(unpass)}'` : null} where vsn = '${vehicle.vsn}'`);
+        await connection.query(`update User set state = ${type == 'start' ? true : false} where usn = '${usn}'`);
+
+        // Send response
+        io.to(vehicle.vsn).emit('responseService', type == 'start' ? 4 : 5, unpass, usn);
     });
 
-    // End service
+    // < End service >
     socket.on('serviceEnd', async (user) => {
         let [vehicles, field] = await connection.query(`select pass, cost, names from Vehicle where usn = '${user.usn}'`);
         let pass = JSON.parse(vehicles[0].pass);
@@ -408,25 +417,30 @@ io.on('connection', (socket) => {
         }
     });
 
-    // < Passenger >
-    // Request Service
+    // << Passenger >>
+    // < Request Service >
     socket.on('requestService', async (data) => {
+        // Create new Service
         let service = new nav.Service(connection, socket, data);
-        console.log(data);
 
+        // Service
         try {
+            // Set vechile
             let flag = await service.setVehicle();
+            // Check if vehicle is allowed
             if (service.vehicle != null) {
-                service.setPath();
-                service.path = await service.reqPath();
-                //await service.updateDB();
-                socket.join(service.vehicle.vsn);
-                io.to(service.vehicle.vsn).emit('responseService', service.flag, service.path);
+                service.setPath();                                                                              // Set request path
+                service.path = await service.reqPath();                                                         // Request path to kakao navigation api and return path data
+                await service.updateDB();                                                                       // Update Database
+                socket.join(service.vehicle.vsn);                                                               // Join vsn room
+                io.to(service.vehicle.vsn).emit('responseService', service.flag, service.path, data.user.usn);  // Send response to vsn room users
             } else {
+                // When there is no vehicle available
                 console.log(`No vehicle is available for user ${data.user.usn}(Start : ${data.start.name} / End : ${data.end.name})`);
                 socket.emit('responseService', 0);
             }
         } catch (err) {
+            // When there is a error
             console.log(err + "ERROR");
             socket.emit('responseService', -1);
         }

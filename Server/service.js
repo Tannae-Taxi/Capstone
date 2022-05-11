@@ -1,4 +1,6 @@
-// < Require >
+// <<< Service >>>
+
+// << Require >>
 let request = require('request');
 
 // << Path Class >>
@@ -9,14 +11,14 @@ module.exports.Service = class Service {
         this.connection = connection;
         this.socket = socket;
         this.data = data;
-        // Set path structure
+        // Set request path structure
         this.path = {
             "origin": { "name": "Vehicle", "x": 0, "y": 0 },
             "destination": { "name": null, "x": 0, "y": 0 },
             "waypoints": [],
             "priority": "RECOMMEND", "car_fuel": "GASOLINE", "car_hipass": false, "alternatives": false, "road_details": false, "summary": true
         }
-        // Set path reqeust
+        // Set request
         this.pathReq = {
             headers: { 'content-type': 'application/json', 'authorization': 'KakaoAK d94b5c67305d6a10b3e43e5da881e7cf' },
             url: 'https://apis-navi.kakaomobility.com/v1/waypoints/directions',
@@ -25,6 +27,7 @@ module.exports.Service = class Service {
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 여기서부터 주석처리와 코드 재확인하기
     // < Set vehicle >
     async setVehicle() {
         // Search vehicles available (share ? check available vehicles which is serving : check available vehicles which is on service but not serving)
