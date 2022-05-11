@@ -33,7 +33,7 @@ public class UserServiceListActivity extends AppCompatActivity {
         btnAccount = findViewById(R.id.btn_account_userservicelist);
         btnPoint = findViewById(R.id.btn_point_userservicelist);
         btnQnA = findViewById(R.id.btn_qna_userservicelist);
-        btnHistory = findViewById(R.id.btn_qna_userservicelist);
+        btnHistory = findViewById(R.id.btn_history_userservicelist);
         btnLostFound = findViewById(R.id.btn_lost_found_userservicelist);
         btnFAQ = findViewById(R.id.btn_faq_userservicelist);
         btnPayment = findViewById(R.id.btn_payment_userservicelist);

@@ -33,7 +33,7 @@ public class PaymentActivity extends AppCompatActivity {
         setEventListeners();
         adapter = new ListViewAdapter();
         adapter.addItem(new Receipt("파랑이"));
-        adapter.addItem(new Receipt("노랑이"));
+        adapter.addItem(new Receipt("빨강이"));
         adapter.addItem(new Receipt("하양이"));
 
         listView.setAdapter(adapter);
