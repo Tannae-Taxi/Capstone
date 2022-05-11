@@ -17,6 +17,7 @@ import com.example.tannae.sub.User;
 
 import net.daum.mf.map.api.MapView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // << Navigation Activity >>
@@ -43,6 +44,7 @@ public class NavigationActivity extends AppCompatActivity {
             btnPass.setVisibility(View.INVISIBLE);
             btnEndService.setVisibility(View.INVISIBLE);
             switchDrive.setVisibility(View.INVISIBLE);
+            //////////////////////////// 내부 state 가 1이면 (차를 타고 있는데 Navigation 화면에서 나갔다가 다시 들어온 경우이면) 내부에 저장된 path 를 바탕으로 MapView 다시 그리기
         }
     }
 
@@ -66,41 +68,42 @@ public class NavigationActivity extends AppCompatActivity {
     private void setNetworks() {
         // Response service
         Network.socket.on("responseService", args -> {
-            // args[0] : flag / args[1] : path / args[2] : usn
+            // args[0] = flag:int / args[1] = path:JSONObject / args[2] = usn:String
             runOnUiThread(() -> {
                 // Flag : -1 (Server Error) / 0 (No Vehicle) / 1 (Share vehicle) / 2 (Non-share vehicle to share user) / 3 (Non-share vehicle to non-share user)
                 // 4 (Passenger boarding) / 5 (Passenger get off)
                 int flag = (int) args[0];
-                // Set message
+                JSONObject path = (JSONObject) args[1];
+                String usnOut = (String) args[2];
+                String usnIn = User.sp.getString("usn", "");
+
+                // Update inner DB
+
+                // Toast
                 String message;
+                String add = "추가 인원이 배차되었습니다.\n경로를 수정합니다.";
                 switch (flag) {
                     case 0 : message = "이용 가능한 차량이 없습니다."; break;
-                    case 1 : message = "동승 가능한 차량이 배차되었습니다."; break;
-                    case 2 : message = "동승 가능한 차량이 없습니다.\n일반 차량이 배차되었습니다."; break;
-                    case 3 : message = "일반 차량이 배차되었습니다."; break;
-                    case 4 : message = "탑승자가 승차하였습니다.\n경로를 수정합니다."; break;
-                    case 5 : message = "탑승자가 하차하였습니다.\n경로를 수정합니다."; break;
+                    case 1 : message = !usnOut.equals(usnIn) ? add : "동승 차량이 배차되었습니다."; break;
+                    case 2 : message = !usnOut.equals(usnIn) ? add : "동승 가능한 차량이 없습니다.\n일반 차량이 배차되었습니다."; break;
+                    case 3 : message = !usnOut.equals(usnIn) ? add : "일반 차량이 배차되었습니다."; break;
+                    case 4 : message = usnOut.equals(usnIn) ? "차량이 도착하였습니다.\n탑승해 주시기 바랍니다." : "탑승자가 승차하였습니다.\n경로를 수정합니다."; break;
+                    case 5 : message = usnOut.equals(usnOut) ? "목적지에 도착하였습니다.\n하차해 주시기 바랍니다." : "탑승자가 하차하였습니다.\n경로를 수정합니다."; break;
                     default: message = "배차 오류가 발생하였습니다.\n고객센터에 문의하세요."; break;
                 }
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
-                // Show message
-                if (flag == 1 || flag == 2 || flag == 3)
-                    if (((String)args[2]).equals(User.sp.getString("usn", "")))
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(getApplicationContext(), "추가 인원이 배차 되었습니다.\n경로를 수정합니다.", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-
-                ////////////////////////////////////// 밑에는 flag에 따른 처리 아직 안함
                 // Event handle by flag number
                 if (!(flag == -1 || flag == 0)) {
-                    JSONObject path = (JSONObject) args[1];
-                    ////////////////////////////////////////////////////////////// path 정보를 바탕으로 navigation 화면 수정
-                    /////////////////////////////////////// state 값을 1로 변경하기 (다만, 운전자의 state는 미변경)
-                    ///////////////////////// flag : int args[0] / path : JSONObject args[1] / usn : String args[2]
-                    ///////////////////////// usn은 현재 경유지 탑승자의 usn : 내부 db의 usn과 일치하며 flag가 5이면 내부 db user의 state를 false(0)로 변경
-                    // flag -1 0은 flag이외의 arg가 없으며 1 2 3은 path arg가 추가되고 4 5는 usn이 추가
+                    //////////////////////////////////////// path 정보를 문자열로 변환하여 내부 DB의 path 속성에 저장
+                    if (flag == 1 || flag == 2 || flag == 3) {
+                        //////////////////////// 외부 usn(usnOut) 과 내부 usn(usnIn) 을 비교하여 일치하면 내부 state 을 1로 설정
+                    } else if (flag == 5){
+                        //////////////////////// 외부 usn(usnOut) 과 내부 usn(usnIn) 을 비교하여 일치하면 내부 state 을 0으로 설정
+                        //////////////////////// 외부 usn(usnOut) 과 내부 usn(usnIn) 을 비교하여 일치하면 내부 path 정보를 null 로 변경
+                        //////////////////////// 외부 usn(usnOut) 과 내부 usn(usnIn) 이 일치하고 현재 화면이 navigation 이면 Main 화면으로 복귀
+                    }
+                    //////////////////////// DH : 가져온 path 정보를 바탕으로 navigation mapview 표시
                 } else {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -108,10 +111,12 @@ public class NavigationActivity extends AppCompatActivity {
                 }
             });
         });
+
+        // End service
         Network.socket.on("serviceEnd", args -> {
             runOnUiThread(() -> {
                 JSONObject receipt = (JSONObject) args[0];
-
+                ///////////////////////////////// DH : receipt 는 메모장에서 [ Result of service end ]  형태이며 이를 바탕으로 영수증 화면 구성
             });
         });
     }
@@ -129,57 +134,54 @@ public class NavigationActivity extends AppCompatActivity {
         btnPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONObject user = new JSONObject();
-
-                /////////////////////////////////////////////////////// user에 운전자의 user 정보 삽입
-                /* try {
-                    User.setUserInTOOut(user);
+                try {
+                    JSONObject driver = new JSONObject();
+                    User.setUserInTOOut(driver);
+                    Network.socket.emit("passWaypoint", driver);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                } */ // user에 운전자의 user 정보를 삽입하는 코드. 잘 한건지 몰라서 일단 주석 처리해둠 SC
-
-                Network.socket.emit("passWaypoint", user);
+                }
             }
         });
         // End service [SOCKET]
         btnEndService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Network.socket.emit("serviceEnd"); ///////////////////////////////////////////////// User 정보를 JSONObject 형태로 전송
-                Toast.makeText(getApplicationContext(), "운행이 종료되었습니다.", Toast.LENGTH_SHORT).show();
+                try {
+                    JSONObject driver = new JSONObject();
+                    User.setUserInTOOut(driver);
+                    Network.socket.emit("serviceEnd", driver);
+                    Toast.makeText(getApplicationContext(), "운행이 종료되었습니다.", Toast.LENGTH_SHORT).show();
+                    /////////////////////////////////////////// MapView clear
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         // Change service availability [SOCKET]
-        switchDrive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {  /////////////// 운전자 유저의 drive 값을 변경해주기
+        switchDrive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                JSONObject user = new JSONObject();
-
-                ///////////////////////////////////////////////// user에 운전자의 user 정보 삽입
-                /* try {
-                    User.setUserInTOOut(user);
-                    user.put("service", isChecked);
+                JSONObject driver = new JSONObject();
+                try {
+                    User.setUserInTOOut(driver);
+                    driver.put("service", isChecked);
+                    Network.socket.emit(isChecked ? "serviceOn" : "serviceOff", driver);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                } */ // user에 운전자의 user 정보를 삽입하는 코드. 잘 한건지 몰라서 일단 주석 처리해둠 SC
-
-                Network.socket.emit(isChecked ? "serviceOn" : "serviceOff", user);
+                }
             }
         });
     }
 
     @Override
     public void onBackPressed() {
-        /////////////////////////////// Navigation 화면에 있는데 state 가 0인 사람은 운전자이고 1인 사람은 탑승자임을 알 수 있슴.
-        /////////////////////////////// 운전자는 안전상의 이유로 운행 중일 때는 Navigation 종료 불가
-        /////////////////////////////// 탑승자는 Main 화면으로 복귀
-        if (type) // 내비게이션 화면에 있는데 운전자(state값이 0)이며 운행중(drive 값이 1)상태인경우에는
+        if (type)
             Toast.makeText(getApplicationContext(), "운행중에는 내비게이션을 종료할 수 없습니다.", Toast.LENGTH_SHORT).show(); // 내비 종료 불가
         else {
-            /////////////////////////// Main 화면으로 복귀
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent); // 탑승자인 경우 Main 화면으로 복귀하는 코드. FLAG_ACTIVITY_CLEAR_TOP을 사용하였기 때문에 내비게이션 화면 정보를 유지해주어야 함
+            startActivity(intent);
         }
     }
 }
