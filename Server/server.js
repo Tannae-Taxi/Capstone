@@ -355,7 +355,7 @@ io.on('connection', (socket) => {
         let vehicle = vehicles[0];                                                                              // Set vehicle
         let pass = JSON.parse(vehicle.pass);                                                                    // Get passed points of vehilce
         let unpass = JSON.parse(vehicle.unpass);                                                                // Get unpassed points of vehicle
-        let passPoint = unapass.waypoints.length == 0 ? unpass.waypoints[0] : unpass.destination;               // Get point just passed
+        let passPoint = unapass.waypoints.length !== 0 ? unpass.waypoints[0] : unpass.destination;               // Get point just passed
 
         // If passed point is init point (vehicle) than init set 
         if (unpass.origin.name.equals('Vehicle')) {
@@ -365,13 +365,14 @@ io.on('connection', (socket) => {
         }
 
         // Set pass & unpass
-        if (unpass.waypoints.length != 0) {                 // If no waypoints are left == vehicle arrived at destination
+        if (unpass.waypoints.length !== 0) {                 // If no waypoints are left == vehicle arrived at destination
             pass.waypoints.push(unpass.origin);             // Push unpass origin to pass waypoints
             pass.sections.push(unpass.sections.shift());    // Push unpass sections[0] to pass sections
             unpass.origin = unpass.waypoints.shift();       // Set unpass origin to unpass waypoints[0]
         } else {                                            // If waypoints are left == vehicle arrived at waypoint
             pass.waypoints.push(unpass.origin);             // Push unpass origin to pass wapoints
             pass.waypoints.push(unpass.destination);        // Push unpass destination to pass waypoint
+            pass/sections.push(unpass.sections.shift());    // Push unpass sections[0] to pass sections
             unpass = null;                                  // Set unpass as null
         }
 
@@ -382,8 +383,8 @@ io.on('connection', (socket) => {
 
         // Update DB
         let pos = `${passPoint.x} ${passPoint.y}`;                              // New position
-        let num = type.equals('start') ? vehicle.num + 1 : vehicle.num - 1;     // New number of passengers
-        await connection.query(`update Vehicle set pos = '${pos}', num = ${num}, pass = '${JSON.stringify(pass)}', unpass = ${unpass != null ? `'${JSON.stringify(unpass)}'` : null} where vsn = '${vehicle.vsn}'`);
+        let num = type.equals('end') ? vehicle.num - 1 : vehicle.num;           // New number of passengers
+        await connection.query(`update Vehicle set pos = '${pos}', num = ${num}, pass = '${JSON.stringify(pass)}', unpass = ${unpass !== null ? `'${JSON.stringify(unpass)}'` : null}, ${unpass === null ? 'state = false' : ''} where vsn = '${vehicle.vsn}'`);
         await connection.query(`update User set state = ${type == 'start' ? true : false} where usn = '${usn}'`);
 
         // Send response
@@ -391,30 +392,58 @@ io.on('connection', (socket) => {
     });
 
     // < End service >
-    socket.on('serviceEnd', async (user) => {
-        let [vehicles, field] = await connection.query(`select pass, cost, names from Vehicle where usn = '${user.usn}'`);
-        let pass = JSON.parse(vehicles[0].pass);
-        let cost = vehicles[0].cost;
-        let names = JSON.parse(vehicles[0].names);
+    socket.on('serviceEnd', async (driver) => {
+        // Select vehicle driver ended service
+        let [vehicles, field] = await connection.query(`select pass, cost, names from Vehicle where usn = '${driver.usn}'`);
+        let vehicle = vehicles[0];
 
+        // Get pass, cost, names
+        let pass = JSON.parse(vehicle.pass);
+        let cost = vehicles[0].cost;
+        let names = JSON.parse(vehicle.names);
+
+        // Except info's of vehicle to first waypoint
         cost -= cost * pass.sections[0].distance / pass.distance;
         pass.distance -= pass.sections[0].distance;
         pass.duration -= pass.sections[0].duration;
         pass.waypoints.shift();
         pass.sections.shift();
 
-        let count = 0;
-        let result = [];
-        let users = [];
+        // Initial setting
+        let result = {};    // Result for receipt { 'usn' : {name:String, start:String, end:String, cost:int}, ... , license:String }
+        let count = 0;      // Number of users in the vehicle
+        let current = [];   // User's usn who is riding
+        result.license = vehicle.license;
 
+        // Calculate cost
         for (let i = 0; i < pass.waypoints.length - 1; i++) {
-            let waypoint = pass.waypoints[i];
-            let point = names[waypoint.name];
-            let usn = point.user;
-            let type = point.type;
-            type === 'start' ? `${users.push(usn)}` : `${users.splice(users.indexOf(usn), 1)}`;
+            let point = pass.waypoints[i];
+            let user = names[`${point.x}_${point.y}_${point.name}`];
+            let usn = user.usn;
+            let type = user.type;
 
+            if (type === 'start') {
+                current.push(usn);
+                result[usn] = { start: point.name, end: null, cost: 0 };
+                count++;
+            } else {
+                current.splice(users.indexOf(usn), 1);
+                result[usn].end = point.name;
+                count--;
+            }
+
+            let pathCost = cost * pass.sections[i].distance / pass.distance;
+            for (let j = 0; j < current.length; j++)
+                result[current[i]].cost += pathCost;
         }
+
+        // Update DB
+        await connection.query();       // Vehicle (state)는 passWaypoint에서 처리
+        await connection.query();       // User update (cost update)
+        await connection.query();       // History update
+
+        // Emit result
+        io.to(vehicle.vsn).emit('serviceEnd', result);
     });
 
     // << Passenger >>
