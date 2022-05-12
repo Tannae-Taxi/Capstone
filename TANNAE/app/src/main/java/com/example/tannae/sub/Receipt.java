@@ -2,13 +2,13 @@ package com.example.tannae.sub;
 
 public class Receipt {
 
-    private static String name;
+    private String name;
 
     public Receipt(String name) {
         this.name = name;
     }
 
-    public static String getName() {
+    public String getName() {
         return name;
     }
 

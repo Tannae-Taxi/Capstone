@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.tannae.sub.Receipt;
 import com.example.tannae.R;
 import com.example.tannae.sub.Receipt;
 
@@ -24,7 +25,6 @@ public class PaymentActivity extends AppCompatActivity {
     private Button btnSend;
     private RatingBar rbDriverRating;
 
-    private String TAG = PaymentActivity.class.getSimpleName();
     private ListView listView = null;
     private ListViewAdapter adapter = null;
     private Toolbar toolbar;
@@ -111,9 +111,8 @@ public class PaymentActivity extends AppCompatActivity {
                 view = (View) convertView;
             }
 
-            TextView tv_name = (TextView) convertView.findViewById(R.id.tv_name);
-
-            tv_name.setText(Receipt.getName());
+            TextView name = (TextView) convertView.findViewById(R.id.tv_name);
+            name.setText(receipt.getName());
 
             return convertView;
         }
