@@ -460,7 +460,7 @@ io.on('connection', (socket) => {
             if (service.vehicle != null) {
                 service.setPath();                                                                              // Set request path
                 service.path = await service.reqPath();                                                         // Request path to kakao navigation api and return path data
-                await service.updateDB();                                                                       // Update Database
+                //await service.updateDB();                                                                       // Update Database
                 socket.join(service.vehicle.vsn);                                                               // Join vsn room
                 io.to(service.vehicle.vsn).emit('responseService', service.flag, service.path, data.user.usn);  // Send response to vsn room users
             } else {
