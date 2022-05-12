@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
+import com.example.tannae.activity.account.LoginActivity;
 import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
 import com.example.tannae.sub.User;
@@ -111,9 +112,15 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "로그아웃하려면 한번 더 누르세요.", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            Network.socket.disconnect();
-            finish();
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) { // 뒤로가기 두 번 하면
+            User.sp.edit().clear().apply(); // 내부 DB clear
+
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class); //LoginActivity 로 전환 //// 근데 로그아웃 기능 따로 구현 안하고 이 방식으로 할 것인지 궁금
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+            /* Network.socket.disconnect();
+            finish();*/
         }
     }
 }
