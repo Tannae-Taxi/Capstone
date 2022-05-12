@@ -16,6 +16,7 @@ import com.example.tannae.network.Network;
 import com.example.tannae.sub.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
 // << Main Activity >>
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         mapView = new MapView(this);
         mapViewContainer = (ViewGroup) findViewById(R.id.map_view_main);
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord( 37.566406178655534, 126.97786868931414), true);
         mapViewContainer.addView(mapView);
     }
 
