@@ -20,7 +20,7 @@ public class User extends AppCompatActivity {
     }
 
     public void setSharedPreferences() {
-        sp = context.getSharedPreferences("TTdb", MODE_PRIVATE);
+        sp = context.getSharedPreferences("UserSP", MODE_PRIVATE);
         editor = sp.edit();
     }
 
