@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
+import com.example.tannae.sub.Path;
 import com.example.tannae.sub.User;
 
 import net.daum.mf.map.api.MapPoint;
@@ -98,7 +99,12 @@ public class NavigationActivity extends AppCompatActivity {
                 // Event handle by flag number
                 if (!(flag == -1 || flag == 0)) {
                     //////////////////////////////////////// path 정보를 문자열로 변환하여 내부 DB의 path 속성에 저장
-                    // => path정보를 저장할 별도의 내부 Path DB를 만들어야 하는지 (내부 User DB 말고): sc가 추가
+                    // => path정보를 저장할 별도의 내부 Path DB를 만들어야 하는지 (내부 User DB 말고) => 일단 이대로 코드 추가함: sc가 추가
+                    try {
+                        Path.setUserOutTOIn(path);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
                     if (flag == 1 || flag == 2 || flag == 3) {
                         //////////////////////// 외부 usn(usnOut) 과 내부 usn(usnIn) 을 비교하여 일치하면 내부 state 을 1로 설정
@@ -109,9 +115,10 @@ public class NavigationActivity extends AppCompatActivity {
                         if(usnOut == usnIn) {
                             User.sp.edit().putInt("state", 0).apply();
                             //////////////////////// 외부 usn(usnOut) 과 내부 usn(usnIn) 을 비교하여 일치하면 내부 path 정보를 null 로 변경
-                            // => path정보를 저장할 별도의 내부 Path DB를 만들어야 하는지 (내부 User DB 말고), 바로 위의 if 문장(if(usnOut == usnIn))과 같은 조건이므로 같은 블럭에 넣으면 되는지: sc가 추가
+                            // => path정보를 저장할 별도의 내부 Path DB를 만들어야 하는지 (내부 User DB 말고), 바로 위의 if 문장(if(usnOut == usnIn))과 같은 조건이므로 같은 블럭에 넣으면 되는지 => 일단 이대로 코드 추가함: sc가 추가
+                            Path.setNull();
                             //////////////////////// 외부 usn(usnOut) 과 내부 usn(usnIn) 이 일치하고 현재 화면이 navigation 이면 Main 화면으로 복귀
-                            // 이 경우에도 바로 위의 if 문장(if(usnOut == usnIn))과 같은 조건이므로 같은 블럭에 넣으면 되는지, 그리고 navigationActivity에서 호출되는 메소드이므로 현재 화면이 항상 내비인 것인지
+                            // 이 경우에도 바로 위의 if 문장(if(usnOut == usnIn))과 같은 조건이므로 같은 블럭에 넣으면 되는지, 그리고 navigationActivity에서 호출되는 메소드이므로 현재 화면이 항상 내비인 것인지 => 일단 이대로 코드 추가함: sc가 추가
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
