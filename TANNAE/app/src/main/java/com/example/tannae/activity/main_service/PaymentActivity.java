@@ -1,6 +1,7 @@
 package com.example.tannae.activity.main_service;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
 import com.example.tannae.sub.Receipt;
@@ -19,12 +21,13 @@ import com.example.tannae.sub.Receipt;
 import java.util.ArrayList;
 
 public class PaymentActivity extends AppCompatActivity {
-    private Button btnBack, btnSend;
+    private Button btnSend;
     private RatingBar rbDriverRating;
 
     private String TAG = PaymentActivity.class.getSimpleName();
     private ListView listView = null;
     private ListViewAdapter adapter = null;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +44,23 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        btnBack = findViewById(R.id.btn_back_payment);
         btnSend = findViewById(R.id.btn_send_payment);
         rbDriverRating = findViewById(R.id.rb_driverrating_payment);
         listView = findViewById(R.id.lv_receipt_payment);
+        toolbar = findViewById(R.id.topAppBar_payment);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("type", false);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setEventListeners() {
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
