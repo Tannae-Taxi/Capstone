@@ -9,7 +9,7 @@ let server = require('http').createServer(app);
 let io = require('socket.io')(server);
 let bodyParser = require('body-parser');
 let nav = require('./service.js');
-// Test 주석
+
 // << Uses >>
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
