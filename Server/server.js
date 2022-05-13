@@ -38,7 +38,6 @@ app.get('/account/login', async (req, res) => {
 
     try {
         let [result, field] = await connection.query(`select usn, cast(id as char) as id, cast(pw as char) as pw, uname, rrn, gender, phone, email, drive, points, score, state from User where binary id = '${data.id}'`);
-        console.log(result);
         if (result.length === 0) {
             console.log('/account/login : Not a user');
             resType.resType = "등록된 사용자가 아닙니다.";
@@ -335,7 +334,7 @@ io.on('connection', (socket) => {
     // << Driver >>
     // < Service On >
     socket.on('serviceOn', async (driver) => {
-        await connection.query(`update Vehicle set state true where usn = '${driver.usn}'`);                    // Update state of vehicle to true
+        await connection.query(`update Vehicle set state = true where usn = '${driver.usn}'`);                    // Update state of vehicle to true
         let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${driver.usn}'`);    // Select vehicle which driver started service
         socket.join(vehicles[0].vsn);                                                                           // Join vsn room
         console.log(`Driver ${driver.usn} started service on vehicle ${vehicles[0].vsn}`);                      // LOG
@@ -343,7 +342,7 @@ io.on('connection', (socket) => {
 
     // < Service Off >
     socket.on('serviceOff', async (driver) => {
-        await connection.query(`update Vehilce set state = false where usn = '${driver.usn}'`);                 // Update state of vehicle to false
+        await connection.query(`update Vehicle set state = false where usn = '${driver.usn}'`);                 // Update state of vehicle to false
         let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${driver.usn}'`);    // Select vehicle which driver ended service
         console.log(`Driver ${driver.usn} stopped servicing on vehicle = ${vehicles[0].vsn}`);                  // LOG
     });
@@ -355,36 +354,37 @@ io.on('connection', (socket) => {
         let vehicle = vehicles[0];                                                                              // Set vehicle
         let pass = JSON.parse(vehicle.pass);                                                                    // Get passed points of vehilce
         let unpass = JSON.parse(vehicle.unpass);                                                                // Get unpassed points of vehicle
-        let passPoint = unapass.waypoints.length !== 0 ? unpass.waypoints[0] : unpass.destination;               // Get point just passed
+        let passPoint = unpass.waypoints.length !== 0 ? unpass.waypoints[0] : unpass.destination;               // Get point just passed
 
         // If passed point is init point (vehicle) than init set 
-        if (unpass.origin.name.equals('Vehicle')) {
+        if (unpass.origin.name === 'Vehicle') {
             pass = {}
             pass.waypoints = [];
             pass.sections = [];
         }
 
         // Set pass & unpass
-        if (unpass.waypoints.length !== 0) {                 // If no waypoints are left == vehicle arrived at destination
+        if (unpass.waypoints.length !== 0) {                // If no waypoints are left == vehicle arrived at destination
             pass.waypoints.push(unpass.origin);             // Push unpass origin to pass waypoints
             pass.sections.push(unpass.sections.shift());    // Push unpass sections[0] to pass sections
             unpass.origin = unpass.waypoints.shift();       // Set unpass origin to unpass waypoints[0]
         } else {                                            // If waypoints are left == vehicle arrived at waypoint
             pass.waypoints.push(unpass.origin);             // Push unpass origin to pass wapoints
             pass.waypoints.push(unpass.destination);        // Push unpass destination to pass waypoint
-            pass/sections.push(unpass.sections.shift());    // Push unpass sections[0] to pass sections
+            pass.sections.push(unpass.sections.shift());  // Push unpass sections[0] to pass sections
             unpass = null;                                  // Set unpass as null
         }
 
         // Get passenger of current waypoint
-        let point = JSON.parse(vehicle.names)[`${passPoint.x}_${passPoint.y}_${passPoint.name}`];   // Get point json names data just passed
+        let point = JSON.parse(vehicle.names)[`${passPoint.name}`];   // Get point json names data just passed
+        console.log(point);///////////////////////////////////////////////
         let usn = point.user;                                                                       // Get usn of point
         let type = point.type                                                                       // Get type of point
 
         // Update DB
         let pos = `${passPoint.x} ${passPoint.y}`;                              // New position
-        let num = type.equals('end') ? vehicle.num - 1 : vehicle.num;           // New number of passengers
-        await connection.query(`update Vehicle set pos = '${pos}', num = ${num}, pass = '${JSON.stringify(pass)}', unpass = ${unpass !== null ? `'${JSON.stringify(unpass)}'` : null}, ${unpass === null ? 'state = false' : ''} where vsn = '${vehicle.vsn}'`);
+        let num = type === 'end' ? vehicle.num - 1 : vehicle.num;           // New number of passengers
+        await connection.query(`update Vehicle set pos = '${pos}', num = ${num}, pass = '${JSON.stringify(pass)}', unpass = ${unpass !== null ? `'${JSON.stringify(unpass)}'` : null}${unpass === null ? ', state = false' : ''} where vsn = '${vehicle.vsn}'`);
         await connection.query(`update User set state = ${type == 'start' ? true : false} where usn = '${usn}'`);
 
         // Send response
@@ -438,9 +438,9 @@ io.on('connection', (socket) => {
         }
 
         // Update DB
-        await connection.query();       // Vehicle (state)는 passWaypoint에서 처리
-        await connection.query();       // User update (cost update)
-        await connection.query();       // History update
+        //await connection.query();       // Vehicle (state)는 passWaypoint에서 처리 pass 부분은 null 처리
+        //await connection.query();       // User update (cost update)
+        //await connection.query();       // History update
 
         // Emit result
         io.to(vehicle.vsn).emit('serviceEnd', result);
@@ -460,7 +460,7 @@ io.on('connection', (socket) => {
             if (service.vehicle != null) {
                 service.setPath();                                                                              // Set request path
                 service.path = await service.reqPath();                                                         // Request path to kakao navigation api and return path data
-                //await service.updateDB();                                                                       // Update Database
+                await service.updateDB();                                                                       // Update Database
                 socket.join(service.vehicle.vsn);                                                               // Join vsn room
                 io.to(service.vehicle.vsn).emit('responseService', service.flag, service.path, data.user.usn);  // Send response to vsn room users
             } else {
