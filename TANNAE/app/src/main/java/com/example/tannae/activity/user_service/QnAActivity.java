@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,6 +23,8 @@ import java.util.ArrayList;
 
 public class QnAActivity extends AppCompatActivity {
 
+    private Button btnsearch;
+    private EditText etsearchtitle;
     private Toolbar toolbar;
 
     private ListView listView = null;
@@ -44,7 +48,17 @@ public class QnAActivity extends AppCompatActivity {
 
     }
 
+    // < BackPress >
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
     private void setViews() {
+        btnsearch = findViewById(R.id.btn_search_qna);
+        etsearchtitle = findViewById(R.id.et_search_title_qna);
         toolbar = findViewById(R.id.topAppBar_qna);
         listView = (ListView) findViewById(R.id.lv_list_qna);
 
@@ -54,7 +68,7 @@ public class QnAActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("type", false);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });

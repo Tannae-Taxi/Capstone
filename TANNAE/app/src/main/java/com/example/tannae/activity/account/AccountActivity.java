@@ -15,7 +15,7 @@ import com.example.tannae.activity.main_service.MainActivity;
 public class AccountActivity extends AppCompatActivity {
     private Button btnEdit;
     private Button btnSignOut;
-    private TextView tvID, tvPW, tvGender, tvUname, tvBirth, tvEmail, tvPhone;
+    private TextView tvID, tvPW, tvGender, tvUname, tvRrn, tvEmail, tvPhone;
     private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class AccountActivity extends AppCompatActivity {
         tvPW = findViewById(R.id.tv_pw_account);
         tvGender = findViewById(R.id.tv_gender_account);
         tvUname = findViewById(R.id.tv_uname_account);
-        tvBirth = findViewById(R.id.tv_birth_account);
+        tvRrn = findViewById(R.id.tv_rrn_account);
         tvEmail = findViewById(R.id.tv_email_account);
         tvPhone = findViewById(R.id.tv_phone_account);
         toolbar = findViewById(R.id.topAppBar_account);
@@ -42,10 +42,18 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("type", false);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
+    }
+
+    // < BackPress >
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void setEventListeners(){

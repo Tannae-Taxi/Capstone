@@ -55,14 +55,6 @@
                 tools:layout_editor_absoluteY="219dp" />
 
             <TextView
-                android:id="@+id/tv_gender_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gender"
-                tools:layout_editor_absoluteX="176dp"
-                tools:layout_editor_absoluteY="320dp" />
-
-            <TextView
                 android:id="@+id/tv_uname_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,10 +63,18 @@
                 tools:layout_editor_absoluteY="269dp" />
 
             <TextView
-                android:id="@+id/tv_birth_account"
+                android:id="@+id/tv_gender_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Birth"
+                android:text="Gender"
+                tools:layout_editor_absoluteX="176dp"
+                tools:layout_editor_absoluteY="320dp" />
+
+            <TextView
+                android:id="@+id/tv_rrn_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="주민등록번호"
                 tools:layout_editor_absoluteX="64dp"
                 tools:layout_editor_absoluteY="320dp" />
 

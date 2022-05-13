@@ -2,8 +2,11 @@ package com.example.tannae.activity.user_service;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,8 +19,8 @@ import com.example.tannae.activity.main_service.NavigationActivity;
 import com.example.tannae.activity.main_service.PaymentActivity;
 
 public class UserServiceListActivity extends AppCompatActivity {
-
-    private Button btnAccount, btnPoint, btnQnA, btnHistory, btnLostFound, btnFAQ;
+    private LinearLayout layoutAccount;
+    private Button btnPoint, btnQnA, btnHistory, btnLostFound, btnFAQ;
     private Button btnPayment;
 
     @Override
@@ -29,7 +32,7 @@ public class UserServiceListActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        btnAccount = findViewById(R.id.btn_account_userservicelist);
+        layoutAccount = (LinearLayout) findViewById(R.id.layout_account_userservicelist);
         btnPoint = findViewById(R.id.btn_point_userservicelist);
         btnQnA = findViewById(R.id.btn_qna_userservicelist);
         btnHistory = findViewById(R.id.btn_history_userservicelist);
@@ -39,21 +42,21 @@ public class UserServiceListActivity extends AppCompatActivity {
     }
 
     private void setEventListeners() {
-        // Service on
-        btnAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
+
+        layoutAccount.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), AccountActivity.class);
-                intent.putExtra("type", true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
+        // Service on
 
         btnPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), PointActivity.class);
-                intent.putExtra("type", true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
@@ -62,7 +65,7 @@ public class UserServiceListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), QnAActivity.class);
-                intent.putExtra("type", true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
@@ -71,7 +74,7 @@ public class UserServiceListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), HistoryActivity.class);
-                intent.putExtra("type", true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
@@ -80,7 +83,7 @@ public class UserServiceListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LostFoundActivity.class);
-                intent.putExtra("type", true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
@@ -89,7 +92,7 @@ public class UserServiceListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), FAQActivity.class);
-                intent.putExtra("type", true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
@@ -98,7 +101,7 @@ public class UserServiceListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
-                intent.putExtra("type", true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });

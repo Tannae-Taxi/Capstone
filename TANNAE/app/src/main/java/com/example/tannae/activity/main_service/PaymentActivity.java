@@ -39,6 +39,12 @@ public class PaymentActivity extends AppCompatActivity {
         adapter.addItem(new Receipt("파랑이"));
         adapter.addItem(new Receipt("빨강이"));
         adapter.addItem(new Receipt("하양이"));
+        adapter.addItem(new Receipt("파랑이"));
+        adapter.addItem(new Receipt("빨강이"));
+        adapter.addItem(new Receipt("하양이"));
+        adapter.addItem(new Receipt("파랑이"));
+        adapter.addItem(new Receipt("빨강이"));
+        adapter.addItem(new Receipt("하양이"));
 
         listView.setAdapter(adapter);
     }
@@ -54,10 +60,18 @@ public class PaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("type", false);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
+    }
+
+    // < BackPress >
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void setEventListeners() {

@@ -41,16 +41,29 @@
         android:layout_gravity="bottom"
         style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="end">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
             <Button
                 android:id="@+id/btn_drive_main"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
                 android:layout_marginVertical="8dp"
                 android:layout_marginRight="40dp"
-                android:background="@drawable/button_round"
                 android:text="Drive" />
+
+        </LinearLayout>
+
+
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
@@ -59,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@id/bottomAppBar"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        app:srcCompat="@drawable/ic_baseline_local_taxi_24" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
