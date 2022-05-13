@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
-import com.example.tannae.sub.User;
+import com.example.tannae.sub.InnerDB;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -121,8 +121,8 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
                         end.put("x", destinationX);
                         end.put("y", destinationY);
 
-                        JSONObject user = new JSONObject(); // 현재 로그인되어 있는 User(SharedPreferences에 저장된) 정보를 json 형태로 전환
-                        User.setUserInTOOut(user);
+                        JSONObject user = new JSONObject(); // 현재 로그인되어 있는 InnerDB(SharedPreferences에 저장된) 정보를 json 형태로 전환
+                        InnerDB.setUserInTOOut(user);
 
                         JSONObject data = new JSONObject();
                         data.put("start", start);

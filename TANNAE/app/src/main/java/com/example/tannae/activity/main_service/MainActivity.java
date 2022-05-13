@@ -14,7 +14,7 @@ import com.example.tannae.R;
 import com.example.tannae.activity.account.LoginActivity;
 import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
-import com.example.tannae.sub.User;
+import com.example.tannae.sub.InnerDB;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.daum.mf.map.api.MapPoint;
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         reqBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (User.sp.getInt("state", 0) == 1) {
+                if (InnerDB.sp.getInt("state", 0) == 1) {
                     Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
                     intent.putExtra("type", false);
                     startActivity(intent);
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) { // 뒤로가기 두 번 하면
-            User.sp.edit().clear().apply(); // 내부 DB clear
+            InnerDB.sp.edit().clear().apply(); // 내부 DB clear
 
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class); //LoginActivity 로 전환 //// 근데 로그아웃 기능 따로 구현 안하고 이 방식으로 할 것인지 궁금
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

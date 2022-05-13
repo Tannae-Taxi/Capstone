@@ -10,12 +10,12 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 
-public class User extends AppCompatActivity {
+public class InnerDB extends AppCompatActivity {
     public static SharedPreferences sp;
     public static SharedPreferences.Editor editor;
     public static Context context;
 
-    public User(Context context) {
+    public InnerDB(Context context) {
         this.context = context;
     }
 

@@ -15,7 +15,7 @@ import com.example.tannae.activity.main_service.MainActivity;
 import com.example.tannae.network.Network;
 import com.example.tannae.network.RetrofitClient;
 import com.example.tannae.network.ServiceApi;
-import com.example.tannae.sub.User;
+import com.example.tannae.sub.InnerDB;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,8 +36,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // Create Retrofit Client
         Network.service = RetrofitClient.getClient().create(ServiceApi.class);
-        new User(getApplicationContext()).setSharedPreferences();
-        ///////////////////////////////////////////// User 정보가 등록되어 있다면 자동 로그인
+        new InnerDB(getApplicationContext()).setSharedPreferences();
+        ///////////////////////////////////////////// InnerDB 정보가 등록되어 있다면 자동 로그인
         // Create Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -81,8 +81,8 @@ public class LoginActivity extends AppCompatActivity {
                             String resType = resObj.getString("resType");
 
                             if (resType.equals("OK")) {
-                                JSONObject user = resArr.getJSONObject(1); // 이게 User data
-                                User.setUserOutTOIn(user);
+                                JSONObject user = resArr.getJSONObject(1); // 이게 InnerDB data
+                                InnerDB.setUserOutTOIn(user);
 
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
