@@ -25,7 +25,7 @@
             android:layout_marginVertical="25dp"
             android:layout_marginLeft="25dp"
             android:layout_weight="1"
-            android:text="여기다가 경유지들 삽입" />
+            android:text="현재 탑승자가 없습니다." />
 
         <Switch
             android:id="@+id/switch_drive_state_navigation"
@@ -48,7 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="25dp"
             android:layout_weight="1"
-            android:text="경유" />
+            android:enabled="false"
+            android:text="경유"/>
 
         <Button
             android:id="@+id/btn_end_service_navigation"
@@ -56,15 +57,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="25dp"
             android:layout_weight="1"
-            android:text="End" />
+            android:enabled="false"
+            android:text="요금 정산"/>
 
-
-        <!-- 이거 뭔지 몰라서 일단 주석 처리함
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_menu_preferences" />-->
     </LinearLayout>
 
 </LinearLayout>
