@@ -38,12 +38,16 @@ module.exports.Service = class Service {
         this.flag = 0;       // 0 : No vehicle / 1 : Share vehicle / 2 : Non share vehicle for share user / 3 : Non share vehicle for non-share user
 
         this.pointss = [];
+        this.starts = [];
+        this.ends = [];
         // Select nearest vehicle which is available
         for (let i = 0; i < vehicles.length; i++) {
             // If share than check if requested path is available on vehicle's path
             if (this.data.share) {
-                let [flagP, points] = this.checkInnerPath(vehicles[i]);
+                let [flagP, points, startIndex, endIndex] = this.checkInnerPath(vehicles[i]);
                 pointss.push(points);
+                start.push(startIndex);
+                end.push(endIndex);
                 // If not available than don't check current vehicle
                 if (!flagP)
                     continue;
@@ -67,8 +71,17 @@ module.exports.Service = class Service {
             }
         }
 
+        // Set start index and end index
+        if (this.flag === 1) {
+            this.starts = this.starts[nearestIndex];
+            this.ends = this.ends[nearestIndex];
+        } else if (nearestIndex !== -1) {
+            this.starts = 1;
+            this.ends = 2;
+        }
+
         // Set vehicle
-        if (nearestIndex != -1) {
+        if (nearestIndex !== -1) {
             this.vehicle = vehicles[nearestIndex];
             this.pointss = this.pointss[nearestIndex];
             this.flag = this.flag === 0 ? (this.data.share ? 2 : 3) : 1;
@@ -153,11 +166,11 @@ module.exports.Service = class Service {
             let endTOpost = Math.pow(postPoint.x - end.x, 2) + Math.pow(postPoint.y - end.y, 2);
             // Return (When start point is far than end point) ? true : false
             if (startIndex == endIndex && !(preTOstart < preTOend && startTOpost > endTOpost))
-                return [false, null];
+                return [false, null, null, null];
             else {
                 points.splice(endIndex, 0, end);
                 points.splice(startIndex, 0, start);
-                return [true, points];
+                return [true, points, startIndex, endIndex];
             }
         } else if (innerStart) {
             // Get last point end pre last point
@@ -172,11 +185,11 @@ module.exports.Service = class Service {
             if (theta < Math.PI / 4) {
                 points.push(end);
                 points.splice(startIndex, 0, start);
-                return [true, points];
+                return [true, points, startIndex, endIndex];
             } else
-                return [false, null];
+                return [false, null, null, null];
         } else
-            return [false, null];
+            return [false, null, null, null];
     }
 
     // < Calculate if coordinate is in single path >
@@ -205,10 +218,13 @@ module.exports.Service = class Service {
         this.path.duration = summary.duration;
         this.path.sections = sections;
 
+        let start = this.path.waypoints[this.starts - 1];
+        let end = this.path.waypoints.length > this.ends - 1 ? this.path.waypoints[this.ends - 1] : this.path.destination;
+
         let names = {};
-        names = this.flag === 1 ? JSON.parse(this.vehicle.names) : {};  ///////////////////////////////
-        names[`${this.data.start.name}`] = {'user': this.data.user.usn, 'type': 'start'};
-        names[`${this.data.end.name}`] = {'user': this.data.user.usn, 'type': 'end'};
+        names = this.flag === 1 ? JSON.parse(this.vehicle.names) : {};
+        names[`${start.x}_${start.y}_${start.name}`] = {'user': this.data.user.usn, 'type': 'start'};
+        names[`${end.x}_${end.y}_${end.name}`] = {'user': this.data.user.usn, 'type': 'end'};
 
         await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi}, names = '${JSON.stringify(names)}' where vsn = '${this.vehicle.vsn}'`);
         await this.connection.query(`update User set state = true where usn = '${this.data.user.usn}'`);

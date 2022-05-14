@@ -344,7 +344,7 @@ io.on('connection', (socket) => {
     socket.on('serviceOff', async (driver) => {
         await connection.query(`update Vehicle set state = false where usn = '${driver.usn}'`);                 // Update state of vehicle to false
         let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${driver.usn}'`);    // Select vehicle which driver ended service
-        console.log(`Driver ${driver.usn} stopped servicing on vehicle = ${vehicles[0].vsn}`);                  // LOG
+        console.log(`Driver ${driver.usn} stopped servicing on vehicle ${vehicles[0].vsn}`);                  // LOG
     });
 
     // < Pass Waypoint >
@@ -371,19 +371,18 @@ io.on('connection', (socket) => {
         } else {                                            // If waypoints are left == vehicle arrived at waypoint
             pass.waypoints.push(unpass.origin);             // Push unpass origin to pass wapoints
             pass.waypoints.push(unpass.destination);        // Push unpass destination to pass waypoint
-            pass.sections.push(unpass.sections.shift());  // Push unpass sections[0] to pass sections
+            pass.sections.push(unpass.sections.shift());    // Push unpass sections[0] to pass sections
             unpass = null;                                  // Set unpass as null
         }
 
         // Get passenger of current waypoint
-        let point = JSON.parse(vehicle.names)[`${passPoint.name}`];   // Get point json names data just passed
-        console.log(point);///////////////////////////////////////////////
+        let point = JSON.parse(vehicle.names)[`${passPoint.x}_${passPoint.y}_${passPoint.name}`];   // Get point json names data just passed
         let usn = point.user;                                                                       // Get usn of point
         let type = point.type                                                                       // Get type of point
 
         // Update DB
-        let pos = `${passPoint.x} ${passPoint.y}`;                              // New position
-        let num = type === 'end' ? vehicle.num - 1 : vehicle.num;           // New number of passengers
+        let pos = `${passPoint.x} ${passPoint.y}`;                  // New position
+        let num = type === 'end' ? vehicle.num - 1 : vehicle.num;   // New number of passengers
         await connection.query(`update Vehicle set pos = '${pos}', num = ${num}, pass = '${JSON.stringify(pass)}', unpass = ${unpass !== null ? `'${JSON.stringify(unpass)}'` : null}${unpass === null ? ', state = false' : ''} where vsn = '${vehicle.vsn}'`);
         await connection.query(`update User set state = ${type == 'start' ? true : false} where usn = '${usn}'`);
 
@@ -394,7 +393,7 @@ io.on('connection', (socket) => {
     // < End service >
     socket.on('serviceEnd', async (driver) => {
         // Select vehicle driver ended service
-        let [vehicles, field] = await connection.query(`select pass, cost, names from Vehicle where usn = '${driver.usn}'`);
+        let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${driver.usn}'`);
         let vehicle = vehicles[0];
 
         // Get pass, cost, names
@@ -444,6 +443,7 @@ io.on('connection', (socket) => {
 
         // Emit result
         io.to(vehicle.vsn).emit('serviceEnd', result);
+        //////////////////////// ROOM 삭제
     });
 
     // << Passenger >>
