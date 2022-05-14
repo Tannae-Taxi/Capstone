@@ -20,6 +20,7 @@ import com.example.tannae.sub.InnerDB;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -66,7 +67,7 @@ public class NavigationActivity extends AppCompatActivity {
         super.onResume();
         mapView = new MapView(this);
         mapViewContainer = (ViewGroup) findViewById(R.id.map_view_navigation);
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord( 37.566406178655534, 126.97786868931414), true);
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
         mapViewContainer.addView(mapView);
     }
 
@@ -83,29 +84,29 @@ public class NavigationActivity extends AppCompatActivity {
         Network.socket.on("responseService", args -> {
             // args[0] = flag:int / args[1] = path:JSONObject / args[2] = usn:String
             runOnUiThread(() -> {
-                // Flag : -1 (Server Error) / 0 (No Vehicle) / 1 (Share vehicle) / 2 (Non-share vehicle to share user) / 3 (Non-share vehicle to non-share user)
-                // 4 (Passenger boarding) / 5 (Passenger get off)
-                int flag = (int) args[0];
-                JSONObject path = (JSONObject) args[1];
-                String usnOut = (String) args[2];
-                String usnIn = InnerDB.sp.getString("usn", "");
-
-                // Toast
-                String message;
-                String add = "추가 인원이 배차되었습니다.\n경로를 수정합니다.";
-                switch (flag) {
-                    case 0 : message = "이용 가능한 차량이 없습니다."; break;
-                    case 1 : message = !usnOut.equals(usnIn) ? add : "동승 차량이 배차되었습니다."; break;
-                    case 2 : message = !usnOut.equals(usnIn) ? add : "동승 가능한 차량이 없습니다.\n일반 차량이 배차되었습니다."; break;
-                    case 3 : message = !usnOut.equals(usnIn) ? add : "일반 차량이 배차되었습니다."; break;
-                    case 4 : message = usnOut.equals(usnIn) ? "차량이 도착하였습니다.\n탑승해 주시기 바랍니다." : "탑승자가 승차하였습니다.\n경로를 수정합니다."; break;
-                    case 5 : message = usnOut.equals(usnOut) ? "목적지에 도착하였습니다.\n하차해 주시기 바랍니다." : "탑승자가 하차하였습니다.\n경로를 수정합니다."; break;
-                    default: message = "배차 오류가 발생하였습니다.\n고객센터에 문의하세요."; break;
-                }
-
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-
                 try {
+                    // Flag : -1 (Server Error) / 0 (No Vehicle) / 1 (Share vehicle) / 2 (Non-share vehicle to share user) / 3 (Non-share vehicle to non-share user)
+                    // 4 (Passenger boarding) / 5 (Passenger get off)
+                    int flag = (int) args[0];
+                    JSONObject path = (JSONObject) args[1];
+                    String usnOut = (String) args[2];
+                    String usnIn = InnerDB.sp.getString("usn", "");
+                    JSONArray waypoints = path != null ? path.getJSONArray("waypoints") : null;
+
+                    // Toast
+                    String message;
+                    switch (flag) {
+                        case 0 : message = "이용 가능한 차량이 없습니다."; break;
+                        case 1 : message = usnOut.equals(usnIn) ? "동승 차량이 배차되었습니다." : "추가 인원이 배차되었습니다.\n경로를 수정합니다.."; break;
+                        case 2 : message = usnOut.equals(usnIn) ? "동승 가능한 차량이 없습니다.\n일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다."; break;
+                        case 3 : message = usnOut.equals(usnIn) ? "일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다."; break;
+                        case 4 : message = usnOut.equals(usnIn) ? "차량이 도착하였습니다.\n탑승해 주시기 바랍니다." : "탑승자가 승차하였습니다.\n경로를 수정합니다."; break;
+                        case 5 : message = usnOut.equals(usnIn) ? "목적지에 도착하였습니다.\n하차해 주시기 바랍니다." : path != null ? "탑승자가 하차하였습니다.\n경로를 수정합니다." : "마지막 탑승자가 하차하였습니다."; break;
+                        default: message = "배차 오류가 발생하였습니다.\n고객센터에 문의하세요."; break;
+                    }
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+
                     // Event handle by flag number
                     if (!(flag == -1 || flag == 0)) {
                         if (flag == 1 || flag == 2 || flag == 3) {
@@ -118,8 +119,10 @@ public class NavigationActivity extends AppCompatActivity {
                             ///////////////////////// 지도 띄우기 path.origin / path.waypoints / path.destination
                         } else if (flag == 4) {
                             InnerDB.editor.putString("path", path.toString()).apply();
-                            tvNext.setText("NEXT : " + path.getJSONArray("waypoints").getJSONObject(0).getString("name"));
+                            tvNext.setText("NEXT : " + (waypoints.length() == 0 ? path.getJSONObject("destination").getString("name") : waypoints.getJSONObject(0).getString("name")));
                             //////////////////////// 지도 띄우기
+                            if (path.getJSONArray("waypoints").length() == 0)
+                                btnPass.setText("도착");
                         } else if (flag == 5) {
                             if (usnOut.equals(usnIn)) {
                                 InnerDB.editor.putInt("state", 0).apply();
@@ -127,13 +130,12 @@ public class NavigationActivity extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
-                            } else if (path != null){
+                            } else if (path != null) {
                                 InnerDB.editor.putString("path", path.toString()).apply();
                                 tvNext.setText("NEXT : " + path.getJSONArray("waypoints").getJSONObject(0).getString("name"));
                                 if (path.getJSONArray("waypoints").length() == 0)
                                     btnPass.setText("도착");
                                 ///////////////////////// 지도 띄우기
-
                             } else {
                                 InnerDB.editor.putString("path", null).apply();
                                 tvNext.setText("요금을 정산해주세요.");
@@ -152,7 +154,7 @@ public class NavigationActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 } catch (JSONException e) {
-
+                    e.printStackTrace();
                 }
             });
         });
@@ -160,8 +162,11 @@ public class NavigationActivity extends AppCompatActivity {
         // End service
         Network.socket.on("serviceEnd", args -> {
             runOnUiThread(() -> {
-                JSONObject receipt = (JSONObject) args[0];
-                ///////////////////////////////// DH : receipt 는 메모장에서 [ Result of service end ]  형태이며 이를 바탕으로 영수증 화면 구성
+                JSONObject result = (JSONObject) args[0];
+                Toast.makeText(getApplicationContext(), "운행이 종료되었습니다.\n영수증을 확인하여 주세요.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
+                intent.putExtra("result", result.toString());
+                startActivity(intent);
             });
         });
     }
@@ -197,7 +202,6 @@ public class NavigationActivity extends AppCompatActivity {
                     JSONObject driver = new JSONObject();
                     InnerDB.setUserInTOOut(driver);
                     Network.socket.emit("serviceEnd", driver);
-                    Toast.makeText(getApplicationContext(), "운행이 종료되었습니다.", Toast.LENGTH_SHORT).show();
                     /////////////////////////////////////////// MapView clear
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -208,9 +212,10 @@ public class NavigationActivity extends AppCompatActivity {
         switchDrive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (btnEndService.isEnabled())
+                if (btnEndService.isEnabled()) {
                     Toast.makeText(getApplicationContext(), "요금을 정산해주세요.", Toast.LENGTH_SHORT).show();
-                else {
+                    switchDrive.setChecked(false);
+                } else {
                     JSONObject driver = new JSONObject();
                     try {
                         InnerDB.setUserInTOOut(driver);
