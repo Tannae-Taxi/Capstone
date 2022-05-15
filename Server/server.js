@@ -433,12 +433,21 @@ io.on('connection', (socket) => {
 
             let pathCost = cost * pass.sections[i].distance / pass.distance;
             for (let j = 0; j < current.length; j++)
-                result[current[i]].cost += pathCost;
+                result[current[i]].cost += pathCost / count;
         }
 
-        // Update DB
+        // Update User DB
+        let usns = Object.keys(result)
+        for (let i = 0; i < usns.length; i++) {
+            let usn = usns[i];
+            if (usn === 'license') continue;
+            await connection.query(`update User set points = points - ${result[usn].cost} where usn = '${usn}'`);
+        }
+
+        // Update Vechile DB
+
+
         //await connection.query();       // Vehicle (state)는 passWaypoint에서 처리 pass 부분은 null 처리
-        //await connection.query();       // User update (cost update)
         //await connection.query();       // History update
 
         // Emit result
