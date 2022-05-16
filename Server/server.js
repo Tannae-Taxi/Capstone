@@ -445,10 +445,12 @@ io.on('connection', (socket) => {
         }
 
         // Update Vechile DB
+        await connection.query(`update Vehicle set pass = null, unpass = null, share = null, gender = null, cost = null, names = null where vsn = '${driver.usn}'`);
 
+        // Update History DB
+        let [historyNum, fields] = await connection.query(`select count(*) as count from History`);
+        
 
-        //await connection.query();       // Vehicle (state)는 passWaypoint에서 처리 pass 부분은 null 처리
-        //await connection.query();       // History update
 
         // Emit result
         io.to(vehicle.vsn).emit('serviceEnd', result);
