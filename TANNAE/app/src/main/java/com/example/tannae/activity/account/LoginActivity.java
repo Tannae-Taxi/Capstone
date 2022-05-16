@@ -68,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);                    // 임시 코드
                     startActivity(intent);                                                                      // 임시 코드
-                    finish();                                                                                   // 임시 코드
                     return;
                 }
                 // Check if entered ID/PW is a user
@@ -86,8 +85,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
-                                finish();
-
                             } else
                                 Toast.makeText(getApplicationContext(), resType, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {

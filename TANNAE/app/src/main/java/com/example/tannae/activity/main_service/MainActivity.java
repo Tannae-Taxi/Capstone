@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class); //LoginActivity 로 전환 //// 근데 로그아웃 기능 따로 구현 안하고 이 방식으로 할 것인지 궁금
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent); /////////////////////////////////////////이 부분에서 무한루프 발생
+            startActivity(intent);
 
             /* Network.socket.disconnect();
             finish();*/
