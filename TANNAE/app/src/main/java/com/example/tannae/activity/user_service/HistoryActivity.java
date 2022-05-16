@@ -30,6 +30,7 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         setViews();
+        setEventListeners();
         adapter = new ListViewAdapter();
         adapter.addItem(new List("history title", "내용1"));
         adapter.addItem(new List("제목2", "내용2"));
@@ -57,6 +58,9 @@ public class HistoryActivity extends AppCompatActivity {
         listView = findViewById(R.id.lv_list_history);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setEventListeners() {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

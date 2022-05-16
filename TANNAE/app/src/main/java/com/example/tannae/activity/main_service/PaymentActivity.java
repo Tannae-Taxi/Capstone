@@ -56,14 +56,6 @@ public class PaymentActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.topAppBar_payment);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
     }
 
     // < BackPress >
@@ -88,6 +80,15 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
         // rvReceipt는 RecyclerView 객체의 이벤트 처리 방법 찾아본 후 추가할 예정
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
     }
 
     public class ListViewAdapter extends BaseAdapter {

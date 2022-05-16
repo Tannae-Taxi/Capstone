@@ -31,6 +31,7 @@ public class LostFoundActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lost_found);
         setViews();
+        setEventListeners();
         adapter = new ListViewAdapter();
         adapter.addItem(new List("LostFoundTitle", "내용1"));
         adapter.addItem(new List("제목2", "내용2"));
@@ -58,6 +59,9 @@ public class LostFoundActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setEventListeners() {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -32,6 +32,7 @@ public class FAQActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faq);
         setViews();
+        setEventListeners();
         adapter = new ListViewAdapter();
         adapter.addItem(new List("FAQ Title", "내용1"));
         adapter.addItem(new List("제목2", "내용2"));
@@ -60,6 +61,9 @@ public class FAQActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setEventListeners() {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
