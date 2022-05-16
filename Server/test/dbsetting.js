@@ -15,5 +15,5 @@ for (let i = 0; i < 100; i++) {
     for (let j = 0; j < 5 - (i + 1).toString().length; j++)
         vsn += '0';
     vsn += (i + 1).toString();
-    connection.query(`insert Vehicle values('${vsn}', false, '0 0', 'temp${vsn}', 0, null, null, null, null, null, null, null)`);
+    connection.query(`insert Vehicle values('${vsn}', false, '126.96913490121608 37.55701346877968', 'temp${vsn}', 0, null, null, null, null, null, null, null)`);
 }

@@ -223,8 +223,8 @@ module.exports.Service = class Service {
 
         let names = {};
         names = this.flag === 1 ? JSON.parse(this.vehicle.names) : {};
-        names[`${start.x}_${start.y}_${start.name}`] = {'user': this.data.user.usn, 'type': 'start'};
-        names[`${end.x}_${end.y}_${end.name}`] = {'user': this.data.user.usn, 'type': 'end'};
+        names[`${start.x}_${start.y}_${start.name}`] = {'usn': this.data.user.usn, 'type': 'start'};
+        names[`${end.x}_${end.y}_${end.name}`] = {'usn': this.data.user.usn, 'type': 'end'};
 
         await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi}, names = '${JSON.stringify(names)}' where vsn = '${this.vehicle.vsn}'`);
         await this.connection.query(`update User set state = true where usn = '${this.data.user.usn}'`);

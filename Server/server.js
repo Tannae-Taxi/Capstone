@@ -93,7 +93,7 @@ app.post('/account/signup', async (req, res) => {
         }
         if (usnNew === 'u') {
             let usnNum = result.length + 1;
-            for (let j = 0; j < 5 - usnNum.toString.length; j++)
+            for (let j = 0; j < 5 - usnNum.toString().length; j++)
                 usnNew += '0';
             usnNew += usnNum;
         }
@@ -238,7 +238,7 @@ app.post('/user/postLost', async (req, res) => {
         }
         if (lsnNew === 'l') {
             let lsnNum = result.length + 1;
-            for (let j = 0; j < 5 - lsnNum.toString.length; j++)
+            for (let j = 0; j < 5 - lsnNum.toString().length; j++)
                 lsnNew += '0';
             lsnNew += lsnNum;
         }
@@ -294,10 +294,10 @@ app.post('/user/postContent', async (req, res) => {
 
     try {
         let [result, field] = await connection.query('select csn from Content where csn like "c%" order by csn asc');
-        let csnNew = 'l';
+        let csnNew = 'c';
         for (let i = 0; i < result.length; i++) {
             let csn = result[i].csn;
-            csn = csn.replace('l', '');
+            csn = csn.replace('c', '');
             csn = csn.replace(/0/g, '');
             if (i + 1 !== Number(csn)) {
                 for (let j = 0; j < 5 - (i + 1).toString().length; j++)
@@ -307,8 +307,8 @@ app.post('/user/postContent', async (req, res) => {
         }
         if (csnNew === 'c') {
             let csnNum = result.length + 1;
-            for (let j = 0; j < 5 - csnNum.toString.length; j++)
-                lsnNew += '0';
+            for (let j = 0; j < 5 - csnNum.toString().length; j++)
+                csnNew += '0';
             csnNew += csnNum;
         }
         await connection.query(`insert Content values('${csnNew}', '${data.title}', '${data.cont}', Null, '${data.usn}')`);
@@ -372,12 +372,14 @@ io.on('connection', (socket) => {
             pass.waypoints.push(unpass.origin);             // Push unpass origin to pass wapoints
             pass.waypoints.push(unpass.destination);        // Push unpass destination to pass waypoint
             pass.sections.push(unpass.sections.shift());    // Push unpass sections[0] to pass sections
+            pass.distance = unpass.distance;                // Update total distance
+            pass.duration = unpass.duration;                // Update total duration
             unpass = null;                                  // Set unpass as null
         }
 
         // Get passenger of current waypoint
         let point = JSON.parse(vehicle.names)[`${passPoint.x}_${passPoint.y}_${passPoint.name}`];   // Get point json names data just passed
-        let usn = point.user;                                                                       // Get usn of point
+        let usn = point.usn;                                                                        // Get usn of point
         let type = point.type                                                                       // Get type of point
 
         // Update DB
@@ -398,7 +400,7 @@ io.on('connection', (socket) => {
 
         // Get pass, cost, names
         let pass = JSON.parse(vehicle.pass);
-        let cost = vehicles[0].cost;
+        let cost = vehicle.cost;
         let names = JSON.parse(vehicle.names);
 
         // Except info's of vehicle to first waypoint
@@ -431,13 +433,16 @@ io.on('connection', (socket) => {
                 count--;
             }
 
-            let pathCost = cost * pass.sections[i].distance / pass.distance;
-            for (let j = 0; j < current.length; j++)
-                result[current[i]].cost += pathCost / count;
+            if (count !== 0) {
+                let pathCost = parseInt(cost * pass.sections[i].distance / pass.distance);
+                for (let j = 0; j < current.length; j++)
+                    result[current[i]].cost += pathCost / count;
+            }
         }
+        console.log('result', result);
 
         // Update User DB
-        let usns = Object.keys(result)
+        let usns = Object.keys(result);
         for (let i = 0; i < usns.length; i++) {
             let usn = usns[i];
             if (usn === 'license') continue;
@@ -445,16 +450,42 @@ io.on('connection', (socket) => {
         }
 
         // Update Vechile DB
-        await connection.query(`update Vehicle set pass = null, unpass = null, share = null, gender = null, cost = null, names = null where vsn = '${driver.usn}'`);
+        await connection.query(`update Vehicle set pass = null, unpass = null, share = null, gender = null, cost = null, names = null where vsn = '${vehicle.vsn}'`);
 
         // Update History DB
-        let [historyNum, fields] = await connection.query(`select count(*) as count from History`);
-        
+        for (let i = 0; i < usns.length; i++) {
+            let usn = usns[i];
+            if (usn === 'license') continue;
 
+            let [history, fields] = await connection.query(`select * from History`);
+            let hsnNew = 'h';
+            for (let i = 0; i < history.length; i++) {
+                let hsn = history[i].hsn;
+                hsn = hsn.replace('h', '');
+                hsn = hsn.replace(/0/g, '');
+                if (i + 1 !== Number(hsn)) {
+                    for (let j = 0; j < 5 - (i + 1).toString().length; j++)
+                        hsnNew += '0';
+                    hsnNew += (i + 1);
+                }
+            }
+            if (hsnNew === 'h') {
+                let hsnNum = history.length + 1;
+                for (let j = 0; j < 5 - hsnNum.toString().length; j++)
+                    hsnNew += '0';
+                hsnNew += hsnNum;
+            }
+            await connection.query(`insert History values('${hsnNew}', '${vehicle.license}', '${new Date().toLocaleString()}', '${result[usn].start}', '${result[usn].end}', ${result[usn].cost}, '${usn}')`);
+        }
 
         // Emit result
         io.to(vehicle.vsn).emit('serviceEnd', result);
-        //////////////////////// ROOM 삭제
+
+        // Exit room
+        let users = io.sockets.adapter.rooms.get(vehicle.vsn);
+        console.log(users);
+        for (let i = 0; i < users.length; i++)
+            users[i].leave(vehicle.vsn);
     });
 
     // << Passenger >>
