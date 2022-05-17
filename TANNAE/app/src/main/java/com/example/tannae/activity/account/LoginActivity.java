@@ -42,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, InnerDB.sp.getString("uname", null )+"님이 자동로그인 되었습니다.", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
-            finish();
         }
 
         // Create Activity
@@ -93,7 +92,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
-                                finish(); // finish를 넣어주지 않으면 메인 화면에서 뒤로가기 두번으로 앱 종료가 안돼서 다시 추가함
                             } else
                                 Toast.makeText(getApplicationContext(), resType, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
