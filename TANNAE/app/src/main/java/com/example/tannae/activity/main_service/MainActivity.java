@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
 
     // < BackPress >
     public void onBackPressed() {
-        //////////////////////////////////////////////////////////////// 뒤로가기 두 번 하면 Logout 되면서 LoginActivity 로 전환되고 내부 DB clear
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
             Toast.makeText(this, "종료하려면 한번 더 누르세요.", Toast.LENGTH_SHORT).show();

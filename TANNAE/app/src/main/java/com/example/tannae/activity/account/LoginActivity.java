@@ -37,7 +37,17 @@ public class LoginActivity extends AppCompatActivity {
         // Create Retrofit Client
         Network.service = RetrofitClient.getClient().create(ServiceApi.class);
         new InnerDB(getApplicationContext()).setSharedPreferences();
-        ///////////////////////////////////////////// InnerDB 정보가 등록되어 있다면 자동 로그인
+
+        ////// InnerDB 정보가 등록되어 있다면 자동 로그인 구현 완료. => 서버키고 테스트해보아야 함
+        if(InnerDB.sp.getString("id", null) != null && InnerDB.sp.getString("pw", null) != null){
+
+            Toast.makeText(LoginActivity.this, InnerDB.sp.getString("uname", null )+"님이 자동로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish(); // finish를 넣어주지 않으면 메인 화면에서 뒤로가기 두번으로 앱 종료가 안돼서 다시 추가함
+        }
+
         // Create Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -67,7 +77,8 @@ public class LoginActivity extends AppCompatActivity {
                 if(id.length() == 0 || pw.length() == 0) {
                     Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);                    // 임시 코드
-                    startActivity(intent);                                                                      // 임시 코드
+                    startActivity(intent); // 임시 코드
+                    finish(); // 임시 코드 // finish를 넣어주지 않으면 메인 화면에서 뒤로가기 두번으로 앱 종료가 안돼서 다시 추가함
                     return;
                 }
                 // Check if entered ID/PW is a user
@@ -85,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
+                                finish(); // finish를 넣어주지 않으면 메인 화면에서 뒤로가기 두번으로 앱 종료가 안돼서 다시 추가함
                             } else
                                 Toast.makeText(getApplicationContext(), resType, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
