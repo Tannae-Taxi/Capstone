@@ -37,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
         // Setting
         setViews();
         setEventListeners();
+
+        /* if(InnerDB.sp.getInt("drive",0) == 1){
+            btnDrive.setVisibility(View.VISIBLE);
+        }
+        else btnDrive.setVisibility(View.INVISIBLE); */ //운전자 여부에 따라 drive 버튼이 보이도록 하는 코드. 개발 중에는 편의를 위해 주석상태
+
         // Connect Socket.io
         if (!Network.socket.isActive())
             Network.socket.connect();
