@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -16,33 +18,35 @@
 
 
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.account.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.AccountActivity"/>
-        <activity android:name=".activity.AccountEditActivity"/>
-        <activity android:name=".activity.DetailServiceReqActivity"/>
-        <activity android:name=".activity.FAQActivity"/>
-        <activity android:name=".activity.FAQEditActivity"/>
-        <activity android:name=".activity.FindActivity"/>
-        <activity android:name=".activity.HistoryActivity"/>
-        <activity android:name=".activity.LostFoundActivity"/>
-        <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.NavigationActivity"/>
-        <activity android:name=".activity.PaymentActivity"/>
-        <activity android:name=".activity.PointActivity"/>
-        <activity android:name=".activity.QnAActivity"/>
-        <activity android:name=".activity.QnADetailActivity"/>
-        <activity android:name=".activity.QnAEditActivity"/>
-        <activity android:name=".activity.ServiceReqActivity"/>
-        <activity android:name=".activity.ServiceUsingActivity"/>
-        <activity android:name=".activity.SignUpActivity"/>
-        <activity android:name=".activity.VehicleListActivity"/>
 
+        <activity android:name=".activity.account.AccountActivity"/>
+        <activity android:name=".activity.account.AccountEditActivity"/>
+        <activity android:name=".activity.account.SignUpActivity"/>
+        <activity android:name=".activity.account.FindActivity"/>
+
+        <activity android:name=".activity.main_service.MainActivity"/>
+        <activity android:name=".activity.main_service.ServiceReqActivity"/>
+        <activity android:name=".activity.main_service.NavigationActivity"/>
+        <activity android:name=".activity.main_service.PaymentActivity"/>
+
+        <activity android:name=".activity.user_service.UserServiceListActivity"/>
+        <activity android:name=".activity.user_service.LostFoundActivity"/>
+        <activity android:name=".activity.user_service.HistoryActivity"/>
+        <activity android:name=".activity.user_service.PointActivity"/>
+        <activity android:name=".activity.user_service.QnAActivity"/>
+        <activity android:name=".activity.user_service.QnADetailActivity"/>
+        <activity android:name=".activity.user_service.QnAEditActivity"/>
+        <activity android:name=".activity.user_service.FAQActivity"/>
+        <activity android:name=".activity.user_service.FAQEditActivity"/>
+
+        <meta-data android:name="com.kakao.sdk.AppKey" android:value="be32c53145962ae88db090324e2223b0"/>
     </application>
 
 </manifest>

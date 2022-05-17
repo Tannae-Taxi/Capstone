@@ -37,8 +37,4 @@ public interface ServiceApi {
     Call<String> editContent(@Body JSONObject content);
     @POST("/user/postContent")              // Post Content
     Call<String> postContent(@Body JSONObject content);
-
-    /* Driver */
-
-    /* Passenger */
 }
