@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -20,155 +21,153 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="25dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_account"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Account"
-            android:layout_gravity="center"
-            android:textSize="30sp" />
+            android:layout_marginHorizontal="25dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/text_border"
+            android:elevation="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="REGISTER"
+                android:textSize="30sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_id_sign_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="ID"
+                    android:inputType="textPersonName" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btn_checkID_sign_up"
+                    style="@style/Widget.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="중복검사" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_checkID_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="영문과 숫자를 사용하여 6자리 이상 작성하세요." />
+
+            <EditText
+                android:id="@+id/et_pw_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/et_checkpw_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Password Check"
+                android:inputType="textPassword" />
+
+            <TextView
+                android:id="@+id/tv_retrypw_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비밀번호는 8자 이상 입력하세요." />
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="25dp"
+            android:background="@drawable/text_border"
+            android:elevation="20dp"
+            android:orientation="vertical">
+
 
             <EditText
-                android:id="@+id/et_id_sign_up"
+                android:id="@+id/et_name_sign_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="ID"
-                android:inputType="textPersonName" />
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:hint="Name"
+                android:inputType="text" />
 
-            <Button
-                android:id="@+id/btn_checkID_sign_up"
-                style="@style/Widget.Button.TextButton"
+            <EditText
+                android:id="@+id/et_rrn_sign_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="중복검사"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appBarLayout3" />
-        </LinearLayout>
+                android:ems="15"
+                android:hint="주민등록번호 ( - 기호 자동입력)"
+                android:inputType="number"
+                android:maxLength="14" />
 
-        <TextView
-            android:id="@+id/tv_checkID_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="영문과 숫자를 사용하여 6자리 이상 작성하세요." />
+            <RadioGroup
+                android:id="@+id/rg_gender_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_pw_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPassword" />
+                <RadioButton
+                    android:id="@+id/rb_man_sign_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="남" />
 
-        <EditText
-            android:id="@+id/et_checkpw_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Password Check"
-            android:inputType="textPassword"/>
+                <RadioButton
+                    android:id="@+id/rb_woman_sign_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="여" />
+            </RadioGroup>
 
-        <TextView
-            android:id="@+id/tv_retrypw_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="비밀번호는 8자 이상 입력하세요." />
+            <EditText
+                android:id="@+id/et_email_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
 
+            <EditText
+                android:id="@+id/et_phone_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:maxLength="11" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="25dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_personal_sign_up"
+        <Button
+            android:id="@+id/btn_sign_up"
+            style="@style/Widget.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Personal"
-            android:textSize="30sp" />
+            android:text="Sign Up" />
 
-        <EditText
-            android:id="@+id/et_name_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="Name"/>
-
-        <EditText
-            android:id="@+id/et_rrn_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="15"
-            android:hint="주민등록번호 ( - 기호 자동입력)"
-            android:inputType="number"
-            android:maxLength="14"/>
-
-        <RadioGroup
-            android:id="@+id/rg_gender_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rb_man_sign_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="남" />
-
-            <RadioButton
-                android:id="@+id/rb_woman_sign_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="여" />
-        </RadioGroup>
-
-        <EditText
-            android:id="@+id/et_email_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Email"
-            android:inputType="textEmailAddress" />
-
-        <EditText
-            android:id="@+id/et_phone_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Phone Number"
-            android:inputType="phone"
-            android:maxLength="11" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_sign_up"
-        style="@style/Widget.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Sign Up"/>
+        </LinearLayout>
 
 </LinearLayout>
