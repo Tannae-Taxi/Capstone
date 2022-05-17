@@ -35,7 +35,7 @@ public class NavigationActivity extends AppCompatActivity {
     private MapView mapView;
     private ViewGroup mapViewContainer;
     private boolean type;
-    private MapPolyline polyline = new MapPolyline();
+    private MapPolyline polyline;
     private MapPoint point;
 
     // < onCreate >
@@ -117,46 +117,52 @@ public class NavigationActivity extends AppCompatActivity {
                     // Event handle by flag number
                     if (!(flag == -1 || flag == 0)) {
                         if (flag == 1 || flag == 2 || flag == 3) {
+                            // Set inner DB
                             InnerDB.editor.putInt("state", usnOut.equals(usnIn) ? 1 : InnerDB.sp.getInt("state", 0)).apply();
                             InnerDB.editor.putString("path", path.toString()).apply();
+
+                            // Set View's variable
                             btnPass.setEnabled(true);
                             btnPass.setBackgroundColor(Color.parseColor("#FF127CEA"));
                             btnPass.setText("경유");
                             tvNext.setText("NEXT : " + path.getJSONArray("waypoints").getJSONObject(0).getString("name"));
-                            // 지도 띄우기 path.origin / path.waypoints / path.destination
-                            polyline.setLineColor(Color.argb(128, 255, 0, 0));
-                            polyline.addPoint(point.mapPointWithGeoCoord(path.getJSONObject("origin").getDouble("y"), path.getJSONObject("origin")  .getDouble("x")));
-                            for (int i = 0; i < path.getJSONArray("waypoints").length(); i++) {
-                                JSONObject waypoint = path.getJSONArray("waypoints").getJSONObject(i);
-                                polyline.addPoint(point.mapPointWithGeoCoord(waypoint.getDouble("y"), waypoint.getDouble("x")));
-                            }
-                            polyline.addPoint(point.mapPointWithGeoCoord(path.getJSONObject("destination").getDouble("y"), path.getJSONObject("destination").getDouble("x")));
 
-
-                            mapView.addPolyline(polyline);
-                            MapPointBounds bounds = new MapPointBounds(polyline.getMapPoints());
-                            mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(bounds, 10));
+                            // Show path on Map
+                            showPathOnMap(path);
                         } else if (flag == 4) {
+                            // Set inner DB
                             InnerDB.editor.putString("path", path.toString()).apply();
+
+                            // Set View's variable
                             tvNext.setText("NEXT : " + (waypoints.length() == 0 ? path.getJSONObject("destination").getString("name") : waypoints.getJSONObject(0).getString("name")));
-                            //////////////////////// 지도 띄우기
                             if (path.getJSONArray("waypoints").length() == 0)
                                 btnPass.setText("도착");
+
+                            // Show path on Map
+                            showPathOnMap(path);
                         } else if (flag == 5) {
-                            if (usnOut.equals(usnIn)) {
+                            if (usnOut.equals(usnIn)) {     // When current user get off
                                 InnerDB.editor.putInt("state", 0).apply();
                                 InnerDB.editor.putString("path", null).apply();
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
-                            } else if (path != null) {
+                            } else if (path != null) {      // When not current user and path is still left
+                                // Set inner DB
                                 InnerDB.editor.putString("path", path.toString()).apply();
+
+                                // Set View's variable
                                 tvNext.setText("NEXT : " + path.getJSONArray("waypoints").getJSONObject(0).getString("name"));
                                 if (path.getJSONArray("waypoints").length() == 0)
                                     btnPass.setText("도착");
-                                ///////////////////////// 지도 띄우기
-                            } else {
+
+                                // Show path on Map
+                                showPathOnMap(path);
+                            } else {                        // When driver and service ends
+                                // Set inner DB
                                 InnerDB.editor.putString("path", null).apply();
+
+                                // Set View's variable
                                 tvNext.setText("요금을 정산해주세요.");
                                 btnPass.setEnabled(false);
                                 btnPass.setBackgroundColor(Color.parseColor("#BDBDBD"));
@@ -164,10 +170,13 @@ public class NavigationActivity extends AppCompatActivity {
                                 btnEndService.setEnabled(true);
                                 btnEndService.setBackgroundColor(Color.parseColor("#FF127CEA"));
                                 switchDrive.setChecked(false);
-                                //////////////////////// 지도 지우기
+
+                                // Erase map
+                                for (MapPolyline mp : mapView.getPolylines())
+                                    mapView.removePolyline(mp);
                             }
                         }
-                    } else {
+                    } else {    // When there is no vehicle available
                         Thread.sleep(500);
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -247,6 +256,37 @@ public class NavigationActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // < Show path data on map >
+    private void showPathOnMap(JSONObject path) {
+        try {
+            // Erase map
+            for (MapPolyline mp : mapView.getPolylines())
+                mapView.removePolyline(mp);
+
+            // INIT
+            polyline = new MapPolyline();
+            polyline.setLineColor(Color.argb(128, 0, 0, 255));
+            JSONObject origin = path.getJSONObject("origin");
+            JSONObject destination = path.getJSONObject("destination");
+            JSONArray waypoints = path.getJSONArray("waypoints");
+
+            // Add points
+            polyline.addPoint(point.mapPointWithGeoCoord(origin.getDouble("y"), origin.getDouble("x")));
+            for (int i = 0; i < waypoints.length(); i++) {
+                JSONObject waypoint = waypoints.getJSONObject(i);
+                polyline.addPoint(point.mapPointWithGeoCoord(waypoint.getDouble("y"), waypoint.getDouble("x")));
+            }
+            polyline.addPoint(point.mapPointWithGeoCoord(destination.getDouble("y"), destination.getDouble("x")));
+
+            // Show
+            mapView.addPolyline(polyline);
+            MapPointBounds bounds = new MapPointBounds(polyline.getMapPoints());
+            mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(bounds, 100));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
