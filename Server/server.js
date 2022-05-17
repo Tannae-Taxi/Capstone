@@ -333,7 +333,7 @@ io.on('connection', (socket) => {
     // << Driver >>
     // < Service On >
     socket.on('serviceOn', async (driver) => {
-        await connection.query(`update Vehicle set state = true where usn = '${driver.usn}'`);                    // Update state of vehicle to true
+        await connection.query(`update Vehicle set state = true where usn = '${driver.usn}'`);                  // Update state of vehicle to true
         let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${driver.usn}'`);    // Select vehicle which driver started service
         socket.join(vehicles[0].vsn);                                                                           // Join vsn room
         console.log(`Driver ${driver.usn} started service on vehicle ${vehicles[0].vsn}`);                      // LOG
@@ -343,7 +343,7 @@ io.on('connection', (socket) => {
     socket.on('serviceOff', async (driver) => {
         await connection.query(`update Vehicle set state = false where usn = '${driver.usn}'`);                 // Update state of vehicle to false
         let [vehicles, field] = await connection.query(`select * from Vehicle where usn = '${driver.usn}'`);    // Select vehicle which driver ended service
-        console.log(`Driver ${driver.usn} stopped servicing on vehicle ${vehicles[0].vsn}`);                  // LOG
+        console.log(`Driver ${driver.usn} stopped servicing on vehicle ${vehicles[0].vsn}`);                    // LOG
     });
 
     // < Pass Waypoint >
@@ -363,17 +363,19 @@ io.on('connection', (socket) => {
         }
 
         // Set pass & unpass
-        if (unpass.waypoints.length !== 0) {                // If no waypoints are left == vehicle arrived at destination
-            pass.waypoints.push(unpass.origin);             // Push unpass origin to pass waypoints
-            pass.sections.push(unpass.sections.shift());    // Push unpass sections[0] to pass sections
-            unpass.origin = unpass.waypoints.shift();       // Set unpass origin to unpass waypoints[0]
-        } else {                                            // If waypoints are left == vehicle arrived at waypoint
-            pass.waypoints.push(unpass.origin);             // Push unpass origin to pass wapoints
-            pass.waypoints.push(unpass.destination);        // Push unpass destination to pass waypoint
-            pass.sections.push(unpass.sections.shift());    // Push unpass sections[0] to pass sections
-            pass.distance = unpass.distance;                // Update total distance
-            pass.duration = unpass.duration;                // Update total duration
-            unpass = null;                                  // Set unpass as null
+        if (unpass.waypoints.length !== 0) {                            // If no waypoints are left == vehicle arrived at destination
+            pass.waypoints.push(unpass.origin);                         // Push unpass origin to pass waypoints
+            pass.sections.push(unpass.sections.shift());                // Push unpass sections[0] to pass sections
+            unpass.origin = unpass.waypoints.shift();                   // Set unpass origin to unpass waypoints[0]
+            console.log(`Vehicle ${vehicle.vsn} has passed waypoint`);  // LOG
+        } else {                                                        // If waypoints are left == vehicle arrived at waypoint
+            pass.waypoints.push(unpass.origin);                         // Push unpass origin to pass wapoints
+            pass.waypoints.push(unpass.destination);                    // Push unpass destination to pass waypoint
+            pass.sections.push(unpass.sections.shift());                // Push unpass sections[0] to pass sections
+            pass.distance = unpass.distance;                            // Update total distance
+            pass.duration = unpass.duration;                            // Update total duration
+            unpass = null;                                              // Set unpass as null
+            console.log(`Vehicle ${vehicle.vsn} arrived at end point`); // LOG
         }
 
         // Get passenger of current waypoint
@@ -438,7 +440,6 @@ io.on('connection', (socket) => {
                     result[current[i]].cost += pathCost / count;
             }
         }
-        console.log('result', result);
 
         // Update User DB
         let usns = Object.keys(result);
@@ -482,9 +483,11 @@ io.on('connection', (socket) => {
 
         // Exit room
         let users = io.sockets.adapter.rooms.get(vehicle.vsn);
-        console.log(users);
         for (let i = 0; i < users.length; i++)
             users[i].leave(vehicle.vsn);
+
+        // LOG
+        console.log(`Service ended on vehicle ${vehicle.vsn}`);
     });
 
     // << Passenger >>
@@ -504,6 +507,7 @@ io.on('connection', (socket) => {
                 await service.updateDB();                                                                       // Update Database
                 socket.join(service.vehicle.vsn);                                                               // Join vsn room
                 io.to(service.vehicle.vsn).emit('responseService', service.flag, service.path, data.user.usn);  // Send response to vsn room users
+                console.log(`User ${data.user.usn} is matched with vehicle ${service.vehicle.vsn}`);
             } else {
                 // When there is no vehicle available
                 console.log(`No vehicle is available for user ${data.user.usn}(Start : ${data.start.name} / End : ${data.end.name})`);
@@ -511,7 +515,7 @@ io.on('connection', (socket) => {
             }
         } catch (err) {
             // When there is a error
-            console.log(err + "ERROR");
+            console.log(err);
             socket.emit('responseService', -1, null, null, null);
         }
     });
