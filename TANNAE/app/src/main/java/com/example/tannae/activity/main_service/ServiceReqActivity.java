@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
-import com.example.tannae.network.Network;
 import com.example.tannae.sub.InnerDB;
 
 import net.daum.mf.map.api.MapPOIItem;
@@ -47,7 +46,6 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         // Setting
         setViews();
         setEventListeners();
-
     }
 
     @Override
@@ -130,9 +128,9 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
                         data.put("share", switchShare.isChecked());
                         data.put("user", user);
 
-                        Network.socket.emit("requestService", data);
                         Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
                         intent.putExtra("type", false);
+                        intent.putExtra("data", data.toString());
                         startActivity(intent);
                     } catch (JSONException e) {
                         e.printStackTrace();

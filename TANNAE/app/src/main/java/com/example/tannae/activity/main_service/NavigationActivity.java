@@ -47,18 +47,6 @@ public class NavigationActivity extends AppCompatActivity {
         type = getIntent().getBooleanExtra("type", false);
         btnPass.setBackgroundColor(Color.parseColor("#BDBDBD"));
         btnEndService.setBackgroundColor(Color.parseColor("#BDBDBD"));
-        if (!type) {
-            btnPass.setVisibility(View.INVISIBLE);
-            btnEndService.setVisibility(View.INVISIBLE);
-            switchDrive.setVisibility(View.INVISIBLE);
-            try {
-                JSONObject path = new JSONObject(InnerDB.sp.getString("path", ""));
-                //////////////////////////////////////////////////////////// path(JSON)을 Mapview 띄우기
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
     }
 
     // < onResume >
@@ -69,6 +57,20 @@ public class NavigationActivity extends AppCompatActivity {
         mapViewContainer = (ViewGroup) findViewById(R.id.map_view_navigation);
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
         mapViewContainer.addView(mapView);
+        if (!type) {
+            btnPass.setVisibility(View.INVISIBLE);
+            btnEndService.setVisibility(View.INVISIBLE);
+            switchDrive.setVisibility(View.INVISIBLE);
+            if (InnerDB.sp.getInt("state", 0) == 1) {
+                // 사용자가 서비스를 이용중이면 innerDB에 저장된 path 정보를 바탕으로 지도에 경로 표시*
+            } else {
+                try {
+                    Network.socket.emit("requestService", new JSONObject(getIntent().getStringExtra("data")));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     // < onPause >
@@ -149,11 +151,12 @@ public class NavigationActivity extends AppCompatActivity {
                             }
                         }
                     } else {
+                        Thread.sleep(500);
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
-                } catch (JSONException e) {
+                } catch (JSONException | InterruptedException e) {
                     e.printStackTrace();
                 }
             });
