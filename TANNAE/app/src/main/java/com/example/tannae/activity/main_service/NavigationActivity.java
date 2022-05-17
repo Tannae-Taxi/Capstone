@@ -17,7 +17,10 @@ import com.example.tannae.R;
 import com.example.tannae.network.Network;
 import com.example.tannae.sub.InnerDB;
 
+import net.daum.mf.map.api.CameraUpdateFactory;
 import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapPointBounds;
+import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapView;
 
 import org.json.JSONArray;
@@ -32,6 +35,8 @@ public class NavigationActivity extends AppCompatActivity {
     private MapView mapView;
     private ViewGroup mapViewContainer;
     private boolean type;
+    private MapPolyline polyline = new MapPolyline();
+    private MapPoint point;
 
     // < onCreate >
     @Override
@@ -118,7 +123,19 @@ public class NavigationActivity extends AppCompatActivity {
                             btnPass.setBackgroundColor(Color.parseColor("#FF127CEA"));
                             btnPass.setText("경유");
                             tvNext.setText("NEXT : " + path.getJSONArray("waypoints").getJSONObject(0).getString("name"));
-                            ///////////////////////// 지도 띄우기 path.origin / path.waypoints / path.destination
+                            // 지도 띄우기 path.origin / path.waypoints / path.destination
+                            polyline.setLineColor(Color.argb(128, 255, 0, 0));
+                            polyline.addPoint(point.mapPointWithGeoCoord(path.getJSONObject("origin").getDouble("y"), path.getJSONObject("origin")  .getDouble("x")));
+                            for (int i = 0; i < path.getJSONArray("waypoints").length(); i++) {
+                                JSONObject waypoint = path.getJSONArray("waypoints").getJSONObject(i);
+                                polyline.addPoint(point.mapPointWithGeoCoord(waypoint.getDouble("y"), waypoint.getDouble("x")));
+                            }
+                            polyline.addPoint(point.mapPointWithGeoCoord(path.getJSONObject("destination").getDouble("y"), path.getJSONObject("destination").getDouble("x")));
+
+
+                            mapView.addPolyline(polyline);
+                            MapPointBounds bounds = new MapPointBounds(polyline.getMapPoints());
+                            mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(bounds, 10));
                         } else if (flag == 4) {
                             InnerDB.editor.putString("path", path.toString()).apply();
                             tvNext.setText("NEXT : " + (waypoints.length() == 0 ? path.getJSONObject("destination").getString("name") : waypoints.getJSONObject(0).getString("name")));
