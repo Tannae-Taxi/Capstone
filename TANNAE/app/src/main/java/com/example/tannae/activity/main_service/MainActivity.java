@@ -109,16 +109,11 @@ public class MainActivity extends AppCompatActivity {
         //////////////////////////////////////////////////////////////// 뒤로가기 두 번 하면 Logout 되면서 LoginActivity 로 전환되고 내부 DB clear
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
-            Toast.makeText(this, "로그아웃하려면 한번 더 누르세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "종료하려면 한번 더 누르세요.", Toast.LENGTH_SHORT).show();
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) { // 뒤로가기 두 번 하면
-            InnerDB.sp.edit().clear().apply(); // 내부 DB clear
-
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class); //LoginActivity 로 전환 //// 근데 로그아웃 기능 따로 구현 안하고 이 방식으로 할 것인지 궁금
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-
+            finish();
             /* Network.socket.disconnect();
             finish();*/
         }

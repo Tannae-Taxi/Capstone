@@ -17,11 +17,12 @@ import com.example.tannae.activity.account.LoginActivity;
 import com.example.tannae.activity.main_service.MainActivity;
 import com.example.tannae.activity.main_service.NavigationActivity;
 import com.example.tannae.activity.main_service.PaymentActivity;
+import com.example.tannae.sub.InnerDB;
 
 public class UserServiceListActivity extends AppCompatActivity {
     private LinearLayout layoutAccount;
-    private Button btnPoint, btnQnA, btnHistory, btnLostFound, btnFAQ;
-    private Button btnPayment;
+    private Button btnPoint, btnQnA, btnHistory, btnLostFound, btnFAQ, btnPayment;
+    private Button btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class UserServiceListActivity extends AppCompatActivity {
         btnLostFound = findViewById(R.id.btn_lost_found_userservicelist);
         btnFAQ = findViewById(R.id.btn_faq_userservicelist);
         btnPayment = findViewById(R.id.btn_payment_userservicelist);
+        btnLogout = findViewById(R.id.btn_logout_userservicelist);
     }
 
     @Override
@@ -110,6 +112,16 @@ public class UserServiceListActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+            }
+        });
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InnerDB.sp.edit().clear().apply(); // 내부 DB clear
+
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class); //LoginActivity 로 전환 //// 근데 로그아웃 기능 따로 구현 안하고 이 방식으로 할 것인지 궁금
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent); // 로그아웃 기능 구현
             }
         });
     }
