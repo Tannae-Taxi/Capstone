@@ -3,8 +3,7 @@
 // <<< Settings >>>
 // << Require >>
 let mysql = require('mysql2');
-let express = require('express');
-let app = express();
+let app = require('express')();
 let server = require('http').createServer(app);
 let io = require('socket.io')(server);
 let bodyParser = require('body-parser');
@@ -39,22 +38,22 @@ app.get('/account/login', async (req, res) => {
     try {
         let [result, field] = await connection.query(`select usn, cast(id as char) as id, cast(pw as char) as pw, uname, rrn, gender, phone, email, drive, points, score, state from User where binary id = '${data.id}'`);
         if (result.length === 0) {
-            console.log('/account/login : Not a user');
+            console.log(`/account/login : ${data.id} is not a user`);
             resType.resType = "등록된 사용자가 아닙니다.";
         } else if (req.query.pw !== result[0].pw) {
-            console.log('/account/login : Password mismatch');
+            console.log(`/account/login : ${data.pw} is wrong password for ${data.id}`);
             resType.resType = "비밀번호가 잘못되었습니다.";
         } else
-            console.log('/account/login : Login success');
+            console.log(`/account/login : User ${result[0].usn} logged in`);
         result.unshift(resType);
         res.json(JSON.stringify(result));
     } catch (err) {
-        console.log(err.code);
+        console.log(`MySQL connection error : ${err.code}`);
         resType.resType = "Error";
         res.json(JSON.stringify([resType]));
     }
 });
-
+/////////////////////////////////////////////////////////////////////////////////////////////////// Complete Line
 // < Check ID >
 app.get('/account/checkID', async (req, res) => {
     let data = req.query;
@@ -508,12 +507,12 @@ io.on('connection', (socket) => {
             } else {
                 // When there is no vehicle available
                 console.log(`No vehicle is available for user ${data.user.usn}(Start : ${data.start.name} / End : ${data.end.name})`);
-                socket.emit('responseService', 0);
+                socket.emit('responseService', 0, null, null, null);
             }
         } catch (err) {
             // When there is a error
             console.log(err + "ERROR");
-            socket.emit('responseService', -1);
+            socket.emit('responseService', -1, null, null, null);
         }
     });
 });
