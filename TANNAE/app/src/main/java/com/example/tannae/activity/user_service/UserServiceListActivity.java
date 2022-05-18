@@ -2,21 +2,17 @@ package com.example.tannae.activity.user_service;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
 import com.example.tannae.activity.account.AccountActivity;
 import com.example.tannae.activity.account.LoginActivity;
 import com.example.tannae.activity.main_service.MainActivity;
-import com.example.tannae.activity.main_service.NavigationActivity;
 import com.example.tannae.activity.main_service.PaymentActivity;
 import com.example.tannae.sub.InnerDB;
 
@@ -119,9 +115,9 @@ public class UserServiceListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 InnerDB.sp.edit().clear().apply(); // 내부 DB clear
-                Toast.makeText(UserServiceListActivity.this, "안전하게 로그아웃 되었어요.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserServiceListActivity.this, "안전하게 로그아웃 되었습니다다.", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class); //LoginActivity 로 전환 //// 근데 로그아웃 기능 따로 구현 안하고 이 방식으로 할 것인지 궁금
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class); //LoginActivity 로 전환 //// 근데 로그아웃 기능 따로 구현 안하고이 방식으로 할 것인지 궁금
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent); // 로그아웃 기능 구현
             }
