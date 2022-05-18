@@ -115,7 +115,7 @@ public class UserServiceListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 InnerDB.sp.edit().clear().apply(); // 내부 DB clear
-                Toast.makeText(UserServiceListActivity.this, "안전하게 로그아웃 되었습니다다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserServiceListActivity.this, "안전하게 로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class); //LoginActivity 로 전환 //// 근데 로그아웃 기능 따로 구현 안하고이 방식으로 할 것인지 궁금
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
