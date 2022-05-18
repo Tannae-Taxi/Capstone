@@ -346,6 +346,20 @@ app.post('/user/postContent', async (req, res) => {
     res.json(JSON.stringify([resType]));
 });
 
+// < Post Evaluate >
+app.post('/user/evaluate', async (req, res) => {
+    let data = req.body.nameValuePairs;
+    let resType = { "resType": "OK"};
+
+    try {
+        let [result, field] = await connection.query(`select usn from Vehicle where license = '${data.license}'`);
+        let usn = result[0].usn;
+        await connection.query(`updata User set score = (score + ${data.score}) / 2 where license = '${data.license}'`);
+    } catch (err) {
+        ////////////////////////////////////
+    }
+});
+
 // <<< Socket.io >>>
 io.on('connection', (socket) => {
     // << Connection >>
@@ -531,7 +545,9 @@ io.on('connection', (socket) => {
             // Check if vehicle is allowed
             if (service.vehicle != null) {
                 service.setPath();                                                                              // Set request path
+                let destinationName = service.path.destination.name;                                            // Save destination name before request
                 service.path = await service.reqPath();                                                         // Request path to kakao navigation api and return path data
+                service.path.summary.destination.name = destinationName;                                        // Reset destination name after request
                 await service.updateDB();                                                                       // Update Database
                 socket.join(service.vehicle.vsn);                                                               // Join vsn room
                 io.to(service.vehicle.vsn).emit('responseService', service.flag, service.path, data.user.usn);  // Send response to vsn room users
