@@ -38,22 +38,26 @@ app.get('/account/login', async (req, res) => {
     try {
         let [result, field] = await connection.query(`select usn, cast(id as char) as id, cast(pw as char) as pw, uname, rrn, gender, phone, email, drive, points, score, state from User where binary id = '${data.id}'`);
         if (result.length === 0) {
+            // When entered ID is not registered
             console.log(`/account/login : ${data.id} is not a user`);
             resType.resType = "등록된 사용자가 아닙니다.";
         } else if (req.query.pw !== result[0].pw) {
+            // When entered PW doesn't match with ID
             console.log(`/account/login : ${data.pw} is wrong password for ${data.id}`);
             resType.resType = "비밀번호가 잘못되었습니다.";
         } else
+            // When entered ID & PW is registered correctly
             console.log(`/account/login : User ${result[0].usn} logged in`);
         result.unshift(resType);
         res.json(JSON.stringify(result));
     } catch (err) {
-        console.log(`MySQL connection error : ${err.code}`);
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
         res.json(JSON.stringify([resType]));
     }
 });
-/////////////////////////////////////////////////////////////////////////////////////////////////// Complete Line
+
 // < Check ID >
 app.get('/account/checkID', async (req, res) => {
     let data = req.query;
@@ -61,12 +65,15 @@ app.get('/account/checkID', async (req, res) => {
     try {
         let [result, field] = await connection.query(`select * from User where binary id = '${data.id}'`);
         if (result.length !== 0) {
-            console.log('/account/checkID : Used ID');
+            // When entered ID is already registered
+            console.log(`/account/checkID : ${data.id} is already used`);
             resType.resType = "이미 등록된 ID입니다.";
         } else
-            console.log('/account/checkID : ID permitted');
+            // When entered ID is not registered
+            console.log(`/account/checkID : ID ${data.id} is permitted`);
     } catch (err) {
-        console.log(err.code);
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
     }
     res.json(JSON.stringify([resType]));
@@ -78,13 +85,14 @@ app.post('/account/signup', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
+        // User Serial Number Generator
         let [result, field] = await connection.query('select usn from User where usn like "u%" order by usn asc');
         let usnNew = 'u';
         for (let i = 0; i < result.length; i++) {
             let usn = result[i].usn;
             usn = usn.replace('u', '');
-            usn = usn.replace(/0/g, '');
-            if (i + 1 !== Number(usn)) {
+            usn = Number(usn);
+            if (i + 1 !== usn) {
                 for (let j = 0; j < 5 - (i + 1).toString().length; j++)
                     usnNew += '0';
                 usnNew += (i + 1);
@@ -96,10 +104,14 @@ app.post('/account/signup', async (req, res) => {
                 usnNew += '0';
             usnNew += usnNum;
         }
+
+
+        // Insert new user to User database
         await connection.query(`insert User values('${usnNew}', '${data.id}', '${data.pw}', '${data.uname}', '${data.rrn}', ${data.gender}, '${data.phone}', '${data.email}', false, 0, 4.5, false)`);
-        console.log('/account/signup : Sign Up complete');
+        console.log(`/account/signup : User ${data.name} sign up successfully`);
     } catch (err) {
-        console.log(err.code);
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
     }
     res.json(JSON.stringify([resType]));
@@ -109,22 +121,27 @@ app.post('/account/signup', async (req, res) => {
 app.get('/account/findAccount', async (req, res) => {
     let data = req.query;
     let resType = { "resType": "OK" };
+
     try {
         let [result, fields] = await connection.query(`select * from User where uname = '${data.uname}'`);
         if (result.length === 0) {
-            console.log('/account/findAccount : Not a user');
+            // When entered name is not registered
+            console.log(`/account/findAccount : ${data.uname} is not a user`);
             resType.resType = "등록된 사용자가 아닙니다.";
         } else if (result[0].rrn !== data.rrn || result[0].phone !== data.phone || result[0].email !== data.email) {
-            console.log('/account/findAccount : Wrong private info');
+            // When entered private infos doesn't match with user name
+            console.log(`/account/findAccount : ${data.uname} entered wrong private info`);
             resType.resType = "잘못된 사용자 정보입니다."
         } else
-            console.log('/account/findAccount : Found user');
+            // Found account
+            console.log(`/account/findAccount : Found ${data.uname}'s account`);
         result[0].id = String(result[0].id)
         result[0].pw = String(result[0].pw);
         result.unshift(resType);
         res.json(JSON.stringify(result));
     } catch (err) {
-        console.log(err.code);
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
         res.json(JSON.stringify([resType]));
     }
@@ -136,10 +153,12 @@ app.post('/account/editAccount', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
+        // Update user infos to new infos
         await connection.query(`update User set id = '${data.id}', pw = '${data.pw}', email = '${data.email}', phone = '${data.phone}' where usn = '${data.usn}'`);
         console.log('/account/editAccount : Account is updated');
     } catch (err) {
-        console.log(err.code);
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
     }
     res.json(JSON.stringify([resType]));
@@ -151,15 +170,17 @@ app.post('/account/signout', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
+        // Delete user info from database
         await connection.query(`delete from User where usn = '${data.usn}'`);
         console.log('/account/signout : Account is deleted');
     } catch (err) {
-        console.log(err.code);
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
     }
     res.json(JSON.stringify([resType]));
 });
-
+/////////////////////////////////////////////////////////////////////////// Checked complete line
 // << User >>
 // < Charge Point >
 app.post('/user/charge', async (req, res) => {
@@ -223,13 +244,14 @@ app.post('/user/postLost', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
+        // Lost Serial Number Generator
         let [result, field] = await connection.query('select lsn from Lost where lsn like "l%" order by lsn asc');
         let lsnNew = 'l';
         for (let i = 0; i < result.length; i++) {
             let lsn = result[i].lsn;
             lsn = lsn.replace('l', '');
-            lsn = lsn.replace(/0/g, '');
-            if (i + 1 !== Number(lsn)) {
+            lsn = Number(lsn);
+            if (i + 1 !== lsn) {
                 for (let j = 0; j < 5 - (i + 1).toString().length; j++)
                     lsnNew += '0';
                 lsnNew += (i + 1);
@@ -242,10 +264,14 @@ app.post('/user/postLost', async (req, res) => {
             lsnNew += lsnNum;
         }
 
+        // Get VSN from driver(USN) who requested
         [result, field] = await connection.query(`select vsn from Vehicle where usn = '${data.usn}'`);
+
+        // Post new Lost data
         await connection.query(`insert Lost value('${lsnNew}', ${data.date}, '${data.type}', '${result.vsn}')`);
-        console.log('/user/postLost : Lost inserted');
+        console.log(`/user/postLost : Driver ${data.usn} posted new Lost data`);
     } catch (err) {
+        // MySQL Error
         console.log(err.code);
         resType.resType = "Error";
     }
@@ -295,10 +321,10 @@ app.post('/user/postContent', async (req, res) => {
         let [result, field] = await connection.query('select csn from Content where csn like "c%" order by csn asc');
         let csnNew = 'c';
         for (let i = 0; i < result.length; i++) {
-            let csn = result[i].csn;
+            let csn = result[i].lsn;
             csn = csn.replace('c', '');
-            csn = csn.replace(/0/g, '');
-            if (i + 1 !== Number(csn)) {
+            csn = Number(csn);
+            if (i + 1 !== csn) {
                 for (let j = 0; j < 5 - (i + 1).toString().length; j++)
                     csnNew += '0';
                 csnNew += (i + 1);
@@ -310,6 +336,7 @@ app.post('/user/postContent', async (req, res) => {
                 csnNew += '0';
             csnNew += csnNum;
         }
+
         await connection.query(`insert Content values('${csnNew}', '${data.title}', '${data.cont}', Null, '${data.usn}')`);
         console.log('/user/postContent : Content inserted');
     } catch (err) {
@@ -457,13 +484,13 @@ io.on('connection', (socket) => {
             let usn = usns[i];
             if (usn === 'license') continue;
 
-            let [history, fields] = await connection.query(`select * from History`);
+            let [history, field] = await connection.query('select hsn from History where hsn like "h%" order by hsn asc');
             let hsnNew = 'h';
             for (let i = 0; i < history.length; i++) {
                 let hsn = history[i].hsn;
                 hsn = hsn.replace('h', '');
-                hsn = hsn.replace(/0/g, '');
-                if (i + 1 !== Number(hsn)) {
+                hsn = Number(hsn);
+                if (i + 1 !== hsn) {
                     for (let j = 0; j < 5 - (i + 1).toString().length; j++)
                         hsnNew += '0';
                     hsnNew += (i + 1);
@@ -475,6 +502,7 @@ io.on('connection', (socket) => {
                     hsnNew += '0';
                 hsnNew += hsnNum;
             }
+
             await connection.query(`insert History values('${hsnNew}', '${vehicle.license}', '${new Date().toLocaleString()}', '${result[usn].start}', '${result[usn].end}', ${result[usn].cost}, '${usn}')`);
         }
 
@@ -514,7 +542,7 @@ io.on('connection', (socket) => {
                 socket.emit('responseService', 0, null, null, null);
             }
         } catch (err) {
-            // When there is a error
+            // MySQL Error
             console.log(err);
             socket.emit('responseService', -1, null, null, null);
         }
