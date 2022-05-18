@@ -38,10 +38,12 @@ public class LoginActivity extends AppCompatActivity {
         Network.service = RetrofitClient.getClient().create(ServiceApi.class);
         new InnerDB(getApplicationContext()).setSharedPreferences();
 
-        if(InnerDB.sp.getString("id", null) != null && InnerDB.sp.getString("pw", null) != null){
-            Toast.makeText(LoginActivity.this, InnerDB.sp.getString("uname", null )+"님이 자동로그인 되었습니다.", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
+        String id = InnerDB.sp.getString("id", null);
+        String pw = InnerDB.sp.getString("pw", null);
+
+        if (id != null) {
+            Toast.makeText(LoginActivity.this, InnerDB.sp.getString("uname", null) + "님이 자동로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+            login(id, pw);
         }
 
         // Create Activity
@@ -70,41 +72,14 @@ public class LoginActivity extends AppCompatActivity {
                 // Check if ID and PW is entered
                 String id = etID.getText().toString();
                 String pw = etPW.getText().toString();
-                if(id.length() == 0 || pw.length() == 0) {
+                if (id.length() == 0 || pw.length() == 0) {
                     Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);                    // 임시 코드
                     startActivity(intent); // 임시 코드
                     finish(); // 임시 코드 // finish를 넣어주지 않으면 메인 화면에서 뒤로가기 두번으로 앱 종료가 안돼서 다시 추가함
                     return;
                 }
-                // Check if entered ID/PW is a user
-                Network.service.login(id, pw).enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        try {
-                            JSONArray resArr = new JSONArray(response.body());
-                            JSONObject resObj = resArr.getJSONObject(0);
-                            String resType = resObj.getString("resType");
-
-                            if (resType.equals("OK")) {
-                                JSONObject user = resArr.getJSONObject(1); // 이게 InnerDB data
-                                InnerDB.setUserOutTOIn(user);
-
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
-                            } else
-                                Toast.makeText(getApplicationContext(), resType, Toast.LENGTH_SHORT).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                        Log.e("Error", t.getMessage());
-                    }
-                });
+                login(id, pw);
             }
         });
 
@@ -128,14 +103,46 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // < Login >
+    public void login(String id, String pw) {
+        // Check if entered ID/PW is a user
+        Network.service.login(id, pw).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                try {
+                    JSONArray resArr = new JSONArray(response.body());
+                    JSONObject resObj = resArr.getJSONObject(0);
+                    String resType = resObj.getString("resType");
+
+                    if (resType.equals("OK")) {
+                        JSONObject user = resArr.getJSONObject(1); // 이게 InnerDB data
+                        InnerDB.setUserOutTOIn(user);
+
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                    } else
+                        Toast.makeText(getApplicationContext(), resType, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                Log.e("Error", t.getMessage());
+            }
+        });
+    }
+
     // < BackPress >
-    public void onBackPressed(){
-        if(System.currentTimeMillis() > backKeyPressedTime + 2000){
+    public void onBackPressed() {
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
-            Toast.makeText(this,"종료하려면 한번 더 누르세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "종료하려면 한번 더 누르세요.", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(System.currentTimeMillis() <= backKeyPressedTime + 2000){
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
             finish();
         }
     }
