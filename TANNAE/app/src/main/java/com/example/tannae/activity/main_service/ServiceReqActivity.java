@@ -35,7 +35,7 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
     private MapPOIItem marker;
     private boolean locationType = true;
     private String originLocation, destinationLocation;
-    private double originX= 0, originY = 0, destinationX = 0, destinationY = 0;
+    private double originX = 0, originY = 0, destinationX = 0, destinationY = 0;
 
     // < onCreate >
     @Override
@@ -43,14 +43,12 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         // Create Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_servicereq);
+
         // Setting
         setViews();
         setEventListeners();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+        // Set Map
         mapView = new MapView(this);
         mapViewContainer = (ViewGroup) findViewById(R.id.map_view_servicereq);
 
@@ -64,9 +62,10 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
         marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
 
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord( 37.566406178655534, 126.97786868931414), true);
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
         mapViewContainer.addView(mapView);
     }
+
 
     @Override
     protected void onPause() {
@@ -106,7 +105,7 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         btnServiceReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!(originLocation == null  || destinationLocation == null)) {
+                if (!(originLocation == null || destinationLocation == null)) {
                     try {
                         // Create JSON
                         JSONObject start = new JSONObject();
@@ -136,7 +135,7 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "주변에 정차할 수 있는 도로가 없습니다.\n올바른 위치를 입력해주세요." , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "주변에 정차할 수 있는 도로가 없습니다.\n올바른 위치를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

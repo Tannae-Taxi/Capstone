@@ -44,20 +44,18 @@ public class NavigationActivity extends AppCompatActivity {
         // Create Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+
         // Setting
         setViews();
         setEventListeners();
         setNetworks();
+
         // If main -> navigation ? true : false
         type = getIntent().getBooleanExtra("type", false);
         btnPass.setBackgroundColor(Color.parseColor("#BDBDBD"));
         btnEndService.setBackgroundColor(Color.parseColor("#BDBDBD"));
-    }
 
-    // < onResume >
-    @Override
-    protected void onResume() {
-        super.onResume();
+        // Set Map
         mapView = new MapView(this);
         mapViewContainer = (ViewGroup) findViewById(R.id.map_view_navigation);
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
@@ -92,6 +90,7 @@ public class NavigationActivity extends AppCompatActivity {
             // args[0] = flag:int / args[1] = path:JSONObject / args[2] = usn:String
             runOnUiThread(() -> {
                 try {
+                    System.out.println();
                     // Flag : -1 (Server Error) / 0 (No Vehicle) / 1 (Share vehicle) / 2 (Non-share vehicle to share user) / 3 (Non-share vehicle to non-share user)
                     // 4 (Passenger boarding) / 5 (Passenger get off)
                     int flag = (int) args[0];
@@ -103,13 +102,27 @@ public class NavigationActivity extends AppCompatActivity {
                     // Toast
                     String message;
                     switch (flag) {
-                        case 0 : message = "이용 가능한 차량이 없습니다."; break;
-                        case 1 : message = usnOut.equals(usnIn) ? "동승 차량이 배차되었습니다." : "추가 인원이 배차되었습니다.\n경로를 수정합니다.."; break;
-                        case 2 : message = usnOut.equals(usnIn) ? "동승 가능한 차량이 없습니다.\n일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다."; break;
-                        case 3 : message = usnOut.equals(usnIn) ? "일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다."; break;
-                        case 4 : message = usnOut.equals(usnIn) ? "차량이 도착하였습니다.\n탑승해 주시기 바랍니다." : "탑승자가 승차하였습니다.\n경로를 수정합니다."; break;
-                        case 5 : message = usnOut.equals(usnIn) ? "목적지에 도착하였습니다.\n하차해 주시기 바랍니다." : path != null ? "탑승자가 하차하였습니다.\n경로를 수정합니다." : "마지막 탑승자가 하차하였습니다."; break;
-                        default: message = "배차 오류가 발생하였습니다.\n고객센터에 문의하세요."; break;
+                        case 0:
+                            message = "이용 가능한 차량이 없습니다.";
+                            break;
+                        case 1:
+                            message = usnOut.equals(usnIn) ? "동승 차량이 배차되었습니다." : "추가 인원이 배차되었습니다.\n경로를 수정합니다..";
+                            break;
+                        case 2:
+                            message = usnOut.equals(usnIn) ? "동승 가능한 차량이 없습니다.\n일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다.";
+                            break;
+                        case 3:
+                            message = usnOut.equals(usnIn) ? "일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다.";
+                            break;
+                        case 4:
+                            message = usnOut.equals(usnIn) ? "차량이 도착하였습니다.\n탑승해 주시기 바랍니다." : "탑승자가 승차하였습니다.\n경로를 수정합니다.";
+                            break;
+                        case 5:
+                            message = usnOut.equals(usnIn) ? "목적지에 도착하였습니다.\n하차해 주시기 바랍니다." : path != null ? "탑승자가 하차하였습니다.\n경로를 수정합니다." : "마지막 탑승자가 하차하였습니다.";
+                            break;
+                        default:
+                            message = "배차 오류가 발생하였습니다.\n고객센터에 문의하세요.";
+                            break;
                     }
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
@@ -177,12 +190,11 @@ public class NavigationActivity extends AppCompatActivity {
                             }
                         }
                     } else {    // When there is no vehicle available
-                        Thread.sleep(500);
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
-                } catch (JSONException | InterruptedException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             });

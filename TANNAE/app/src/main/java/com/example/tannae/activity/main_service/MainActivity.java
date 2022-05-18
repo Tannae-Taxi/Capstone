@@ -34,27 +34,28 @@ public class MainActivity extends AppCompatActivity {
         // Create Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         // Setting
         setViews();
         setEventListeners();
+
+        // Connect Socket.io
+        if (!Network.socket.isActive())
+            Network.socket.connect();
+
+        // Set Map
+        mapView = new MapView(this);
+        mapViewContainer = (ViewGroup) findViewById(R.id.map_view_main);
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
+        mapViewContainer.addView(mapView);
+
 
         /* if(InnerDB.sp.getInt("drive",0) == 1){
             btnDrive.setVisibility(View.VISIBLE);
         }
         else btnDrive.setVisibility(View.INVISIBLE); */ //운전자 여부에 따라 drive 버튼이 보이도록 하는 코드. 개발 중에는 편의를 위해 주석상태
 
-        // Connect Socket.io
-        if (!Network.socket.isActive())
-            Network.socket.connect();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mapView = new MapView(this);
-        mapViewContainer = (ViewGroup) findViewById(R.id.map_view_main);
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord( 37.566406178655534, 126.97786868931414), true);
-        mapViewContainer.addView(mapView);
     }
 
     @Override
@@ -100,8 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
                     intent.putExtra("type", false);
                     startActivity(intent);
-                }
-                else {
+                } else {
                     Intent intent = new Intent(getApplicationContext(), ServiceReqActivity.class);
                     startActivity(intent);
                 }
