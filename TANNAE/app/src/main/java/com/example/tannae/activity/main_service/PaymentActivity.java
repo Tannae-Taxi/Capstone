@@ -15,12 +15,15 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.tannae.R;
 import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.sub.Receipt;
-import com.example.tannae.R;
-import com.example.tannae.sub.Receipt;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class PaymentActivity extends AppCompatActivity {
     private Button btnSend;
@@ -36,18 +39,7 @@ public class PaymentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_payment);
         setViews();
         setEventListeners();
-        adapter = new ListViewAdapter();
-        adapter.addItem(new Receipt("파랑이"));
-        adapter.addItem(new Receipt("빨강이"));
-        adapter.addItem(new Receipt("하양이"));
-        adapter.addItem(new Receipt("파랑이"));
-        adapter.addItem(new Receipt("빨강이"));
-        adapter.addItem(new Receipt("하양이"));
-        adapter.addItem(new Receipt("파랑이"));
-        adapter.addItem(new Receipt("빨강이"));
-        adapter.addItem(new Receipt("하양이"));
-
-        listView.setAdapter(adapter);
+        setAdapter();
     }
 
     private void setViews() {
@@ -57,14 +49,6 @@ public class PaymentActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.topAppBar_payment);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    // < BackPress >
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
     }
 
     private void setEventListeners() {
@@ -92,7 +76,32 @@ public class PaymentActivity extends AppCompatActivity {
         });
     }
 
-    public class ListViewAdapter extends BaseAdapter {
+    private void setAdapter() {
+        try {
+            // Create ListViewAdapter
+            adapter = new ListViewAdapter();
+
+            // Set items
+            JSONObject result = new JSONObject(getIntent().getStringExtra("result"));
+            Iterator i = result.keys();
+            while (i.hasNext()) {
+                String usn = i.next().toString();
+                JSONObject res = result.getJSONObject(usn);
+                String origin = res.getString("start");
+                String destination = res.getString("end");
+                int cost = res.getInt("cost");
+                adapter.addItem(new Receipt("EXAMPLE"));
+                /////////////////////////////////////////////////////////////아이템 추가하가
+            }
+
+            // Set adapter
+            listView.setAdapter(adapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class ListViewAdapter extends BaseAdapter {
         ArrayList<Receipt> items = new ArrayList<Receipt>();
 
         @Override
@@ -132,5 +141,13 @@ public class PaymentActivity extends AppCompatActivity {
 
             return convertView;
         }
+    }
+
+    // < BackPress >
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }
