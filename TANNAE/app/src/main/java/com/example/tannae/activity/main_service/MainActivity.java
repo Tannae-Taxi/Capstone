@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         // Setting
         setViews();
         setEventListeners();
+        btnDrive.setVisibility(InnerDB.sp.getInt("drive", 0) == 1 ? View.VISIBLE : View.INVISIBLE);
 
         // Connect Socket.io
         if (!Network.socket.isActive())
@@ -48,14 +49,6 @@ public class MainActivity extends AppCompatActivity {
         mapViewContainer = (ViewGroup) findViewById(R.id.map_view_main);
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
         mapViewContainer.addView(mapView);
-
-
-        /* if(InnerDB.sp.getInt("drive",0) == 1){
-            btnDrive.setVisibility(View.VISIBLE);
-        }
-        else btnDrive.setVisibility(View.INVISIBLE); */ //운전자 여부에 따라 drive 버튼이 보이도록 하는 코드. 개발 중에는 편의를 위해 주석상태
-
-
     }
 
     @Override
