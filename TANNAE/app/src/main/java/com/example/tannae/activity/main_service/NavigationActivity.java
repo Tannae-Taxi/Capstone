@@ -60,19 +60,20 @@ public class NavigationActivity extends AppCompatActivity {
         mapViewContainer = (ViewGroup) findViewById(R.id.map_view_navigation);
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
         mapViewContainer.addView(mapView);
-        if (!type) {
-            btnPass.setVisibility(View.INVISIBLE);
-            btnEndService.setVisibility(View.INVISIBLE);
-            switchDrive.setVisibility(View.INVISIBLE);
-            if (InnerDB.sp.getInt("state", 0) == 1) {
-                // 사용자가 서비스를 이용중이면 innerDB에 저장된 path 정보를 바탕으로 지도에 경로 표시*
-            } else {
-                try {
+        try {
+            if (!type) {
+                btnPass.setVisibility(View.INVISIBLE);
+                btnEndService.setVisibility(View.INVISIBLE);
+                switchDrive.setVisibility(View.INVISIBLE);
+                if (InnerDB.sp.getInt("state", 0) == 1) {
+                    Toast.makeText(getApplicationContext(), "서비스를 이용중입니다.", Toast.LENGTH_SHORT).show();
+                    JSONObject path = new JSONObject(InnerDB.sp.getString("path", ""));
+                    showPathOnMap(path);
+                } else
                     Network.socket.emit("requestService", new JSONObject(getIntent().getStringExtra("data")));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
