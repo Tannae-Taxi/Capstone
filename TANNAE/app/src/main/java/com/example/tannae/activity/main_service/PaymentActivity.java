@@ -17,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
 import com.example.tannae.activity.user_service.UserServiceListActivity;
+import com.example.tannae.network.Network;
 import com.example.tannae.sub.Receipt;
 
 import org.json.JSONException;
@@ -25,6 +26,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class PaymentActivity extends AppCompatActivity {
     private Button btnSend;
     private RatingBar rbDriverRating;
@@ -32,6 +37,8 @@ public class PaymentActivity extends AppCompatActivity {
     private ListView listView = null;
     private ListViewAdapter adapter = null;
     private Toolbar toolbar;
+
+    private String license;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +62,18 @@ public class PaymentActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                JSONObject data = new JSONObject();
+                Network.service.evaluate(data).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        /////////////////////////////////
+                    }
 
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        /////////////////////////////
+                    }
+                });
             }
         });
         rbDriverRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -86,6 +104,10 @@ public class PaymentActivity extends AppCompatActivity {
             Iterator i = result.keys();
             while (i.hasNext()) {
                 String usn = i.next().toString();
+                if (usn.equals("license")) {
+                    license = result.getString("license");
+                    continue;
+                }
                 JSONObject res = result.getJSONObject(usn);
                 String origin = res.getString("start");
                 String destination = res.getString("end");
@@ -112,6 +134,7 @@ public class PaymentActivity extends AppCompatActivity {
         public void addItem(Receipt item) {
             items.add(item);
         }
+
         @Override
         public Object getItem(int position) {
             return items.get(position);
@@ -127,11 +150,11 @@ public class PaymentActivity extends AppCompatActivity {
             final Context context = viewGroup.getContext();
             final Receipt receipt = items.get(position);
 
-            if(convertView == null) {
+            if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.payment_listview_list_item, viewGroup, false);
 
-            }else {
+            } else {
                 View view = new View(context);
                 view = (View) convertView;
             }

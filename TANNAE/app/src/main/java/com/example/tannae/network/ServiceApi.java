@@ -37,4 +37,6 @@ public interface ServiceApi {
     Call<String> editContent(@Body JSONObject content);
     @POST("/user/postContent")              // Post Content
     Call<String> postContent(@Body JSONObject content);
+    @POST("/user/evaluate")                 // Post evaluate
+    Call<String> evaluate(@Body JSONObject data);
 }
