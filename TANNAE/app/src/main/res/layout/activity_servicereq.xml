@@ -8,11 +8,10 @@
 
     <Button
         android:id="@+id/btn_back_servicereq"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_margin="10dp"
-        android:background="@drawable/button_rounded"
-        android:text="Back" />
+        android:background="@drawable/ic_baseline_arrow_back_24"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_margin="25dp"
+            android:layout_marginBottom="20dp"
             android:orientation="vertical" />
     </LinearLayout>
     <LinearLayout

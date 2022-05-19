@@ -129,27 +129,70 @@
             app:tint="@color/main"/>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_lost_found_userservicelist"
-        style="@style/Widget.Button.TextButton"
+    <LinearLayout
+        android:id="@+id/layout_lost_found_userservicelist"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="10dp"
-        android:text="Lost_Found" />
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_travel_explore_24"
+            android:layout_marginLeft="10dp"
+            app:tint="@color/main" />
 
-    <Button
-        android:id="@+id/btn_faq_userservicelist"
-        style="@style/Widget.Button.TextButton"
+        <TextView
+            style="@style/Widget.AppCompat.TextView.SpinnerItem"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Lost_Found" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            android:layout_marginRight="10dp"
+            app:tint="@color/main"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_faq_userservicelist"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="10dp"
-        android:text="FAQ" />
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_chat_24"
+            android:layout_marginLeft="10dp"
+            app:tint="@color/main" />
+
+        <TextView
+            style="@style/Widget.AppCompat.TextView.SpinnerItem"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="FAQ" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            android:layout_marginRight="10dp"
+            app:tint="@color/main"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-
         <Button
             android:id="@+id/btn_logout_userservicelist"
             style="@style/Widget.Button.TextButton"
