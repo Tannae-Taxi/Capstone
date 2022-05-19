@@ -488,7 +488,7 @@ io.on('connection', (socket) => {
         result.license = vehicle.license;
 
         // Calculate cost
-        for (let i = 0; i < pass.waypoints.length - 1; i++) {
+        for (let i = 0; i < pass.waypoints.length; i++) {
             let point = pass.waypoints[i];
             let user = names[`${point.x}_${point.y}_${point.name}`];
             let usn = user.usn;
@@ -499,7 +499,7 @@ io.on('connection', (socket) => {
                 result[usn] = { start: point.name, end: null, cost: 0 };
                 count++;
             } else {
-                current.splice(users.indexOf(usn), 1);
+                current.splice(current.indexOf(usn), 1);
                 result[usn].end = point.name;
                 count--;
             }
