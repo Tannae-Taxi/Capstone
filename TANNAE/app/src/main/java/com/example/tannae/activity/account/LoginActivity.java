@@ -42,8 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         String pw = InnerDB.sp.getString("pw", null);
 
         if (id != null) {
-            Toast.makeText(LoginActivity.this, InnerDB.sp.getString("uname", null) + "님이 자동로그인 되었습니다.", Toast.LENGTH_SHORT).show();
-            login(id, pw);
+            login(id, pw, true);
         }
 
         // Create Activity
@@ -74,12 +73,9 @@ public class LoginActivity extends AppCompatActivity {
                 String pw = etPW.getText().toString();
                 if (id.length() == 0 || pw.length() == 0) {
                     Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);                    // 임시 코드
-                    startActivity(intent); // 임시 코드
-                    finish(); // 임시 코드 // finish를 넣어주지 않으면 메인 화면에서 뒤로가기 두번으로 앱 종료가 안돼서 다시 추가함
                     return;
                 }
-                login(id, pw);
+                login(id, pw, false);
             }
         });
 
@@ -104,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // < Login >
-    public void login(String id, String pw) {
+    public void login(String id, String pw, boolean auto) {
         // Check if entered ID/PW is a user
         Network.service.login(id, pw).enqueue(new Callback<String>() {
             @Override
@@ -117,7 +113,8 @@ public class LoginActivity extends AppCompatActivity {
                     if (resType.equals("OK")) {
                         JSONObject user = resArr.getJSONObject(1); // 이게 InnerDB data
                         InnerDB.setUserOutTOIn(user);
-
+                        if (auto)
+                            Toast.makeText(LoginActivity.this, InnerDB.sp.getString("uname", null) + "님이 자동로그인 되었습니다.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                     } else
