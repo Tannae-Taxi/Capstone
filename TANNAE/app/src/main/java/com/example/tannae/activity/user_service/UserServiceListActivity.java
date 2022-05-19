@@ -18,7 +18,7 @@ import com.example.tannae.sub.InnerDB;
 
 public class UserServiceListActivity extends AppCompatActivity {
     private LinearLayout layoutAccount, layoutPoint, layoutQnA, layoutHistory;
-    private Button btnPoint, btnQnA, btnHistory, btnLostFound, btnFAQ, btnPayment;
+    private Button btnPoint, btnQnA, btnHistory, btnLostFound, btnFAQ;
     private Button btnLogout;
 
     @Override
@@ -36,7 +36,6 @@ public class UserServiceListActivity extends AppCompatActivity {
         layoutHistory = (LinearLayout) findViewById(R.id.layout_history_userservicelist);
         btnLostFound = findViewById(R.id.btn_lost_found_userservicelist);
         btnFAQ = findViewById(R.id.btn_faq_userservicelist);
-        btnPayment = findViewById(R.id.btn_payment_userservicelist);
         btnLogout = findViewById(R.id.btn_logout_userservicelist);
     }
 
@@ -102,14 +101,6 @@ public class UserServiceListActivity extends AppCompatActivity {
             }
         });
 
-        btnPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
