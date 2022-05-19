@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.tannae.R;
 import com.example.tannae.activity.main_service.MainActivity;
 import com.example.tannae.sub.List;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,7 @@ public class QnAActivity extends AppCompatActivity {
 
     private Button btnsearch;
     private EditText etsearchtitle;
+    private FloatingActionButton fabqna;
     private Toolbar toolbar;
 
     private ListView listView = null;
@@ -62,6 +64,7 @@ public class QnAActivity extends AppCompatActivity {
         etsearchtitle = findViewById(R.id.et_search_title_qna);
         toolbar = findViewById(R.id.topAppBar_qna);
         listView = (ListView) findViewById(R.id.lv_list_qna);
+        fabqna = findViewById(R.id.fab_qna);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -76,6 +79,16 @@ public class QnAActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        fabqna.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), QnAEditActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
     }
 
     public class ListViewAdapter extends BaseAdapter {

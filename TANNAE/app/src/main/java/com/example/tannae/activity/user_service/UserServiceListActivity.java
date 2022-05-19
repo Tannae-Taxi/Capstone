@@ -17,7 +17,7 @@ import com.example.tannae.activity.main_service.PaymentActivity;
 import com.example.tannae.sub.InnerDB;
 
 public class UserServiceListActivity extends AppCompatActivity {
-    private LinearLayout layoutAccount;
+    private LinearLayout layoutAccount, layoutPoint, layoutQnA, layoutHistory;
     private Button btnPoint, btnQnA, btnHistory, btnLostFound, btnFAQ, btnPayment;
     private Button btnLogout;
 
@@ -31,9 +31,9 @@ public class UserServiceListActivity extends AppCompatActivity {
 
     private void setViews() {
         layoutAccount = (LinearLayout) findViewById(R.id.layout_account_userservicelist);
-        btnPoint = findViewById(R.id.btn_point_userservicelist);
-        btnQnA = findViewById(R.id.btn_qna_userservicelist);
-        btnHistory = findViewById(R.id.btn_history_userservicelist);
+        layoutPoint = (LinearLayout) findViewById(R.id.layout_point_userservicelist);
+        layoutQnA = (LinearLayout) findViewById(R.id.layout_qna_userservicelist);
+        layoutHistory = (LinearLayout) findViewById(R.id.layout_history_userservicelist);
         btnLostFound = findViewById(R.id.btn_lost_found_userservicelist);
         btnFAQ = findViewById(R.id.btn_faq_userservicelist);
         btnPayment = findViewById(R.id.btn_payment_userservicelist);
@@ -58,8 +58,7 @@ public class UserServiceListActivity extends AppCompatActivity {
         });
         // Service on
 
-        btnPoint.setOnClickListener(new View.OnClickListener() {
-            @Override
+        layoutPoint.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), PointActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -67,7 +66,7 @@ public class UserServiceListActivity extends AppCompatActivity {
             }
         });
 
-        btnQnA.setOnClickListener(new View.OnClickListener() {
+        layoutQnA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), QnAActivity.class);
@@ -76,7 +75,7 @@ public class UserServiceListActivity extends AppCompatActivity {
             }
         });
 
-        btnHistory.setOnClickListener(new View.OnClickListener() {
+        layoutHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), HistoryActivity.class);

@@ -23,7 +23,6 @@
             app:tint="@color/main" />
 
         <TextView
-            android:id="@+id/tv_account_userservicelist"
             style="@style/Widget.AppCompat.TextView.SpinnerItem"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -40,29 +39,95 @@
     </LinearLayout>
 
 
-    <Button
-        android:id="@+id/btn_point_userservicelist"
-        style="@style/Widget.Button.TextButton"
+    <LinearLayout
+        android:id="@+id/layout_point_userservicelist"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="10dp"
-        android:text="Point" />
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_attach_money_24"
+            android:layout_marginLeft="10dp"
+            app:tint="@color/main" />
 
-    <Button
-        android:id="@+id/btn_qna_userservicelist"
-        style="@style/Widget.Button.TextButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="QnA" />
+        <TextView
+            style="@style/Widget.AppCompat.TextView.SpinnerItem"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Point" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            android:layout_marginRight="10dp"
+            app:tint="@color/main"/>
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_history_userservicelist"
-        style="@style/Widget.Button.TextButton"
+    <LinearLayout
+        android:id="@+id/layout_qna_userservicelist"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="10dp"
-        android:text="History" />
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_question_answer_24"
+            android:layout_marginLeft="10dp"
+            app:tint="@color/main" />
+
+        <TextView
+            style="@style/Widget.AppCompat.TextView.SpinnerItem"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="QnA" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            android:layout_marginRight="10dp"
+            app:tint="@color/main"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_history_userservicelist"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_history_24"
+            android:layout_marginLeft="10dp"
+            app:tint="@color/main" />
+
+        <TextView
+            style="@style/Widget.AppCompat.TextView.SpinnerItem"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="History" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            android:layout_marginRight="10dp"
+            app:tint="@color/main"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_lost_found_userservicelist"

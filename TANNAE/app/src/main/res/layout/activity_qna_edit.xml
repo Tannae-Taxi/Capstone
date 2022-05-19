@@ -5,12 +5,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout_qnaedit"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:menu="@menu/top_app_bar" />
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar_qnaedit"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,16 +30,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:text="Title"
+            android:hint="Title"
             android:layout_marginVertical="10dp"
             android:background="@drawable/text_border"/>
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="Question Content"
+            android:layout_height="168dp"
             android:layout_marginVertical="10dp"
-            android:background="@drawable/text_border"/>
+            android:background="@drawable/text_border"
+            android:ems="10"
+            android:hint="Question Content" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="확인" />
     </LinearLayout>
 </LinearLayout>
