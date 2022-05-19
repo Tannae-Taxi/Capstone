@@ -155,7 +155,7 @@ app.post('/account/editAccount', async (req, res) => {
     try {
         // Update user infos to new infos
         await connection.query(`update User set id = '${data.id}', pw = '${data.pw}', email = '${data.email}', phone = '${data.phone}' where usn = '${data.usn}'`);
-        console.log('/account/editAccount : Account is updated');
+        console.log(`/account/editAccount : User ${data.usn} account is updated`);
     } catch (err) {
         // MySQL Error
         console.log(`MySQL error : ${err.code}`);
@@ -172,7 +172,7 @@ app.post('/account/signout', async (req, res) => {
     try {
         // Delete user info from database
         await connection.query(`delete from User where usn = '${data.usn}'`);
-        console.log('/account/signout : Account is deleted');
+        console.log(`/account/signout : User ${data.usn} account is deleted`);
     } catch (err) {
         // MySQL Error
         console.log(`MySQL error : ${err.code}`);
@@ -180,7 +180,7 @@ app.post('/account/signout', async (req, res) => {
     }
     res.json(JSON.stringify([resType]));
 });
-/////////////////////////////////////////////////////////////////////////// Checked complete line
+
 // << User >>
 // < Charge Point >
 app.post('/user/charge', async (req, res) => {
@@ -188,10 +188,12 @@ app.post('/user/charge', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
+        // Update user point info
         await connection.query(`update User set point = ${data.point} where usn = '${data.usn}'`);
-        console.log('/user/charge : Point us updated');
+        console.log(`/user/charge : User ${data.usn}'s point is updated`);
     } catch (err) {
-        console.log(err.code);
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
     }
     res.json(JSON.stringify([resType]));
@@ -203,16 +205,21 @@ app.get('/user/getHistory', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
+        // Get History of requested user
         let [result, field] = await connection.query(`select * from History where usn = '${data.usn}'`);
+
         if (result.length === 0) {
-            console.log('/user/getHistory : No history');
+            // When no history is searched
+            console.log(`/user/getHistory : User ${data.usn} has no history`);
             resType.resType = "이용 현황이 없습니다.";
         } else
+            // When history is searched
             console.log('/user/getHistory : History found');
         result.unshift(resType);
         res.json(JSON.stringify(result));
     } catch (err) {
-        console.log(err.code);
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
         res.json(JSON.stringify([resType]));
     }
@@ -223,16 +230,21 @@ app.get('/user/getLost', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
+        // Get Lost data
         let [result, field] = await connection.query('select * from Lost');
+
         if (result.length === 0) {
-            console.log('/user/getLost : No Lost');
+            // When no Lost are searched
+            console.log('/user/getLost : No Lost data exist');
             resType.resType = "등록된 분실물이 없습니다.";
         } else
-            console.log('/user/getLost : Lost list returned');
+            // When Lost are searched
+            console.log('/user/getLost : Lost list is returned');
         result.unshift(resType);
         res.json(JSON.stringify(result));
     } catch (err) {
-        console.log(err.code);
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
         res.json(JSON.stringify([resType]));
     }
@@ -272,7 +284,7 @@ app.post('/user/postLost', async (req, res) => {
         console.log(`/user/postLost : Driver ${data.usn} posted new Lost data`);
     } catch (err) {
         // MySQL Error
-        console.log(err.code);
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
     }
     res.json(JSON.stringify([resType]));
@@ -281,17 +293,23 @@ app.post('/user/postLost', async (req, res) => {
 // < Get Content >
 app.get('/user/getContent', async (req, res) => {
     let resType = { "resType": "OK" };
+
     try {
+        // Get Content data
         let [result, field] = await connection.query('select * from Content');
+
         if (result.length === 0) {
-            console.log('/user/getContent : No Content');
+            // When no Content are searched
+            console.log('/user/getContent : No Content data exist');
             resType.resType = "등록된 컨텐츠가 없습니다.";
         } else
-            console.log('/user/getContent : Content list returned');
+            // When Content data exist
+            console.log(`/user/getContent : Content list is returned`);
         result.unshift(resType);
         res.json(JSON.stringify(result));
     } catch (err) {
-        console.log(err.code);
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
         res.json(JSON.stringify([resType]));
     }
@@ -303,10 +321,12 @@ app.post('/user/editContent', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
+        // Update Content
         await connection.query(`update Content set title = '${data.title}', cont = '${data.cont}' where usn = '${data.usn}'`);
-        console.log('/user/editContent : Content updated');
+        console.log(`/user/editContent : User ${data.usn} edited content`);
     } catch (err) {
-        console.log(err.code);
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
     }
     res.json(JSON.stringify([resType]));
@@ -318,6 +338,7 @@ app.post('/user/postContent', async (req, res) => {
     let resType = { "resType": "OK" };
 
     try {
+        // Content Serial Number Generator
         let [result, field] = await connection.query('select csn from Content where csn like "c%" order by csn asc');
         let csnNew = 'c';
         for (let i = 0; i < result.length; i++) {
@@ -337,10 +358,12 @@ app.post('/user/postContent', async (req, res) => {
             csnNew += csnNum;
         }
 
+        // Insert Content
         await connection.query(`insert Content values('${csnNew}', '${data.title}', '${data.cont}', Null, '${data.usn}')`);
-        console.log('/user/postContent : Content inserted');
+        console.log(`/user/postContent : User ${data.usn} inserted Content`);
     } catch (err) {
-        console.log(err.code);
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
         resType.resType = "Error";
     }
     res.json(JSON.stringify([resType]));
@@ -352,14 +375,20 @@ app.post('/user/evaluate', async (req, res) => {
     let resType = { "resType": "OK"};
 
     try {
+        // Select vehicle
         let [result, field] = await connection.query(`select usn from Vehicle where license = '${data.license}'`);
         let usn = result[0].usn;
-        await connection.query(`updata User set score = (score + ${data.score}) / 2 where license = '${data.license}'`);
+        await connection.query(`updata User set score = (score + ${data.score}) / 2 where usn = '${usn}'`);
+        console.log(`/user/evaluate : Driver ${usn}'s point has been updated`);
     } catch (err) {
-        ////////////////////////////////////
+        // MySQL Error
+        console.loeg(`MySQL error : ${err.code}`);
+        resType.resType = "Error";
     }
+    res.json(JSON.stringify[resType]);
 });
 
+/////////////////////////////////////////////////////////////////////////// Checked complete line
 // <<< Socket.io >>>
 io.on('connection', (socket) => {
     // << Connection >>
