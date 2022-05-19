@@ -112,7 +112,7 @@ public class PaymentActivity extends AppCompatActivity {
                 String origin = res.getString("start");
                 String destination = res.getString("end");
                 int cost = res.getInt("cost");
-                adapter.addItem(new Receipt("EXAMPLE"));
+                adapter.addItem(new Receipt(usn, origin, destination, cost));
                 /////////////////////////////////////////////////////////////아이템 추가하가
             }
 
@@ -159,8 +159,15 @@ public class PaymentActivity extends AppCompatActivity {
                 view = (View) convertView;
             }
 
-            TextView name = (TextView) convertView.findViewById(R.id.tv_name);
-            name.setText(receipt.getName());
+            TextView usn = (TextView) convertView.findViewById(R.id.tv_usn_payment);
+            TextView origin = (TextView) convertView.findViewById(R.id.tv_origin_payment);
+            TextView destination = (TextView) convertView.findViewById(R.id.tv_destination_payment);
+            TextView cost = (TextView) convertView.findViewById(R.id.tv_cost_payment);
+
+            usn.setText(receipt.getData("usn").toString());
+            origin.setText(receipt.getData("origin").toString());
+            destination.setText(receipt.getData("destination").toString());
+            cost.setText(Integer.toString((Integer)receipt.getData("cost")));
 
             return convertView;
         }
