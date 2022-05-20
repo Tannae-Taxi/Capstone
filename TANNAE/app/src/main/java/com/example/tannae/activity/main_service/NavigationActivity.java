@@ -242,7 +242,6 @@ public class NavigationActivity extends AppCompatActivity {
                 try {
                     JSONObject driver = InnerDB.getUser();
                     Network.socket.emit("serviceEnd", driver);
-                    /////////////////////////////////////////// MapView clear
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

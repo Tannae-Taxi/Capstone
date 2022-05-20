@@ -69,7 +69,7 @@ public class PaymentActivity extends AppCompatActivity {
                     JSONObject data = new JSONObject();
                     data.put("license", license);
                     data.put("score", rbDriverRating.getRating());
-                    data.put("user", InnerDB.getUser());
+                    data.put("usn", InnerDB.getUser().getString("usn"));
                     Network.service.evaluate(data).enqueue(new Callback<Boolean>() {
                         @Override
                         public void onResponse(Call<Boolean> call, Response<Boolean> response) {
@@ -114,13 +114,16 @@ public class PaymentActivity extends AppCompatActivity {
 
             // Set items
             JSONObject result = new JSONObject(getIntent().getStringExtra("result"));
+            if (InnerDB.getUser().getString("usn").equals(result.getString("driver")))
+                rbDriverRating.setVisibility(View.INVISIBLE);
             Iterator i = result.keys();
             while (i.hasNext()) {
                 String usn = i.next().toString();
                 if (usn.equals("license")) {
                     license = result.getString("license");
                     continue;
-                }
+                } else if (usn.equals("driver"))
+                    continue;
                 JSONObject res = result.getJSONObject(usn);
                 String origin = res.getString("start");
                 String destination = res.getString("end");
