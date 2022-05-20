@@ -34,7 +34,6 @@ server.listen(3000, () => {
 app.get('/account/login', async (req, res) => {
     let data = req.query;
     let response = { "message": "OK" };
-    console.log(data);
 
     try {
         let [result, field] = (await connection.query(`select usn, cast(id as char) as id, cast(pw as char) as pw, uname, rrn, gender, phone, email, drive, points, score, state from User where binary id = '${data.id}'`))[0];
@@ -356,12 +355,11 @@ app.post('/user/evaluate', async (req, res) => {
         let [result, field] = await connection.query(`select usn from Vehicle where license = '${data.license}'`);
         let usn = result[0].usn;
         await connection.query(`update User set score = (score + ${data.score}) / 2 where usn = '${usn}'`);
-        console.log(`/user/evaluate : Driver ${usn}'s point has been updated by ${data.user.usn}`);
+        console.log(`/user/evaluate : Driver ${usn}'s point has been updated by ${data.usn}`);
         res.json(true);
     } catch (err) {
         // MySQL Error
         console.log(`MySQL error : ${err.code}`);
-        resType.resType = "Error";
     }
 });
 
@@ -463,6 +461,7 @@ io.on('connection', (socket) => {
         let count = 0;      // Number of users in the vehicle
         let current = [];   // User's usn who is riding
         result.license = vehicle.license;
+        result.driver = driver.usn;
 
         // Calculate cost
         for (let i = 0; i < pass.waypoints.length; i++) {
@@ -493,6 +492,7 @@ io.on('connection', (socket) => {
         for (let i = 0; i < usns.length; i++) {
             let usn = usns[i];
             if (usn === 'license') continue;
+            if (usn === 'driver') continue;
             await connection.query(`update User set points = points - ${result[usn].cost} where usn = '${usn}'`);
         }
 
@@ -503,6 +503,7 @@ io.on('connection', (socket) => {
         for (let i = 0; i < usns.length; i++) {
             let usn = usns[i];
             if (usn === 'license') continue;
+            if (usn === 'driver') continue;
 
             let [history, field] = await connection.query('select hsn from History where hsn like "h%" order by hsn asc');
             let hsnNew = 'h';
