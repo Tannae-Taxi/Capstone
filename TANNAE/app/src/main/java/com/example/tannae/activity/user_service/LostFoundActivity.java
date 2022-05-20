@@ -77,8 +77,12 @@ public class LostFoundActivity extends AppCompatActivity {
                         adapter = new ListViewAdapter();
                         for (int i = 0; i < lists.length(); i++) {
                             JSONObject list = lists.getJSONObject(i);
-                            adapter.addItem(new Lost(list.getString("data"), list.getString("license"), list.getString("type")));
+                            adapter.addItem(new Lost(list.getString("date"), list.getString("license"), list.getString("type")));
                         }
+                        listView.setAdapter(adapter);
+                    } else {
+                        Toaster.show(getApplicationContext(), message);
+                        onBackPressed();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -91,8 +95,6 @@ public class LostFoundActivity extends AppCompatActivity {
                 Log.e("Error", t.getMessage());
             }
         });
-
-        listView.setAdapter(adapter);
     }
 
     public class ListViewAdapter extends BaseAdapter {
@@ -120,7 +122,7 @@ public class LostFoundActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             final Context context = viewGroup.getContext();
-            final Lost list = items.get(position);
+            final Lost lost = items.get(position);
 
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -134,9 +136,9 @@ public class LostFoundActivity extends AppCompatActivity {
             TextView license = (TextView) convertView.findViewById(R.id.tv_license_lost_listview);
             TextView type = (TextView) convertView.findViewById(R.id.tv_type_lost_list_view);
 
-            date.setText("분실물 등록일 : " + list.getData("date").toString());
-            license.setText("차량번호 : " + list.getData("license").toString());
-            type.setText("분실물 : " + list.getData("type").toString());
+            date.setText("분실물 등록일 : " + lost.getData("date").toString());
+            license.setText("차량번호 : " + lost.getData("license").toString());
+            type.setText("분실물 : " + lost.getData("type").toString());
 
             return convertView;
         }
