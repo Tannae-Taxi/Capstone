@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -29,12 +28,12 @@ import retrofit2.Response;
 
 // << Sign Up Activity >>
 public class SignUpActivity extends AppCompatActivity {
-    private Button btnCheckID, btnSignUp;
+    private Button btnCheckID, btnSignUp, btnCheckUser;
     private RadioGroup rgGender;
     private EditText etID, etPW, etPWR, etName, etRRN, etPhone, etEmail;
     private TextView tvCheckId, tvCheckPW;
     private Toolbar toolbar;
-    private boolean availableID = false, checkedID = false, availablePW = false, availablePWR = false, genderType = true, availableEmail = false, availablePhone = false;
+    private boolean availableID = false, checkedID = false, checkedUser = false, availablePW = false, availablePWR = false, genderType = true, availableEmail = false, availablePhone = false;
 
     // < onCreate >
     @Override
@@ -51,6 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
     private void setViews() {
         btnCheckID = findViewById(R.id.btn_checkID_sign_up);
         btnSignUp = findViewById(R.id.btn_sign_up);
+        btnCheckUser = findViewById(R.id.btn_check_user_sign_up);
         rgGender = findViewById(R.id.rg_gender_sign_up);
         etID = findViewById(R.id.et_id_sign_up);
         etPW = findViewById(R.id.et_pw_sign_up);
@@ -160,6 +160,16 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+        // Change checkedUser by name input
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkedUser = false;
+            }
+
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void afterTextChanged(Editable s) { }
+        });
         // Store RRN by user input
         etRRN.addTextChangedListener(new TextWatcher() {
             @Override
@@ -169,6 +179,7 @@ public class SignUpActivity extends AppCompatActivity {
                     etRRN.setText(new StringBuffer(rrn).insert(6, '-').toString());
                     etRRN.setSelection(rrn.length() + 1);
                 }
+                checkedUser = false;
             }
 
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -190,26 +201,57 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         String message = response.body();
-                        System.out.println(message);
 
                         if (message.equals("OK")) {
                             checkedID = true;
                             Toaster.show(getApplicationContext(), "사용 가능한 ID 입니다.");
-                            //Toast.makeText(getApplicationContext(), "사용 가능한 ID 입니다.", Toast.LENGTH_SHORT).show();
                         } else {
                             checkedID = false;
                             Toaster.show(getApplicationContext(), message);
-                            //Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
                         Toaster.show(getApplicationContext(), "Error");
-                        //Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                         Log.e("Error", t.getMessage());
                     }
                 });
+            }
+        });
+
+        btnCheckUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = etName.getText().toString();
+                String rrn = etRRN.getText().toString();
+                if (name.length() == 0 && rrn.length() != 14)
+                    Toaster.show(getApplicationContext(), "이름과 주민등록번호를 입력해주세요.");
+                else if (name.length() == 0)
+                    Toaster.show(getApplicationContext(), "이름을 입력해주세요.");
+                else if (rrn.length() != 14)
+                    Toaster.show(getApplicationContext(), "주민등록번호를 제대로 입력해주세요.");
+                else {
+                    Network.service.checkUser(name, rrn).enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            String message = response.body();
+                            if (message.equals("OK")) {
+                                checkedUser = true;
+                                Toaster.show(getApplicationContext(), "본인인증이 완료 되었습니다.");
+                            } else {
+                                checkedUser = false;
+                                Toaster.show(getApplicationContext(), message);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Toaster.show(getApplicationContext(), "Error");
+                            Log.e("Error", t.getMessage());
+                        }
+                    });
+                }
             }
         });
 
@@ -221,25 +263,20 @@ public class SignUpActivity extends AppCompatActivity {
                     // Check if entered info's are available
                     if (!availableID || !availablePW)
                         Toaster.show(getApplicationContext(), "허용되지 않은 ID or PW 형식입니다.");
-                        //Toast.makeText(getApplicationContext(), "허용되지 않은 ID or PW 형식입니다.", Toast.LENGTH_SHORT).show();
                     else if (!checkedID)
                         Toaster.show(getApplicationContext(), "ID 중복을 확인하세요");
-                        //Toast.makeText(getApplicationContext(), "ID 중복을 확인하세요.", Toast.LENGTH_SHORT).show();
                     else if (!availablePWR)
                         Toaster.show(getApplicationContext(), "PW가 일치하지 않습니다.");
-                        //Toast.makeText(getApplicationContext(), "PW가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                     else if (etName.getText().toString().length() == 0)
                         Toaster.show(getApplicationContext(), "이름을 입력하세요.");
-                        //Toast.makeText(getApplicationContext(), "이름을 입력하세요.", Toast.LENGTH_SHORT).show();
                     else if (etRRN.getText().toString().length() != 14)
                         Toaster.show(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.");
-                        //Toast.makeText(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.", Toast.LENGTH_SHORT).show();
+                    else if (!checkedUser)
+                        Toaster.show(getApplicationContext(), "본인인증을 해주세요.");
                     else if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString()).matches())
                         Toaster.show(getApplicationContext(), "Email 을 정확하게 작성하세요.");
-                        //Toast.makeText(getApplicationContext(), "Email 을 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                     else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
                         Toaster.show(getApplicationContext(), "전화번호를 정확하게 작성하세요.");
-                        //Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                     // If available request sign up [RETROFIT]
                     else {
                         // Create User JSON
