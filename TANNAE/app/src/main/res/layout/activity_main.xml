@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Note: A RecyclerView can also be used -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
+            android:id="@+id/topAppBar_main"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"/>
@@ -32,34 +33,12 @@
     </LinearLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
+        android:id="@+id/bottomAppBar_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="end">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
-
-            <Button
-                android:id="@+id/btn_drive_main"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                android:layout_marginRight="40dp"
-                android:text="Drive" />
-
-        </LinearLayout>
-
+        style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface"
+        app:menu="@menu/bottom_app_bar">
 
 
     </com.google.android.material.bottomappbar.BottomAppBar>
@@ -68,8 +47,7 @@
         android:id="@+id/req_button_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_anchor="@id/bottomAppBar"
+        app:layout_anchor="@id/bottomAppBar_main"
         app:srcCompat="@drawable/ic_baseline_local_taxi_24" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

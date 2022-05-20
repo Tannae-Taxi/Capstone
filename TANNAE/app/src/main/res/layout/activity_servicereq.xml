@@ -83,6 +83,8 @@
     </LinearLayout>
 
     <Button
+        style="@style/Widget.Material3.Button"
+        android:textSize="13dp"
         android:id="@+id/btn_request_servicereq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

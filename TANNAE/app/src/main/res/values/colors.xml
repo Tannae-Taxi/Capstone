@@ -10,6 +10,10 @@
     <color name="paper">#FFF9F9F9</color>
     <color name="main">#FF127CEA</color>
     <color name="sub">#FFA5D5E9</color>
+    <color name="one">#FF7579E7</color>
+    <color name="two">#FF9AB3F5</color>
+    <color name="three">#FFA3D8F4</color>
+    <color name="four">#FFB9FFFC</color>
     <color name="textColorPrimary">#FFA5D5E9</color>
     <color name="textInputOutlineColor">#FFA5D5E9</color>
 </resources>
