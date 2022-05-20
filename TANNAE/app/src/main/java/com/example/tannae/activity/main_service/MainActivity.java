@@ -52,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
         mapViewContainer.addView(mapView);
     }
 
-    @Override
+    /*@Override
     protected void onPause() {
         super.onPause();
         mapViewContainer.removeView(mapView);
-    }
+    } */
 
     // < Register views >
     private void setViews() {
@@ -92,10 +92,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (InnerDB.sp.getInt("state", 0) == 1) {
+                    mapViewContainer.removeView(mapView);
+
                     Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
                     intent.putExtra("type", false);
                     startActivity(intent);
                 } else {
+                    mapViewContainer.removeView(mapView);
+
                     Intent intent = new Intent(getApplicationContext(), ServiceReqActivity.class);
                     startActivity(intent);
                 }

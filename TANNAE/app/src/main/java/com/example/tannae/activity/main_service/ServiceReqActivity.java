@@ -68,11 +68,11 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
     }
 
 
-    @Override
+    /*@Override
     protected void onPause() {
         super.onPause();
         mapViewContainer.removeView(mapView);
-    }
+    } */
 
     // < Register views >
     private void setViews() {
@@ -128,6 +128,8 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
                         data.put("share", switchShare.isChecked());
                         data.put("user", user);
 
+                        mapViewContainer.removeView(mapView);
+
                         Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
                         intent.putExtra("type", false);
                         intent.putExtra("data", data.toString());
@@ -146,6 +148,8 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
     // < BackPress >
     @Override
     public void onBackPressed() {
+        mapViewContainer.removeView(mapView);
+
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

@@ -78,11 +78,11 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     // < onPause >
-    @Override
-    protected void onPause() {
+    /*Override
+    /protected void onPause() {
         super.onPause();
         mapViewContainer.removeView(mapView);
-    }
+    } */
 
     // < Set Socket.io >
     private void setNetworks() {
@@ -159,6 +159,9 @@ public class NavigationActivity extends AppCompatActivity {
                             if (usnOut.equals(usnIn)) {     // When current user get off
                                 InnerDB.editor.putInt("state", 0).apply();
                                 InnerDB.editor.putString("path", null).apply();
+
+                                mapViewContainer.removeView(mapView);
+
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
@@ -193,6 +196,8 @@ public class NavigationActivity extends AppCompatActivity {
                             }
                         }
                     } else {    // When there is no vehicle available
+                        mapViewContainer.removeView(mapView);
+
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
@@ -208,6 +213,9 @@ public class NavigationActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 JSONObject result = (JSONObject) args[0];
                 Toaster.show(getApplicationContext(), "운행이 종료되었습니다.\n영수증을 확인하여 주세요.");
+
+                mapViewContainer.removeView(mapView);
+
                 Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
                 intent.putExtra("result", result.toString());
                 startActivity(intent);
@@ -308,6 +316,9 @@ public class NavigationActivity extends AppCompatActivity {
             if (type && !InnerDB.sp.getString("path", "NULL").equals("NULL")) {
                 Toaster.show(getApplicationContext(), "운행중에는 내비게이션을 종료할 수 없습니다.");
             } else {
+
+                mapViewContainer.removeView(mapView);
+
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
