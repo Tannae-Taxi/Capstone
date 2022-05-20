@@ -34,9 +34,10 @@ server.listen(3000, () => {
 app.get('/account/login', async (req, res) => {
     let data = req.query;
     let response = { "message": "OK" };
+    console.log(data);
 
     try {
-        let [result, field] = await connection.query(`select usn, cast(id as char) as id, cast(pw as char) as pw, uname, rrn, gender, phone, email, drive, points, score, state from User where binary id = '${data.id}'`)[0];
+        let [result, field] = (await connection.query(`select usn, cast(id as char) as id, cast(pw as char) as pw, uname, rrn, gender, phone, email, drive, points, score, state from User where binary id = '${data.id}'`))[0];
         response.result = result;
         if (result.length === 0) {
             // When entered ID is not registered
@@ -49,7 +50,7 @@ app.get('/account/login', async (req, res) => {
         } else
             // When entered ID & PW is registered correctly
             console.log(`/account/login : User ${result.usn} logged in`);
-        res.json(response);
+        res.json(JSON.stringify(response));
     } catch (err) {
         // MySQL Error
         console.log(`MySQL error : ${err.code}`);
@@ -64,7 +65,7 @@ app.get('/account/checkID', async (req, res) => {
         let [result, field] = await connection.query(`select * from User where binary id = '${data.id}'`);
         if (result.length !== 0) {
             // When entered ID is already registered
-            console.log(`/account/checkID : ${data.id} is already used`);
+            console.log(`/account/checkID : ID ${data.id} is already used`);
             message = "이미 등록된 ID입니다.";
         } else
             // When entered ID is not registered
@@ -118,7 +119,7 @@ app.get('/account/findAccount', async (req, res) => {
     let response = { "message": "OK" };
 
     try {
-        let [result, fields] = await connection.query(`select * from User where uname = '${data.uname}'`)[0];
+        let [result, fields] = (await connection.query(`select * from User where uname = '${data.uname}'`))[0];
         response.result = result;
 
         if (result.length === 0) {
@@ -135,7 +136,7 @@ app.get('/account/findAccount', async (req, res) => {
 
         result.id = String(result.id)
         result.pw = String(result.pw);
-        res.jso(response);
+        res.json(JSON.stringify(response));
     } catch (err) {
         // MySQL Error
         console.log(`MySQL error : ${err.code}`);
@@ -205,7 +206,7 @@ app.get('/user/getHistory', async (req, res) => {
         } else
             // When history is searched
             console.log('/user/getHistory : History found');
-        res.json(response);
+        res.json(JSON.stringify(response));
     } catch (err) {
         // MySQL Error
         console.log(`MySQL error : ${err.code}`);
@@ -228,7 +229,7 @@ app.get('/user/getLost', async (req, res) => {
         } else
             // When Lost are searched
             console.log('/user/getLost : Lost list is returned');
-        res.json(response);
+        res.json(JSON.stringify(response));
     } catch (err) {
         // MySQL Error
         console.log(`MySQL error : ${err.code}`);
@@ -289,7 +290,7 @@ app.get('/user/getContent', async (req, res) => {
         } else
             // When Content data exist
             console.log(`/user/getContent : Content list is returned`);
-        res.json(response);
+        res.json(JSON.stringify(response));
     } catch (err) {
         // MySQL Error
         console.log(`MySQL error : ${err.code}`);
@@ -364,7 +365,7 @@ app.post('/user/evaluate', async (req, res) => {
     }
 });
 
-/////////////////////////////////////////////////////////////////////////// Checked complete line
+
 // <<< Socket.io >>>
 io.on('connection', (socket) => {
     // << Connection >>
