@@ -311,7 +311,6 @@ public class NavigationActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-                Toaster.show(getApplicationContext(), "홈화면으로 이동합니다.");
             }
         }
     }
