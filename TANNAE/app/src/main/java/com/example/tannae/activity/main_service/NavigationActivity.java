@@ -228,8 +228,7 @@ public class NavigationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    JSONObject driver = new JSONObject();
-                    InnerDB.setUserInTOOut(driver);
+                    JSONObject driver = InnerDB.getUser();
                     Network.socket.emit("passWaypoint", driver);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -241,8 +240,7 @@ public class NavigationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    JSONObject driver = new JSONObject();
-                    InnerDB.setUserInTOOut(driver);
+                    JSONObject driver = InnerDB.getUser();
                     Network.socket.emit("serviceEnd", driver);
                     /////////////////////////////////////////// MapView clear
                 } catch (JSONException e) {
@@ -258,9 +256,8 @@ public class NavigationActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "요금을 정산해주세요.", Toast.LENGTH_SHORT).show();
                     switchDrive.setChecked(false);
                 } else {
-                    JSONObject driver = new JSONObject();
                     try {
-                        InnerDB.setUserInTOOut(driver);
+                        JSONObject driver = InnerDB.getUser();
                         driver.put("service", isChecked);
                         Network.socket.emit(isChecked ? "serviceOn" : "serviceOff", driver);
                     } catch (JSONException e) {

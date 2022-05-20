@@ -119,7 +119,7 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
                         end.put("y", destinationY);
 
                         JSONObject user = new JSONObject(); // 현재 로그인되어 있는 InnerDB(SharedPreferences에 저장된) 정보를 json 형태로 전환
-                        InnerDB.setUserInTOOut(user);
+                        user = InnerDB.getUser();
 
                         JSONObject data = new JSONObject();
                         data.put("start", start);

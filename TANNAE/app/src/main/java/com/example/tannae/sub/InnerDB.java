@@ -24,7 +24,7 @@ public class InnerDB extends AppCompatActivity {
         editor = sp.edit();
     }
 
-    public static void setUserOutTOIn(JSONObject user) throws JSONException {
+    public static void setUser(JSONObject user) throws JSONException {
         editor.putString("usn", user.getString("usn"));
         editor.putString("id", user.getString("id"));
         editor.putString("pw", user.getString("pw"));
@@ -40,7 +40,8 @@ public class InnerDB extends AppCompatActivity {
         editor.apply();
     }
 
-    public static void setUserInTOOut(JSONObject user) throws JSONException {
+    public static JSONObject getUser() throws JSONException {
+        JSONObject user = new JSONObject();
         user.put("usn", sp.getString("usn", ""));
         user.put("id", sp.getString("id", ""));
         user.put("pw", sp.getString("pw", ""));
@@ -53,5 +54,6 @@ public class InnerDB extends AppCompatActivity {
         user.put("points", sp.getInt("points", 0));
         user.put("score", sp.getFloat("score", (float) 0.0));
         user.put("state", sp.getInt("state", 0));
+        return user;
     }
 }
