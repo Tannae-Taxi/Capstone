@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -73,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
                 String pw = etPW.getText().toString();
                 if (id.length() == 0 || pw.length() == 0) {
                     Toaster.show(getApplicationContext(), "로그인 정보를 입력하세요.");
-                    //Toast.makeText(getApplicationContext(), "로그인 정보를 입력하세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 login(id, pw, false);
@@ -115,12 +113,10 @@ public class LoginActivity extends AppCompatActivity {
                         InnerDB.setUser(user);
                         if (auto)
                             Toaster.show(getApplicationContext(),InnerDB.sp.getString("uname", null) + "님이 자동로그인 되었습니다.");
-                            //Toast.makeText(LoginActivity.this, InnerDB.sp.getString("uname", null) + "님이 자동로그인 되었습니다.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                     } else
                         Toaster.show(getApplicationContext(), message);
-                        //Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -129,7 +125,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Toaster.show(getApplicationContext(), "Error");
-                //Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                 Log.e("Error", t.getMessage());
             }
         });
@@ -140,7 +135,6 @@ public class LoginActivity extends AppCompatActivity {
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
             Toaster.show(getApplicationContext(), "종료하려면 한번 더 누르세요.");
-            //Toast.makeText(this, "종료하려면 한번 더 누르세요.", Toast.LENGTH_SHORT).show();
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
