@@ -42,14 +42,21 @@ public class PaymentActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     private String license;
+    private JSONObject result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+        try {
+            result = new JSONObject(getIntent().getStringExtra("result"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         setViews();
         setEventListeners();
         setAdapter();
+
     }
 
     private void setViews() {
@@ -66,25 +73,31 @@ public class PaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    JSONObject data = new JSONObject();
-                    data.put("license", license);
-                    data.put("score", rbDriverRating.getRating());
-                    data.put("usn", InnerDB.getUser().getString("usn"));
-                    Network.service.evaluate(data).enqueue(new Callback<Boolean>() {
-                        @Override
-                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                            Toast.makeText(getApplicationContext(), "평가를 완료하였습니다.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                        }
+                    if(InnerDB.getUser().getString("usn").equals(result.getString("driver"))) {
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    } else {
+                        JSONObject data = new JSONObject();
+                        data.put("license", license);
+                        data.put("score", rbDriverRating.getRating());
+                        data.put("usn", InnerDB.getUser().getString("usn"));
+                        Network.service.evaluate(data).enqueue(new Callback<Boolean>() {
+                            @Override
+                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                Toast.makeText(getApplicationContext(), "평가를 완료하였습니다.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            }
 
-                        @Override
-                        public void onFailure(Call<Boolean> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                            Log.e("Error", t.getMessage());
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<Boolean> call, Throwable t) {
+                                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                                Log.e("Error", t.getMessage());
+                            }
+                        });
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -113,7 +126,6 @@ public class PaymentActivity extends AppCompatActivity {
             adapter = new ListViewAdapter();
 
             // Set items
-            JSONObject result = new JSONObject(getIntent().getStringExtra("result"));
             if (InnerDB.getUser().getString("usn").equals(result.getString("driver")))
                 rbDriverRating.setVisibility(View.INVISIBLE);
             Iterator i = result.keys();
