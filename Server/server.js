@@ -76,6 +76,25 @@ app.get('/account/checkID', async (req, res) => {
     }
 });
 
+// < Check User >
+app.get('/account/checkUser', async (req, res) => {
+    let data = req.query;
+    let message = "OK";
+    try {
+        let [result, field] = await connection.query(`select * from User where uname = '${data.name}' and rrn = '${data.rrn}'`);
+        if (result.length !== 0) {
+            // When user is already signed in
+            console.log(`/account.checkUser : User ${data.name} is already signed in`);
+            message = "이미 등록된 사용자입니다.\n등록된 계정으로 로그인해주세요.";
+        } else
+            // When entered person is not a user
+            console.log(`/account/checkUser : New user ${data.name} checked sign in availability`);
+        res.json(message);
+    } catch (err) {
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
+    }
+});
 // < Sign Up >
 app.post('/account/signup', async (req, res) => {
     let data = req.body.nameValuePairs;
@@ -177,9 +196,10 @@ app.post('/account/signout', async (req, res) => {
 app.post('/user/charge', async (req, res) => {
     let data = req.body.nameValuePairs;
 
+
     try {
         // Update user point info
-        await connection.query(`update User set point = ${data.point} where usn = '${data.usn}'`);
+        await connection.query(`update User set points = ${data.points} where usn = '${data.usn}'`);
         console.log(`/user/charge : User ${data.usn}'s point is updated`);
         res.json(true);
     } catch (err) {
@@ -228,6 +248,7 @@ app.get('/user/getLost', async (req, res) => {
         } else
             // When Lost are searched
             console.log('/user/getLost : Lost list is returned');
+        console.log(response);
         res.json(JSON.stringify(response));
     } catch (err) {
         // MySQL Error
