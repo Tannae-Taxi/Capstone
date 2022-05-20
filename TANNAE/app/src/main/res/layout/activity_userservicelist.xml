@@ -9,8 +9,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1">
 
         <LinearLayout
             android:id="@+id/layout_account_userservicelist"
@@ -27,7 +28,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_baseline_account_circle_24"
                 app:tint="@color/main" />
@@ -35,7 +36,7 @@
             <TextView
                 style="@style/Widget.AppCompat.TextView.SpinnerItem"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="계정"
@@ -59,7 +60,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_baseline_attach_money_24"
                 app:tint="@color/main" />
@@ -67,7 +68,7 @@
             <TextView
                 style="@style/Widget.AppCompat.TextView.SpinnerItem"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="포인트"
@@ -77,8 +78,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1">
 
         <LinearLayout
             android:id="@+id/layout_qna_userservicelist"
@@ -95,7 +97,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_baseline_travel_explore_24"
                 app:tint="@color/main" />
@@ -103,7 +105,7 @@
             <TextView
                 style="@style/Widget.AppCompat.TextView.SpinnerItem"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="분실물"
@@ -127,7 +129,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_baseline_history_24"
                 app:tint="@color/main" />
@@ -135,7 +137,7 @@
             <TextView
                 style="@style/Widget.AppCompat.TextView.SpinnerItem"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="이용기록"
@@ -145,8 +147,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1">
 
         <LinearLayout
             android:id="@+id/layout_lost_found_userservicelist"
@@ -163,7 +166,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_baseline_question_answer_24"
                 app:tint="@color/main" />
@@ -171,7 +174,7 @@
             <TextView
                 style="@style/Widget.AppCompat.TextView.SpinnerItem"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="QnA"
@@ -195,7 +198,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_baseline_chat_24"
                 app:tint="@color/main" />
@@ -203,7 +206,7 @@
             <TextView
                 style="@style/Widget.AppCompat.TextView.SpinnerItem"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="FAQ"
@@ -214,8 +217,9 @@
     <LinearLayout
         style="@style/TextAppearance.AppCompat.Menu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="2.5">
 
         <Button
             android:id="@+id/btn_logout_userservicelist"
