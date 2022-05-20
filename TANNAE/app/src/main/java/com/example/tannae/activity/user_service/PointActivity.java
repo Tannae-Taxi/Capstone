@@ -16,6 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.tannae.R;
 import com.example.tannae.activity.account.LoginActivity;
 import com.example.tannae.activity.main_service.MainActivity;
+import com.example.tannae.sub.InnerDB;
+import com.example.tannae.sub.Toaster;
 
 public class PointActivity extends AppCompatActivity {
     private TextView tvPoint;
@@ -28,6 +30,7 @@ public class PointActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_point);
         setViews();
+        tvPoint.setText(InnerDB.sp.getInt("points", 0) + "원");
         setEventListeners();
     }
 
@@ -76,7 +79,17 @@ public class PointActivity extends AppCompatActivity {
         btnCharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                String charge = etCharge.getText().toString();
+                if(charge.matches("[0-9]+")) {
+                    int currentPoint = InnerDB.sp.getInt("points", 0);
+                    currentPoint += Integer.parseInt(etCharge.getText().toString());
+                    etCharge.setText("");
+                    InnerDB.editor.putInt("points", currentPoint).apply();
+                    tvPoint.setText(InnerDB.sp.getInt("points", 0) + "원");
+                    Toaster.show(getApplicationContext(), "포인트가 충전되었습니다.");
+                }
+                else
+                    Toaster.show(getApplicationContext(), "충전 금액은 숫자만 입력해주세요.");
             }
         });
     }
