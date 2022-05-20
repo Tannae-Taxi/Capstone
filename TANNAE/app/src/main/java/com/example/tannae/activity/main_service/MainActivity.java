@@ -14,6 +14,7 @@ import com.example.tannae.R;
 import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
 import com.example.tannae.sub.InnerDB;
+import com.example.tannae.sub.Toaster;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.daum.mf.map.api.MapPoint;
@@ -106,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
-            Toast.makeText(this, "종료하려면 한번 더 누르세요.", Toast.LENGTH_SHORT).show();
+            Toaster.show(getApplicationContext(), "종료하려면 한번 더 누르세요.");
+            //Toast.makeText(this, "종료하려면 한번 더 누르세요.", Toast.LENGTH_SHORT).show();
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {

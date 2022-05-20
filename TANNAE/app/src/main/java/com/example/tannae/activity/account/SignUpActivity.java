@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
+import com.example.tannae.sub.Toaster;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -180,7 +181,8 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Check if ID type is available
                 if (!availableID) {
-                    Toast.makeText(getApplicationContext(), "지원되지 않는 ID 형식입니다. \n다른 ID를 사용해주세요.", Toast.LENGTH_SHORT).show();
+                    Toaster.show(getApplicationContext(), "지원되지 않는 ID 형식입니다. \n다른 ID를 사용해주세요.");
+                    //Toast.makeText(getApplicationContext(), "지원되지 않는 ID 형식입니다. \n다른 ID를 사용해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // Request if ID is not user [RETROFIT]
@@ -192,16 +194,19 @@ public class SignUpActivity extends AppCompatActivity {
 
                         if (message.equals("OK")) {
                             checkedID = true;
-                            Toast.makeText(getApplicationContext(), "사용 가능한 ID 입니다.", Toast.LENGTH_SHORT).show();
+                            Toaster.show(getApplicationContext(), "사용 가능한 ID 입니다.");
+                            //Toast.makeText(getApplicationContext(), "사용 가능한 ID 입니다.", Toast.LENGTH_SHORT).show();
                         } else {
                             checkedID = false;
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            Toaster.show(getApplicationContext(), message);
+                            //Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                        Toaster.show(getApplicationContext(), "Error");
+                        //Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                         Log.e("Error", t.getMessage());
                     }
                 });
@@ -215,19 +220,26 @@ public class SignUpActivity extends AppCompatActivity {
                 try {
                     // Check if entered info's are available
                     if (!availableID || !availablePW)
-                        Toast.makeText(getApplicationContext(), "허용되지 않은 ID or PW 형식입니다.", Toast.LENGTH_SHORT).show();
+                        Toaster.show(getApplicationContext(), "허용되지 않은 ID or PW 형식입니다.");
+                        //Toast.makeText(getApplicationContext(), "허용되지 않은 ID or PW 형식입니다.", Toast.LENGTH_SHORT).show();
                     else if (!checkedID)
-                        Toast.makeText(getApplicationContext(), "ID 중복을 확인하세요.", Toast.LENGTH_SHORT).show();
+                        Toaster.show(getApplicationContext(), "ID 중복을 확인하세요");
+                        //Toast.makeText(getApplicationContext(), "ID 중복을 확인하세요.", Toast.LENGTH_SHORT).show();
                     else if (!availablePWR)
-                        Toast.makeText(getApplicationContext(), "PW가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                        Toaster.show(getApplicationContext(), "PW가 일치하지 않습니다.");
+                        //Toast.makeText(getApplicationContext(), "PW가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                     else if (etName.getText().toString().length() == 0)
-                        Toast.makeText(getApplicationContext(), "이름을 입력하세요.", Toast.LENGTH_SHORT).show();
+                        Toaster.show(getApplicationContext(), "이름을 입력하세요.");
+                        //Toast.makeText(getApplicationContext(), "이름을 입력하세요.", Toast.LENGTH_SHORT).show();
                     else if (etRRN.getText().toString().length() != 14)
-                        Toast.makeText(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.", Toast.LENGTH_SHORT).show();
+                        Toaster.show(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.");
+                        //Toast.makeText(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.", Toast.LENGTH_SHORT).show();
                     else if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString()).matches())
-                        Toast.makeText(getApplicationContext(), "Email 을 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
+                        Toaster.show(getApplicationContext(), "Email 을 정확하게 작성하세요.");
+                        //Toast.makeText(getApplicationContext(), "Email 을 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                     else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
-                        Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
+                        Toaster.show(getApplicationContext(), "전화번호를 정확하게 작성하세요.");
+                        //Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                     // If available request sign up [RETROFIT]
                     else {
                         // Create User JSON
@@ -244,7 +256,8 @@ public class SignUpActivity extends AppCompatActivity {
                         Network.service.signup(reqObj).enqueue(new Callback<Boolean>() {
                             @Override
                             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                                Toast.makeText(getApplicationContext(), "가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                Toaster.show(getApplicationContext(), "가입이 완료되었습니다.");
+                                //Toast.makeText(getApplicationContext(), "가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
@@ -252,7 +265,8 @@ public class SignUpActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<Boolean> call, Throwable t) {
-                                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                                Toaster.show(getApplicationContext(), "Error");
+                                //Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                                 Log.e("Error", t.getMessage());
                             }
                         });

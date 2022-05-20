@@ -17,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
+import com.example.tannae.sub.Toaster;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,13 +89,17 @@ public class FindActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Check if entered info's are available
                 if (etName.getText().toString().length() == 0)
-                    Toast.makeText(getApplicationContext(), "이름을 입력하세요.", Toast.LENGTH_SHORT).show();
+                    Toaster.show(getApplicationContext(), "이름을 입력하세요.");
+                    //Toast.makeText(getApplicationContext(), "이름을 입력하세요.", Toast.LENGTH_SHORT).show();
                 else if (etRRN.getText().toString().length() != 14)
-                    Toast.makeText(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.", Toast.LENGTH_SHORT).show();
+                    Toaster.show(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.");
+                    //Toast.makeText(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.", Toast.LENGTH_SHORT).show();
                 else if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString()).matches())
-                    Toast.makeText(getApplicationContext(), "Email 을 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
+                    Toaster.show(getApplicationContext(), "Email 을 정확하게 작성하세요.");
+                    //Toast.makeText(getApplicationContext(), "Email 을 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                 else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
-                    Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
+                    Toaster.show(getApplicationContext(), "전화번호를 정확하게 작성하세요.");
+                    //Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                 // If available request server to find account [RETROFIT]
                 else {
                     Network.service.findAccount(etName.getText().toString(), etRRN.getText().toString(), etEmail.getText().toString(), etPhone.getText().toString()).enqueue(new Callback<String>() {
@@ -110,7 +115,8 @@ public class FindActivity extends AppCompatActivity {
                                     tvMyId.setText("ID: " + user.getString("id"));
                                     tvMyPw.setText("PW: " + user.getString("pw"));
                                 } else
-                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                    Toaster.show(getApplicationContext(), message);
+                                    //Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -118,7 +124,8 @@ public class FindActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<String> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Toaster.show(getApplicationContext(), "Error");
+                            //Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                             Log.e("Error", t.getMessage());
                         }
                     });

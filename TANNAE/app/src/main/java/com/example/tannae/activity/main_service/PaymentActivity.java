@@ -22,6 +22,7 @@ import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
 import com.example.tannae.sub.InnerDB;
 import com.example.tannae.sub.Receipt;
+import com.example.tannae.sub.Toaster;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,7 +86,8 @@ public class PaymentActivity extends AppCompatActivity {
                         Network.service.evaluate(data).enqueue(new Callback<Boolean>() {
                             @Override
                             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                                Toast.makeText(getApplicationContext(), "평가를 완료하였습니다.", Toast.LENGTH_SHORT).show();
+                                Toaster.show(getApplicationContext(), "평가를 완료하였습니다.");
+                                //Toast.makeText(getApplicationContext(), "평가를 완료하였습니다.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
@@ -93,7 +95,8 @@ public class PaymentActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<Boolean> call, Throwable t) {
-                                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                                Toaster.show(getApplicationContext(), "Error");
+                                //Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                                 Log.e("Error", t.getMessage());
                             }
                         });
@@ -204,6 +207,7 @@ public class PaymentActivity extends AppCompatActivity {
     // < BackPress >
     @Override
     public void onBackPressed() {
-        Toast.makeText(getApplicationContext(), "확인 버튼을 눌러주세요.", Toast.LENGTH_SHORT).show();
+        Toaster.show(getApplicationContext(), "확인 버튼을 눌러주세요.");
+        //Toast.makeText(getApplicationContext(), "확인 버튼을 눌러주세요.", Toast.LENGTH_SHORT).show();
     }
 }

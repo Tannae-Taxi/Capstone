@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
 import com.example.tannae.sub.InnerDB;
+import com.example.tannae.sub.Toaster;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
 import net.daum.mf.map.api.MapPoint;
@@ -66,7 +68,7 @@ public class NavigationActivity extends AppCompatActivity {
                 btnEndService.setVisibility(View.INVISIBLE);
                 switchDrive.setVisibility(View.INVISIBLE);
                 if (InnerDB.sp.getInt("state", 0) == 1) {
-                    Toast.makeText(getApplicationContext(), "서비스를 이용중입니다.", Toast.LENGTH_SHORT).show();
+                    Toaster.show(getApplicationContext(),"서비스를 이용중입니다.");
                     JSONObject path = new JSONObject(InnerDB.sp.getString("path", ""));
                     showPathOnMap(path);
                 } else
@@ -125,7 +127,7 @@ public class NavigationActivity extends AppCompatActivity {
                             message = "배차 오류가 발생하였습니다.\n고객센터에 문의하세요.";
                             break;
                     }
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    Toaster.show(getApplicationContext(), message);
 
 
                     // Event handle by flag number
@@ -205,7 +207,7 @@ public class NavigationActivity extends AppCompatActivity {
         Network.socket.on("serviceEnd", args -> {
             runOnUiThread(() -> {
                 JSONObject result = (JSONObject) args[0];
-                Toast.makeText(getApplicationContext(), "운행이 종료되었습니다.\n영수증을 확인하여 주세요.", Toast.LENGTH_SHORT).show();
+                Toaster.show(getApplicationContext(), "운행이 종료되었습니다.\n영수증을 확인하여 주세요.");
                 Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
                 intent.putExtra("result", result.toString());
                 startActivity(intent);
@@ -252,7 +254,7 @@ public class NavigationActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (btnEndService.isEnabled()) {
-                    Toast.makeText(getApplicationContext(), "요금을 정산해주세요.", Toast.LENGTH_SHORT).show();
+                    Toaster.show(getApplicationContext(), "요금을 정산해주세요.");
                     switchDrive.setChecked(false);
                 } else {
                     try {
@@ -301,14 +303,15 @@ public class NavigationActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (switchDrive.isChecked()) {
-            Toast.makeText(getApplicationContext(), "서비스 제공 중에는 종료할 수 없습니다.", Toast.LENGTH_SHORT).show();
+            Toaster.show(getApplicationContext(), "서비스 제공 중에는 종료할 수 없습니다.");
         } else {
             if (type && !InnerDB.sp.getString("path", "NULL").equals("NULL")) {
-                Toast.makeText(getApplicationContext(), "운행중에는 내비게이션을 종료할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                Toaster.show(getApplicationContext(), "운행중에는 내비게이션을 종료할 수 없습니다.");
             } else {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                Toaster.show(getApplicationContext(), "홈화면으로 이동합니다.");
             }
         }
     }

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
 import com.example.tannae.sub.InnerDB;
+import com.example.tannae.sub.Toaster;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -135,7 +136,8 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "주변에 정차할 수 있는 도로가 없습니다.\n올바른 위치를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    Toaster.show(getApplicationContext(), "주변에 정차할 수 있는 도로가 없습니다.\n올바른 위치를 입력해주세요.");
+                    //Toast.makeText(getApplicationContext(), "주변에 정차할 수 있는 도로가 없습니다.\n올바른 위치를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
