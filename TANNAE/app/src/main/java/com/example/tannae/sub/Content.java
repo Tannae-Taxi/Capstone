@@ -1,11 +1,11 @@
 package com.example.tannae.sub;
 
-public class List {
+public class Content {
 
     private String title;
     private String content;
 
-    public List(String title, String content) {
+    public Content(String title, String content) {
         this.title = title;
         this.content = content;
     }

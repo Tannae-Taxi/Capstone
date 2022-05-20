@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -144,7 +143,6 @@ public class PaymentActivity extends AppCompatActivity {
                 String destination = res.getString("end");
                 int cost = res.getInt("cost");
                 adapter.addItem(new Receipt(usn, origin, destination, cost));
-                /////////////////////////////////////////////////////////////아이템 추가하가
             }
 
             // Set adapter

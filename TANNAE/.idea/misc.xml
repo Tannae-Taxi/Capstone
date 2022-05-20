@@ -11,7 +11,6 @@
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/drawable/ic_baseline_arrow_forward_ios_24.xml" value="0.273" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.193" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/drawable/ic_launcher_background.xml" value="0.21" />
-        <entry key="..\:/Capstone/TANNAE/app/src/main/res/drawable/menuview.xml" value="0.2305" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/drawable/text_border.xml" value="0.2885" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/drawable/text_sborder.xml" value="0.247" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_account.xml" value="0.1596153846153846" />
@@ -36,7 +35,8 @@
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_userservicelist.xml" value="0.3619791666666667" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/activity_vehiclelist.xml" value="0.3582427536231884" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/community_listview_list_item.xml" value="0.3619791666666667" />
-        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/payment_listview_list_item.xml" value="0.2" />
+        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/lost_listview_list_item.xml" value="0.36614583333333334" />
+        <entry key="..\:/Capstone/TANNAE/app/src/main/res/layout/payment_listview_list_item.xml" value="0.33" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/menu/bottom_app_bar.xml" value="0.3619791666666667" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/menu/main_top_app_bar.xml" value="0.3619791666666667" />
         <entry key="..\:/Capstone/TANNAE/app/src/main/res/menu/top_app_bar.xml" value="0.3619791666666667" />

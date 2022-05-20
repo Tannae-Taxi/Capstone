@@ -14,9 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
-import com.example.tannae.activity.account.LoginActivity;
-import com.example.tannae.activity.main_service.MainActivity;
-import com.example.tannae.sub.List;
+import com.example.tannae.sub.Content;
 
 import java.util.ArrayList;
 
@@ -34,14 +32,14 @@ public class FAQActivity extends AppCompatActivity {
         setViews();
         setEventListeners();
         adapter = new ListViewAdapter();
-        adapter.addItem(new List("FAQ Title", "내용1"));
-        adapter.addItem(new List("제목2", "내용2"));
-        adapter.addItem(new List("제목1", "내용1"));
-        adapter.addItem(new List("제목2", "내용2"));
-        adapter.addItem(new List("제목1", "내용1"));
-        adapter.addItem(new List("제목2", "내용2"));
-        adapter.addItem(new List("제목1", "내용1"));
-        adapter.addItem(new List("제목2", "내용2"));
+        adapter.addItem(new Content("FAQ Title", "내용1"));
+        adapter.addItem(new Content("제목2", "내용2"));
+        adapter.addItem(new Content("제목1", "내용1"));
+        adapter.addItem(new Content("제목2", "내용2"));
+        adapter.addItem(new Content("제목1", "내용1"));
+        adapter.addItem(new Content("제목2", "내용2"));
+        adapter.addItem(new Content("제목1", "내용1"));
+        adapter.addItem(new Content("제목2", "내용2"));
         listView.setAdapter(adapter);
     }
 
@@ -75,14 +73,14 @@ public class FAQActivity extends AppCompatActivity {
     }
 
     public class ListViewAdapter extends BaseAdapter {
-        ArrayList<List> items = new ArrayList<List>();
+        ArrayList<Content> items = new ArrayList<Content>();
 
         @Override
         public int getCount() {
             return items.size();
         }
 
-        public void addItem(List item) {
+        public void addItem(Content item) {
             items.add(item);
         }
         @Override
@@ -98,7 +96,7 @@ public class FAQActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             final Context context = viewGroup.getContext();
-            final List list = items.get(position);
+            final Content list = items.get(position);
 
             if(convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
