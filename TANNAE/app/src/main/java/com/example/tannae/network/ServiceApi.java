@@ -10,33 +10,33 @@ import retrofit2.http.Query;
 public interface ServiceApi {
     /* Account */
     @GET("/account/login")                  // Login
-    Call<String> login(@Query("id") String id, @Query("pw") String pw);
+    Call<JSONObject> login(@Query("id") String id, @Query("pw") String pw);
     @GET("/account/checkID")                 // Check ID Duplication
     Call<String> checkID(@Query("id") String id);
     @POST("/account/signup")                // Sign Up
-    Call<String> signup(@Body JSONObject user);
+    Call<Boolean> signup(@Body JSONObject user);
     @GET("/account/findAccount")            // Find Account
-    Call<String> findAccount(@Query("uname") String uname, @Query("rrn") String rrn, @Query("email") String email, @Query("phone") String phone);
+    Call<JSONObject> findAccount(@Query("uname") String uname, @Query("rrn") String rrn, @Query("email") String email, @Query("phone") String phone);
     @POST("/account/signout")               // Sign Out
-    Call<String> signout(@Body JSONObject user);
+    Call<Boolean> signout(@Body JSONObject user);
     @POST("/account/editAccount")           // Edit Account
-    Call<String> editAccount(@Body JSONObject user);
+    Call<Boolean> editAccount(@Body JSONObject user);
 
     /* User */
     @POST("/user/charge")                   // Charge Point
-    Call<String> charge(@Body JSONObject point);
+    Call<Boolean> charge(@Body JSONObject point);
     @GET("/user/getHistory")                // Get history
-    Call<String> getHistory(@Query("usn") String usn);
+    Call<JSONObject> getHistory(@Query("usn") String usn);
     @GET("/user/getLost")                   // Get lost
-    Call<String> getLost();
+    Call<JSONObject> getLost();
     @POST("/user/postLost")                 // Post lost
-    Call<String> postLost(@Body JSONObject lost);
+    Call<Boolean> postLost(@Body JSONObject lost);
     @GET("/user/getContent")                // Get content
-    Call<String> getContent();
+    Call<JSONObject> getContent();
     @POST("/user/editContent")              // Edit content
-    Call<String> editContent(@Body JSONObject content);
+    Call<Boolean> editContent(@Body JSONObject content);
     @POST("/user/postContent")              // Post Content
-    Call<String> postContent(@Body JSONObject content);
+    Call<Boolean> postContent(@Body JSONObject content);
     @POST("/user/evaluate")                 // Post evaluate
-    Call<String> evaluate(@Body JSONObject data);
+    Call<Boolean> evaluate(@Body JSONObject data);
 }

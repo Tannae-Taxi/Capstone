@@ -12,16 +12,13 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
-import com.example.tannae.activity.main_service.MainActivity;
-import com.example.tannae.activity.main_service.NavigationActivity;
 import com.example.tannae.network.Network;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -190,19 +187,14 @@ public class SignUpActivity extends AppCompatActivity {
                 Network.service.checkID(etID.getText().toString()).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
-                        try {
-                            JSONArray resArr = new JSONArray(response.body());
-                            JSONObject resObj = resArr.getJSONObject(0);
-                            String resType = resObj.getString("resType");
-                            if (resType.equals("OK")) {
-                                checkedID = true;
-                                Toast.makeText(getApplicationContext(), "사용 가능한 ID 입니다.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                checkedID = false;
-                                Toast.makeText(getApplicationContext(), "이미 사용 중인 ID 입니다.", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        String message = response.message();
+
+                        if (message.equals("OK")) {
+                            checkedID = true;
+                            Toast.makeText(getApplicationContext(), "사용 가능한 ID 입니다.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            checkedID = false;
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -248,27 +240,17 @@ public class SignUpActivity extends AppCompatActivity {
                         reqObj.put("email", etEmail.getText().toString());
 
                         // Request sign up [RETROFIT]
-                        Network.service.signup(reqObj).enqueue(new Callback<String>() {
+                        Network.service.signup(reqObj).enqueue(new Callback<Boolean>() {
                             @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                try {
-                                    JSONArray resArr = new JSONArray(response.body());
-                                    JSONObject resObj = resArr.getJSONObject(0);
-                                    String resType = resObj.getString("resType");
-                                    if (resType.equals("OK")) {
-                                        Toast.makeText(getApplicationContext(), "가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        startActivity(intent);
-                                    } else
-                                        Toast.makeText(getApplicationContext(), resType, Toast.LENGTH_SHORT).show();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                Toast.makeText(getApplicationContext(), "가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
                             }
 
                             @Override
-                            public void onFailure(Call<String> call, Throwable t) {
+                            public void onFailure(Call<Boolean> call, Throwable t) {
                                 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                                 Log.e("Error", t.getMessage());
                             }

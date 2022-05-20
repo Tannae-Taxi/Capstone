@@ -17,7 +17,6 @@ import com.example.tannae.network.RetrofitClient;
 import com.example.tannae.network.ServiceApi;
 import com.example.tannae.sub.InnerDB;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -102,30 +101,29 @@ public class LoginActivity extends AppCompatActivity {
     // < Login >
     public void login(String id, String pw, boolean auto) {
         // Check if entered ID/PW is a user
-        Network.service.login(id, pw).enqueue(new Callback<String>() {
+        Network.service.login(id, pw).enqueue(new Callback<JSONObject>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                 try {
-                    JSONArray resArr = new JSONArray(response.body());
-                    JSONObject resObj = resArr.getJSONObject(0);
-                    String resType = resObj.getString("resType");
+                    JSONObject res = response.body();
+                    String message = res.getString("message");
 
-                    if (resType.equals("OK")) {
-                        JSONObject user = resArr.getJSONObject(1); // 이게 InnerDB data
-                        InnerDB.setUserOutTOIn(user);
+                    if (message.equals("OK")) {
+                        JSONObject user = res.getJSONObject("result");
+                        InnerDB.setUser(user);
                         if (auto)
                             Toast.makeText(LoginActivity.this, InnerDB.sp.getString("uname", null) + "님이 자동로그인 되었습니다.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                     } else
-                        Toast.makeText(getApplicationContext(), resType, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<JSONObject> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                 Log.e("Error", t.getMessage());
             }

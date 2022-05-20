@@ -3,6 +3,7 @@ package com.example.tannae.activity.main_service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.tannae.R;
 import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
+import com.example.tannae.sub.InnerDB;
 import com.example.tannae.sub.Receipt;
 
 import org.json.JSONException;
@@ -62,18 +65,29 @@ public class PaymentActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONObject data = new JSONObject();
-                Network.service.evaluate(data).enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        /////////////////////////////////
-                    }
+                try {
+                    JSONObject data = new JSONObject();
+                    data.put("license", license);
+                    data.put("score", rbDriverRating.getRating());
+                    data.put("user", InnerDB.getUser());
+                    Network.service.evaluate(data).enqueue(new Callback<Boolean>() {
+                        @Override
+                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                            Toast.makeText(getApplicationContext(), "평가를 완료하였습니다.", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
 
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        /////////////////////////////
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<Boolean> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Log.e("Error", t.getMessage());
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         rbDriverRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -82,7 +96,6 @@ public class PaymentActivity extends AppCompatActivity {
 
             }
         });
-        // rvReceipt는 RecyclerView 객체의 이벤트 처리 방법 찾아본 후 추가할 예정
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +180,7 @@ public class PaymentActivity extends AppCompatActivity {
             usn.setText(receipt.getData("usn").toString());
             origin.setText(receipt.getData("origin").toString());
             destination.setText(receipt.getData("destination").toString());
-            cost.setText(Integer.toString((Integer)receipt.getData("cost")));
+            cost.setText(Integer.toString((Integer) receipt.getData("cost")));
 
             return convertView;
         }

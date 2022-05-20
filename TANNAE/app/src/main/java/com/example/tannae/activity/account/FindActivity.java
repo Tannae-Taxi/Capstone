@@ -18,7 +18,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -98,27 +97,27 @@ public class FindActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                 // If available request server to find account [RETROFIT]
                 else {
-                    Network.service.findAccount(etName.getText().toString(), etRRN.getText().toString(), etEmail.getText().toString(), etPhone.getText().toString()).enqueue(new Callback<String>() {
+                    Network.service.findAccount(etName.getText().toString(), etRRN.getText().toString(), etEmail.getText().toString(), etPhone.getText().toString()).enqueue(new Callback<JSONObject>() {
                         @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
+                        public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                             try {
-                                JSONArray resArr = new JSONArray(response.body());
-                                JSONObject resObj = resArr.getJSONObject(0);
-                                if(resObj.getString("resType").equals("OK")) {
-                                    JSONObject user = resArr.getJSONObject(1);
+                                JSONObject res = response.body();
+                                String message = res.getString("message");
+
+                                if(message.equals("OK")) {
                                     // Show ID and PW at screen
+                                    JSONObject user = res.getJSONObject("result");
                                     tvMyId.setText("ID: " + user.getString("id"));
                                     tvMyPw.setText("PW: " + user.getString("pw"));
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "일치하는 회원정보가 없습니다.\n입력하신 정보가 올바른 지 확인해주세요."/* resObj.getString("resType")*/, Toast.LENGTH_SHORT).show();
-                                }
+                                } else
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<String> call, Throwable t) {
+                        public void onFailure(Call<JSONObject> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                             Log.e("Error", t.getMessage());
                         }
