@@ -10,13 +10,13 @@ import retrofit2.http.Query;
 public interface ServiceApi {
     /* Account */
     @GET("/account/login")                  // Login
-    Call<JSONObject> login(@Query("id") String id, @Query("pw") String pw);
+    Call<String> login(@Query("id") String id, @Query("pw") String pw);
     @GET("/account/checkID")                 // Check ID Duplication
     Call<String> checkID(@Query("id") String id);
     @POST("/account/signup")                // Sign Up
     Call<Boolean> signup(@Body JSONObject user);
     @GET("/account/findAccount")            // Find Account
-    Call<JSONObject> findAccount(@Query("uname") String uname, @Query("rrn") String rrn, @Query("email") String email, @Query("phone") String phone);
+    Call<String> findAccount(@Query("uname") String uname, @Query("rrn") String rrn, @Query("email") String email, @Query("phone") String phone);
     @POST("/account/signout")               // Sign Out
     Call<Boolean> signout(@Body JSONObject user);
     @POST("/account/editAccount")           // Edit Account
@@ -26,13 +26,13 @@ public interface ServiceApi {
     @POST("/user/charge")                   // Charge Point
     Call<Boolean> charge(@Body JSONObject point);
     @GET("/user/getHistory")                // Get history
-    Call<JSONObject> getHistory(@Query("usn") String usn);
+    Call<String> getHistory(@Query("usn") String usn);
     @GET("/user/getLost")                   // Get lost
-    Call<JSONObject> getLost();
+    Call<String> getLost();
     @POST("/user/postLost")                 // Post lost
     Call<Boolean> postLost(@Body JSONObject lost);
     @GET("/user/getContent")                // Get content
-    Call<JSONObject> getContent();
+    Call<String> getContent();
     @POST("/user/editContent")              // Edit content
     Call<Boolean> editContent(@Body JSONObject content);
     @POST("/user/postContent")              // Post Content

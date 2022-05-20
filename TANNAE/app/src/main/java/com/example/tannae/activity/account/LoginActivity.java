@@ -101,11 +101,11 @@ public class LoginActivity extends AppCompatActivity {
     // < Login >
     public void login(String id, String pw, boolean auto) {
         // Check if entered ID/PW is a user
-        Network.service.login(id, pw).enqueue(new Callback<JSONObject>() {
+        Network.service.login(id, pw).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 try {
-                    JSONObject res = response.body();
+                    JSONObject res = new JSONObject(response.body());
                     String message = res.getString("message");
 
                     if (message.equals("OK")) {
@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<JSONObject> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                 Log.e("Error", t.getMessage());
             }

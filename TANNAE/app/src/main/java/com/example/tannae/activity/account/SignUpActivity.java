@@ -187,7 +187,8 @@ public class SignUpActivity extends AppCompatActivity {
                 Network.service.checkID(etID.getText().toString()).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
-                        String message = response.message();
+                        String message = response.body();
+                        System.out.println(message);
 
                         if (message.equals("OK")) {
                             checkedID = true;

@@ -97,11 +97,11 @@ public class FindActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "전화번호를 정확하게 작성하세요.", Toast.LENGTH_SHORT).show();
                 // If available request server to find account [RETROFIT]
                 else {
-                    Network.service.findAccount(etName.getText().toString(), etRRN.getText().toString(), etEmail.getText().toString(), etPhone.getText().toString()).enqueue(new Callback<JSONObject>() {
+                    Network.service.findAccount(etName.getText().toString(), etRRN.getText().toString(), etEmail.getText().toString(), etPhone.getText().toString()).enqueue(new Callback<String>() {
                         @Override
-                        public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                        public void onResponse(Call<String> call, Response<String> response) {
                             try {
-                                JSONObject res = response.body();
+                                JSONObject res = new JSONObject(response.body());
                                 String message = res.getString("message");
 
                                 if(message.equals("OK")) {
@@ -117,7 +117,7 @@ public class FindActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<JSONObject> call, Throwable t) {
+                        public void onFailure(Call<String> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                             Log.e("Error", t.getMessage());
                         }
