@@ -83,7 +83,7 @@
         android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/layout_qna_userservicelist"
+            android:id="@+id/layout_lost_found_userservicelist"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
@@ -152,7 +152,7 @@
         android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/layout_lost_found_userservicelist"
+            android:id="@+id/layout_qna_userservicelist"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
