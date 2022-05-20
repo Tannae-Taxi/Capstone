@@ -84,7 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String id = etID.getText().toString();
                 if (id.length() == 0) {
                     tvCheckId.setTextColor(0xAA000000);
-                    tvCheckId.setText("영문 혹은 숫자를 사용하여 6자리 이상 작성하세요."); // 이부분 다크모드로 구현하기가 애매. xml의 원본 텍스트랑 같은 형식 사용하고 싶음. 비밀번호도
+                    tvCheckId.setText("영문 혹은 숫자를 사용하여 6자리 이상 작성하세요.");
                     availableID = false;
                 } else if (id.length() >= 6 && (id.matches(".*[a-zA-Z].*") || id.matches(".*[0-9].*"))
                         && !id.matches(".*[가-힣].*") && !id.matches(".*[\\W].*")) {
