@@ -1,10 +1,8 @@
 package com.example.tannae.activity.user_service;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,10 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
-import com.example.tannae.activity.account.LoginActivity;
-import com.example.tannae.activity.main_service.MainActivity;
+import com.example.tannae.network.Network;
 import com.example.tannae.sub.InnerDB;
 import com.example.tannae.sub.Toaster;
+
+import org.json.JSONException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PointActivity extends AppCompatActivity {
     private TextView tvPoint;
@@ -30,7 +33,6 @@ public class PointActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_point);
         setViews();
-        tvPoint.setText(InnerDB.sp.getInt("points", 0) + "원");
         setEventListeners();
     }
 
@@ -47,6 +49,7 @@ public class PointActivity extends AppCompatActivity {
         etCharge = findViewById(R.id.et_charge_point);
         btnCharge = findViewById(R.id.btn_charge_point);
         toolbar = findViewById(R.id.topAppBar_point);
+        tvPoint.setText(InnerDB.sp.getInt("points", 0) + "원");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -60,36 +63,32 @@ public class PointActivity extends AppCompatActivity {
     }
 
     private void setEventListeners() {
-        etCharge.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         btnCharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String charge = etCharge.getText().toString();
-                if(charge.matches("[0-9]+")) {
-                    int currentPoint = InnerDB.sp.getInt("points", 0);
-                    currentPoint += Integer.parseInt(etCharge.getText().toString());
-                    etCharge.setText("");
-                    InnerDB.editor.putInt("points", currentPoint).apply();
-                    tvPoint.setText(InnerDB.sp.getInt("points", 0) + "원");
-                    Toaster.show(getApplicationContext(), "포인트가 충전되었습니다.");
+                int charge = Integer.parseInt(etCharge.getText().toString());
+                final int currentPoint = InnerDB.sp.getInt("points", 0) + charge;
+                InnerDB.editor.putInt("points", currentPoint).apply();
+
+                try {
+                    Network.service.charge(InnerDB.getUser()).enqueue(new Callback<Boolean>() {
+                        @Override
+                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                            etCharge.setText("");
+                            tvPoint.setText(InnerDB.sp.getInt("points", 0) + "원");
+                            Toaster.show(getApplicationContext(), "포인트가 충전되었습니다.");
+                        }
+
+                        @Override
+                        public void onFailure(Call<Boolean> call, Throwable t) {
+                            InnerDB.editor.putInt("points", currentPoint - charge).apply();
+                            Toaster.show(getApplicationContext(), "Error");
+                            Log.e("Error", t.getMessage());
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                else
-                    Toaster.show(getApplicationContext(), "충전 금액은 숫자만 입력해주세요.");
             }
         });
     }

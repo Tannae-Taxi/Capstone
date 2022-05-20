@@ -26,7 +26,7 @@ public interface ServiceApi {
 
     /* User */
     @POST("/user/charge")                   // Charge Point
-    Call<Boolean> charge(@Body JSONObject point);
+    Call<Boolean> charge(@Body JSONObject user);
     @GET("/user/getHistory")                // Get history
     Call<String> getHistory(@Query("usn") String usn);
     @GET("/user/getLost")                   // Get lost
