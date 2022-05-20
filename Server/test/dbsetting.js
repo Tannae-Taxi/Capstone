@@ -54,4 +54,13 @@ function matchDV() {
     }
 }
 
-matchDV();
+// Set vehicle coordinate
+async function veco()  {
+    let [result, fields] = await connection.query(`select usn from Vehicle`);
+    [
+        {}
+    ]
+    for (let i = 0; i < result.length; i++) {
+
+    }
+}

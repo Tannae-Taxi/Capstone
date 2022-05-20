@@ -38,7 +38,7 @@ app.get('/account/login', async (req, res) => {
     try {
         let [result, field] = (await connection.query(`select usn, cast(id as char) as id, cast(pw as char) as pw, uname, rrn, gender, phone, email, drive, points, score, state from User where binary id = '${data.id}'`))[0];
         response.result = result;
-        if (result.length === 0) {
+        if (result === undefined) {
             // When entered ID is not registered
             console.log(`/account/login : ${data.id} is not a user`);
             response.message = "등록된 사용자가 아닙니다.";
@@ -121,7 +121,7 @@ app.get('/account/findAccount', async (req, res) => {
         let [result, fields] = (await connection.query(`select * from User where uname = '${data.uname}'`))[0];
         response.result = result;
 
-        if (result.length === 0) {
+        if (result === undefined) {
             // When entered name is not registered
             console.log(`/account/findAccount : ${data.uname} is not a user`);
             response.message = "등록된 사용자가 아닙니다.";
@@ -479,11 +479,10 @@ io.on('connection', (socket) => {
                 result[usn].end = point.name;
                 count--;
             }
-
             if (count !== 0) {
                 let pathCost = parseInt(cost * pass.sections[i].distance / pass.distance);
                 for (let j = 0; j < current.length; j++)
-                    result[current[i]].cost += pathCost / count;
+                    result[current[j]].cost += pathCost / count;
             }
         }
 
@@ -531,9 +530,11 @@ io.on('connection', (socket) => {
         io.to(vehicle.vsn).emit('serviceEnd', result);
 
         // Exit room
-        let users = io.sockets.adapter.rooms.get(vehicle.vsn);
-        for (let i = 0; i < users.length; i++)
-            users[i].leave(vehicle.vsn);
+        let clients = io.sockets.adapter.rooms.get(vehicle.vsn);
+        for (let client of clients) {
+            let clientSocket = io.sockets.sockets.get(client);
+            clientSocket.leave(vehicle.vsn);
+        }
 
         // LOG
         console.log(`Service ended on vehicle ${vehicle.vsn}`);
@@ -553,10 +554,15 @@ io.on('connection', (socket) => {
             if (service.vehicle != null) {
                 service.setPath();                                                                              // Set request path
                 service.pathR = await service.reqPath();                                                         // Request path to kakao navigation api and return path data
-                await service.updateDB();                                                                       // Update Database
-                socket.join(service.vehicle.vsn);                                                               // Join vsn room
-                io.to(service.vehicle.vsn).emit('responseService', service.flag, service.path, data.user.usn);  // Send response to vsn room users
-                console.log(`User ${data.user.usn} is matched with vehicle ${service.vehicle.vsn}`);
+                if (service.pathR.result_code === 0) {
+                    await service.updateDB();                                                                       // Update Database
+                    socket.join(service.vehicle.vsn);                                                               // Join vsn room
+                    io.to(service.vehicle.vsn).emit('responseService', service.flag, service.path, data.user.usn);  // Send response to vsn room users
+                    console.log(`User ${data.user.usn} is matched with vehicle ${service.vehicle.vsn}`);
+                } else {
+                    socket.emit('responseService', 0, null, null, null);
+                    console.log(`User ${data.user.usn} is rejected becuase of path is unavailable`);
+                }
             } else {
                 // When there is no vehicle available
                 console.log(`No vehicle is available for user ${data.user.usn}(Start : ${data.start.name} / End : ${data.end.name})`);

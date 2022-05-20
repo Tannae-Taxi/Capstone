@@ -8,6 +8,7 @@ module.exports.Service = class Service {
     // < Construct Path >
     constructor(connection, socket, data) {
         // Basic setting
+        this.pathR;
         this.connection = connection;
         this.socket = socket;
         this.data = data;
@@ -16,7 +17,7 @@ module.exports.Service = class Service {
             "origin": { "name": "Vehicle", "x": 0, "y": 0 },
             "destination": { "name": null, "x": 0, "y": 0 },
             "waypoints": [],
-            "priority": "RECOMMEND", "car_fuel": "GASOLINE", "car_hipass": false, "alternatives": false, "road_details": false, "summary": true
+            "priority": "DISTANCE", "car_fuel": "GASOLINE", "car_hipass": false, "alternatives": false, "road_details": false, "summary": true, "alternatives": true
         }
         // Set request
         this.pathReq = {
@@ -73,8 +74,6 @@ module.exports.Service = class Service {
 
         // Set start index and end index
         if (this.flag === 1) {
-            console.log(this.starts);
-            console.log(this.ends);
             this.starts = this.starts[nearestIndex];
             this.ends = this.ends[nearestIndex];
         } else if (nearestIndex !== -1) {
@@ -111,7 +110,6 @@ module.exports.Service = class Service {
 
     // < Request path info >
     reqPath() {
-        this.pathR = null;
         return new Promise((resolve, reject) => {
             request.post(this.pathReq, (err, httpResponse, body) => {
                 if (!err && httpResponse.statusCode == 200) {
@@ -176,7 +174,7 @@ module.exports.Service = class Service {
                 return [true, points, startIndex, endIndex];
             }
         } else if (innerStart) {
-            // Get last point end pre last point
+            // Get last point and pre last point
             let lastPoint = points[points.length - 1];
             let preLastPoint = points[points.length - 2];
             // Get vector of prelast->last and last->end
@@ -186,6 +184,7 @@ module.exports.Service = class Service {
             let theta = Math.acos((uva[0] * uvb[0] + uva[1] * uvb[1]) / (Math.sqrt(Math.pow(uva[0], 2) + Math.pow(uva[1], 2)) * Math.sqrt(Math.pow(uvb[0], 2) + Math.pow(uvb[1], 2))));
             // Available when angle is smaller than 45 degrees
             if (theta < Math.PI / 4) {
+                endIndex = points.length + 2;
                 points.push(end);
                 points.splice(startIndex, 0, start);
                 return [true, points, startIndex, endIndex];
@@ -229,7 +228,6 @@ module.exports.Service = class Service {
         names = this.flag === 1 ? JSON.parse(this.vehicle.names) : {};
         names[`${start.x}_${start.y}_${start.name}`] = { 'usn': this.data.user.usn, 'type': 'start' };
         names[`${end.x}_${end.y}_${end.name}`] = { 'usn': this.data.user.usn, 'type': 'end' };
-
         await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi}, names = '${JSON.stringify(names)}' where vsn = '${this.vehicle.vsn}'`);
         await this.connection.query(`update User set state = true where usn = '${this.data.user.usn}'`);
     }
