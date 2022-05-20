@@ -45,9 +45,9 @@ module.exports.Service = class Service {
             // If share than check if requested path is available on vehicle's path
             if (this.data.share) {
                 let [flagP, points, startIndex, endIndex] = this.checkInnerPath(vehicles[i]);
-                pointss.push(points);
-                start.push(startIndex);
-                end.push(endIndex);
+                this.pointss.push(points);
+                this.starts.push(startIndex);
+                this.ends.push(endIndex);
                 // If not available than don't check current vehicle
                 if (!flagP)
                     continue;
@@ -73,6 +73,8 @@ module.exports.Service = class Service {
 
         // Set start index and end index
         if (this.flag === 1) {
+            console.log(this.starts);
+            console.log(this.ends);
             this.starts = this.starts[nearestIndex];
             this.ends = this.ends[nearestIndex];
         } else if (nearestIndex !== -1) {
@@ -109,6 +111,7 @@ module.exports.Service = class Service {
 
     // < Request path info >
     reqPath() {
+        this.pathR = null;
         return new Promise((resolve, reject) => {
             request.post(this.pathReq, (err, httpResponse, body) => {
                 if (!err && httpResponse.statusCode == 200) {
@@ -208,23 +211,24 @@ module.exports.Service = class Service {
 
     // < Update Database >
     async updateDB() {
-        let summary = this.path.summary;
-        let sections = this.path.sections;
-        this.path = {};
-        this.path.origin = summary.origin;
-        this.path.destination = summary.destination;
-        this.path.waypoints = summary.waypoints;
-        this.path.distance = summary.distance;
-        this.path.duration = summary.duration;
-        this.path.sections = sections;
+        let summary = this.pathR.summary;
+        let sections = this.pathR.sections;
+        this.path = {
+            "origin": this.path.origin,
+            "destination": this.path.destination,
+            "waypoints": this.path.waypoints,
+            "distance": summary.distance,
+            "duration": summary.duration,
+            "sections": sections
+        }
 
         let start = this.path.waypoints[this.starts - 1];
         let end = this.path.waypoints.length > this.ends - 1 ? this.path.waypoints[this.ends - 1] : this.path.destination;
 
         let names = {};
         names = this.flag === 1 ? JSON.parse(this.vehicle.names) : {};
-        names[`${start.x}_${start.y}_${start.name}`] = {'usn': this.data.user.usn, 'type': 'start'};
-        names[`${end.x}_${end.y}_${end.name}`] = {'usn': this.data.user.usn, 'type': 'end'};
+        names[`${start.x}_${start.y}_${start.name}`] = { 'usn': this.data.user.usn, 'type': 'start' };
+        names[`${end.x}_${end.y}_${end.name}`] = { 'usn': this.data.user.usn, 'type': 'end' };
 
         await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi}, names = '${JSON.stringify(names)}' where vsn = '${this.vehicle.vsn}'`);
         await this.connection.query(`update User set state = true where usn = '${this.data.user.usn}'`);
