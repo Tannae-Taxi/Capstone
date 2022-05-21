@@ -3,7 +3,6 @@ package com.example.tannae.activity.account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -53,42 +52,29 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void setEventListeners() {
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AccountEditActivity.class));
+        btnEdit.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), AccountEditActivity.class)));
+
+        btnSignOut.setOnClickListener(v -> {
+            try {
+                Network.service.signout(InnerDB.getUser()).enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        Toaster.show(getApplicationContext(), "TANNAE를 이용해주셔서 감사합니다.");
+                        InnerDB.editor.clear().apply();
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    }
+
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        Toaster.show(getApplicationContext(), "Error");
+                        Log.e("Error", t.getMessage());
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         });
 
-        btnSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Network.service.signout(InnerDB.getUser()).enqueue(new Callback<Boolean>() {
-                        @Override
-                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                            Toaster.show(getApplicationContext(), "TANNAE를 이용해주셔서 감사합니다.");
-                            InnerDB.editor.clear().apply();
-                            startActivity(new Intent(getApplicationContext(), LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                        }
-
-                        @Override
-                        public void onFailure(Call<Boolean> call, Throwable t) {
-                            Toaster.show(getApplicationContext(), "Error");
-                            Log.e("Error", t.getMessage());
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
     }
 }
