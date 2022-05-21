@@ -3,7 +3,6 @@ package com.example.tannae.activity.account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -57,34 +56,21 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setEventListeners() {
         // Login [RETROFIT]
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Check if ID and PW is entered
-                String id = etID.getText().toString();
-                String pw = etPW.getText().toString();
-                if (id.length() == 0 || pw.length() == 0)
-                    Toaster.show(getApplicationContext(), "로그인 정보를 입력하세요.");
-                else
-                    login(id, pw, false);
-            }
+        btnLogin.setOnClickListener(v -> {
+            // Check if ID and PW is entered
+            String id = etID.getText().toString();
+            String pw = etPW.getText().toString();
+            if (id.length() == 0 || pw.length() == 0)
+                Toaster.show(getApplicationContext(), "로그인 정보를 입력하세요.");
+            else
+                login(id, pw, false);
         });
 
         // Start Find Activity
-        btnFind.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), FindActivity.class));
-            }
-        });
+        btnFind.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FindActivity.class)));
 
         // Start Sign up Activity
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
-            }
-        });
+        btnSignUp.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), SignUpActivity.class)));
 
     }
 
