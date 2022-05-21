@@ -6,7 +6,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -87,27 +86,24 @@ public class AccountEditActivity extends AppCompatActivity {
             }
         });
 
-        btnCheckID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!availableID)
-                    Toaster.show(getApplicationContext(), "지원되지 않는 ID 형식입니다. \n다른 ID를 사용해주세요.");
-                else
-                    Network.service.checkID(etID.getText().toString()).enqueue(new Callback<String>() {
-                        @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
-                            String message = response.body();
-                            checkedID = message.equals("OK");
-                            Toaster.show(getApplicationContext(), message.equals("OK") ? "사용 가능한 ID 입니다." : message);
-                        }
+        btnCheckID.setOnClickListener(v -> {
+            if (!availableID)
+                Toaster.show(getApplicationContext(), "지원되지 않는 ID 형식입니다. \n다른 ID를 사용해주세요.");
+            else
+                Network.service.checkID(etID.getText().toString()).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        String message = response.body();
+                        checkedID = message.equals("OK");
+                        Toaster.show(getApplicationContext(), message.equals("OK") ? "사용 가능한 ID 입니다." : message);
+                    }
 
-                        @Override
-                        public void onFailure(Call<String> call, Throwable t) {
-                            Toaster.show(getApplicationContext(), "Error");
-                            Log.e("Error", t.getMessage());
-                        }
-                    });
-            }
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Toaster.show(getApplicationContext(), "Error");
+                        Log.e("Error", t.getMessage());
+                    }
+                });
         });
 
         // Check if PW type is available
@@ -171,53 +167,46 @@ public class AccountEditActivity extends AppCompatActivity {
         });
 
 
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if (!availableID || !availablePW)
-                        Toaster.show(getApplicationContext(), "허용되지 않은 ID or PW 형식입니다.");
-                    else if (!checkedID)
-                        Toaster.show(getApplicationContext(), "ID 중복을 확인하세요");
-                    else if (!availablePWC)
-                        Toaster.show(getApplicationContext(), "PW가 일치하지 않습니다.");
-                    else if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString()).matches())
-                        Toaster.show(getApplicationContext(), "Email 을 정확하게 작성하세요.");
-                    else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
-                        Toaster.show(getApplicationContext(), "전화번호를 정확하게 작성하세요.");
-                    else {
-                        JSONObject newUser = new JSONObject();
-                        newUser.put("usn", InnerDB.sp.getString("usn", null));
-                        newUser.put("id", etID.getText().toString());
-                        newUser.put("pw", etPW.getText().toString());
-                        newUser.put("email", etEmail.getText().toString());
-                        newUser.put("phone", etPhone.getText().toString());
+        btnEdit.setOnClickListener(v -> {
+            try {
+                if (!availableID || !availablePW)
+                    Toaster.show(getApplicationContext(), "허용되지 않은 ID or PW 형식입니다.");
+                else if (!checkedID)
+                    Toaster.show(getApplicationContext(), "ID 중복을 확인하세요");
+                else if (!availablePWC)
+                    Toaster.show(getApplicationContext(), "PW가 일치하지 않습니다.");
+                else if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString()).matches())
+                    Toaster.show(getApplicationContext(), "Email 을 정확하게 작성하세요.");
+                else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
+                    Toaster.show(getApplicationContext(), "전화번호를 정확하게 작성하세요.");
+                else {
+                    JSONObject newUser = new JSONObject();
+                    newUser.put("usn", InnerDB.sp.getString("usn", null));
+                    newUser.put("id", etID.getText().toString());
+                    newUser.put("pw", etPW.getText().toString());
+                    newUser.put("email", etEmail.getText().toString());
+                    newUser.put("phone", etPhone.getText().toString());
 
-                        Network.service.editAccount(newUser).enqueue(new Callback<Boolean>() {
-                            @Override
-                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                                InnerDB.editor.clear().apply();
-                                Toaster.show(getApplicationContext(), "회원정보가 수정되었습니다.\n다시 로그인해주세요.");
-                                startActivity(new Intent(getApplicationContext(), LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                            }
+                    Network.service.editAccount(newUser).enqueue(new Callback<Boolean>() {
+                        @Override
+                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                            InnerDB.editor.clear().apply();
+                            Toaster.show(getApplicationContext(), "회원정보가 수정되었습니다.\n다시 로그인해주세요.");
+                            startActivity(new Intent(getApplicationContext(), LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        }
 
-                            @Override
-                            public void onFailure(Call<Boolean> call, Throwable t) {
-                                Toaster.show(getApplicationContext(), "Error");
-                                Log.e("Error", t.getMessage());
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                        @Override
+                        public void onFailure(Call<Boolean> call, Throwable t) {
+                            Toaster.show(getApplicationContext(), "Error");
+                            Log.e("Error", t.getMessage());
+                        }
+                    });
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         });
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AccountActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), AccountActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
     }
 }
