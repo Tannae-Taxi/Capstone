@@ -6,7 +6,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -33,25 +32,22 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText etID, etPW, etPWR, etName, etRRN, etPhone, etEmail;
     private TextView tvCheckId, tvCheckPW;
     private Toolbar toolbar;
-    private boolean availableID = false, checkedID = false, checkedUser = false, availablePW = false, availablePWR = false, genderType = true, availableEmail = false, availablePhone = false;
+    private boolean availableID = false, checkedID = false, checkedUser = false, availablePW = false, availablePWR = false, genderType = true;
 
-    // < onCreate >
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Create
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        // Setting
         setViews();
         setEventListeners();
     }
 
-    // < Register views >
     private void setViews() {
         btnCheckID = findViewById(R.id.btn_checkID_sign_up);
         btnSignUp = findViewById(R.id.btn_sign_up);
         btnCheckUser = findViewById(R.id.btn_check_user_sign_up);
         rgGender = findViewById(R.id.rg_gender_sign_up);
+
         etID = findViewById(R.id.et_id_sign_up);
         etPW = findViewById(R.id.et_pw_sign_up);
         etPWR = findViewById(R.id.et_checkpw_sign_up);
@@ -62,17 +58,11 @@ public class SignUpActivity extends AppCompatActivity {
 
         tvCheckId = findViewById(R.id.tv_checkID_sign_up);
         tvCheckPW = findViewById(R.id.tv_retrypw_sign_up);
-        toolbar = findViewById(R.id.topAppBar_sign_up);
+        (toolbar = findViewById(R.id.topAppBar_sign_up))
+                .setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), LoginActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                intent.putExtra("type", false);
-                startActivity(intent);
-            }
-        });
     }
 
     // < Register event listeners >
@@ -98,8 +88,13 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
 
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override public void afterTextChanged(Editable s) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // Check if PW type is available
@@ -122,8 +117,13 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
 
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override public void afterTextChanged(Editable s) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // Check if PWR is identical with PW
@@ -136,7 +136,7 @@ public class SignUpActivity extends AppCompatActivity {
                     tvCheckPW.setText("사용 불가능한 PW 형식입니다.");
                     availablePWR = false;
                 } else {
-                    if(etPW.getText().toString().equals(pwr)) {
+                    if (etPW.getText().toString().equals(pwr)) {
                         tvCheckPW.setTextColor(0xAA0000FF);
                         tvCheckPW.setText("비밀번호가 일치합니다.");
                         availablePWR = true;
@@ -148,17 +148,17 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
 
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override public void afterTextChanged(Editable s) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // Change gender type by user input
-        rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                genderType = (checkedId == R.id.rb_man_sign_up) ? true : false;
-            }
-        });
+        rgGender.setOnCheckedChangeListener((group, checkedId) -> genderType = (checkedId == R.id.rb_man_sign_up) ? true : false);
 
         // Change checkedUser by name input
         etName.addTextChangedListener(new TextWatcher() {
@@ -167,8 +167,13 @@ public class SignUpActivity extends AppCompatActivity {
                 checkedUser = false;
             }
 
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override public void afterTextChanged(Editable s) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         });
         // Store RRN by user input
         etRRN.addTextChangedListener(new TextWatcher() {
@@ -182,33 +187,55 @@ public class SignUpActivity extends AppCompatActivity {
                 checkedUser = false;
             }
 
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override public void afterTextChanged(Editable s) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // Check if id entered is available [RETROFIT]
-        btnCheckID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Check if ID type is available
-                if (!availableID) {
-                    Toaster.show(getApplicationContext(), "지원되지 않는 ID 형식입니다. \n다른 ID를 사용해주세요.");
-                    //Toast.makeText(getApplicationContext(), "지원되지 않는 ID 형식입니다. \n다른 ID를 사용해주세요.", Toast.LENGTH_SHORT).show();
-                    return;
+        btnCheckID.setOnClickListener(v -> {
+            // Check if ID type is available
+            if (!availableID) {
+                Toaster.show(getApplicationContext(), "지원되지 않는 ID 형식입니다. \n다른 ID를 사용해주세요.");
+                return;
+            }
+            // Request if ID is not user [RETROFIT]
+            Network.service.checkID(etID.getText().toString()).enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    String message = response.body();
+                    checkedID = message.equals("OK");
+                    Toaster.show(getApplicationContext(), message.equals("OK") ? "사용 가능한 ID 입니다." : message);
                 }
-                // Request if ID is not user [RETROFIT]
-                Network.service.checkID(etID.getText().toString()).enqueue(new Callback<String>() {
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toaster.show(getApplicationContext(), "Error");
+                    Log.e("Error", t.getMessage());
+                }
+            });
+        });
+
+        btnCheckUser.setOnClickListener(v -> {
+            String name = etName.getText().toString();
+            String rrn = etRRN.getText().toString();
+            if (name.length() == 0 && rrn.length() != 14)
+                Toaster.show(getApplicationContext(), "이름과 주민등록번호를 입력해주세요.");
+            else if (name.length() == 0)
+                Toaster.show(getApplicationContext(), "이름을 입력해주세요.");
+            else if (rrn.length() != 14)
+                Toaster.show(getApplicationContext(), "주민등록번호를 제대로 입력해주세요.");
+            else {
+                Network.service.checkUser(name, rrn).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         String message = response.body();
-
-                        if (message.equals("OK")) {
-                            checkedID = true;
-                            Toaster.show(getApplicationContext(), "사용 가능한 ID 입니다.");
-                        } else {
-                            checkedID = false;
-                            Toaster.show(getApplicationContext(), message);
-                        }
+                        checkedUser = message.equals("OK");
+                        Toaster.show(getApplicationContext(), message.equals("OK") ? "본인인증이 완료 되었습니다." : message);
                     }
 
                     @Override
@@ -220,97 +247,55 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        btnCheckUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = etName.getText().toString();
-                String rrn = etRRN.getText().toString();
-                if (name.length() == 0 && rrn.length() != 14)
-                    Toaster.show(getApplicationContext(), "이름과 주민등록번호를 입력해주세요.");
-                else if (name.length() == 0)
-                    Toaster.show(getApplicationContext(), "이름을 입력해주세요.");
-                else if (rrn.length() != 14)
-                    Toaster.show(getApplicationContext(), "주민등록번호를 제대로 입력해주세요.");
+        // Sing Up [RETROFIT]
+        btnSignUp.setOnClickListener(v -> {
+            try {
+                // Check if entered info's are available
+                if (!availableID || !availablePW)
+                    Toaster.show(getApplicationContext(), "허용되지 않은 ID or PW 형식입니다.");
+                else if (!checkedID)
+                    Toaster.show(getApplicationContext(), "ID 중복을 확인하세요");
+                else if (!availablePWR)
+                    Toaster.show(getApplicationContext(), "PW가 일치하지 않습니다.");
+                else if (etName.getText().toString().length() == 0)
+                    Toaster.show(getApplicationContext(), "이름을 입력하세요.");
+                else if (etRRN.getText().toString().length() != 14)
+                    Toaster.show(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.");
+                else if (!checkedUser)
+                    Toaster.show(getApplicationContext(), "본인인증을 해주세요.");
+                else if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString()).matches())
+                    Toaster.show(getApplicationContext(), "Email 을 정확하게 작성하세요.");
+                else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
+                    Toaster.show(getApplicationContext(), "전화번호를 정확하게 작성하세요.");
+                    // If available request sign up [RETROFIT]
                 else {
-                    Network.service.checkUser(name, rrn).enqueue(new Callback<String>() {
+                    // Create User JSON
+                    JSONObject reqObj = new JSONObject();
+                    reqObj.put("id", etID.getText().toString());
+                    reqObj.put("pw", etPW.getText().toString());
+                    reqObj.put("uname", etName.getText().toString());
+                    reqObj.put("rrn", etRRN.getText().toString());
+                    reqObj.put("gender", genderType);
+                    reqObj.put("phone", etPhone.getText().toString());
+                    reqObj.put("email", etEmail.getText().toString());
+
+                    // Request sign up [RETROFIT]
+                    Network.service.signup(reqObj).enqueue(new Callback<Boolean>() {
                         @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
-                            String message = response.body();
-                            if (message.equals("OK")) {
-                                checkedUser = true;
-                                Toaster.show(getApplicationContext(), "본인인증이 완료 되었습니다.");
-                            } else {
-                                checkedUser = false;
-                                Toaster.show(getApplicationContext(), message);
-                            }
+                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                            Toaster.show(getApplicationContext(), "가입이 완료되었습니다.");
+                            startActivity(new Intent(getApplicationContext(), LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         }
 
                         @Override
-                        public void onFailure(Call<String> call, Throwable t) {
+                        public void onFailure(Call<Boolean> call, Throwable t) {
                             Toaster.show(getApplicationContext(), "Error");
                             Log.e("Error", t.getMessage());
                         }
                     });
                 }
-            }
-        });
-
-        // Sing Up [RETROFIT]
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    // Check if entered info's are available
-                    if (!availableID || !availablePW)
-                        Toaster.show(getApplicationContext(), "허용되지 않은 ID or PW 형식입니다.");
-                    else if (!checkedID)
-                        Toaster.show(getApplicationContext(), "ID 중복을 확인하세요");
-                    else if (!availablePWR)
-                        Toaster.show(getApplicationContext(), "PW가 일치하지 않습니다.");
-                    else if (etName.getText().toString().length() == 0)
-                        Toaster.show(getApplicationContext(), "이름을 입력하세요.");
-                    else if (etRRN.getText().toString().length() != 14)
-                        Toaster.show(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.");
-                    else if (!checkedUser)
-                        Toaster.show(getApplicationContext(), "본인인증을 해주세요.");
-                    else if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString()).matches())
-                        Toaster.show(getApplicationContext(), "Email 을 정확하게 작성하세요.");
-                    else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
-                        Toaster.show(getApplicationContext(), "전화번호를 정확하게 작성하세요.");
-                    // If available request sign up [RETROFIT]
-                    else {
-                        // Create User JSON
-                        JSONObject reqObj = new JSONObject();
-                        reqObj.put("id", etID.getText().toString());
-                        reqObj.put("pw", etPW.getText().toString());
-                        reqObj.put("uname", etName.getText().toString());
-                        reqObj.put("rrn", etRRN.getText().toString());
-                        reqObj.put("gender", genderType);
-                        reqObj.put("phone", etPhone.getText().toString());
-                        reqObj.put("email", etEmail.getText().toString());
-
-                        // Request sign up [RETROFIT]
-                        Network.service.signup(reqObj).enqueue(new Callback<Boolean>() {
-                            @Override
-                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                                Toaster.show(getApplicationContext(), "가입이 완료되었습니다.");
-                                //Toast.makeText(getApplicationContext(), "가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                            }
-
-                            @Override
-                            public void onFailure(Call<Boolean> call, Throwable t) {
-                                Toaster.show(getApplicationContext(), "Error");
-                                //Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                                Log.e("Error", t.getMessage());
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         });
     }

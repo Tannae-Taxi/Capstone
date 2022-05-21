@@ -46,8 +46,10 @@ public class AccountActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tv_rrn_account)).setText("주민등록번호 : " + InnerDB.sp.getString("rrn", null));
         ((TextView) findViewById(R.id.tv_email_account)).setText("E-mail : " + InnerDB.sp.getString("email", null));
         ((TextView) findViewById(R.id.tv_phone_account)).setText("연락처 : " + InnerDB.sp.getString("phone", null));
-
-        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_account));
+        (toolbar = findViewById(R.id.topAppBar_account))
+                .setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -74,7 +76,5 @@ public class AccountActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
-
-        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
     }
 }

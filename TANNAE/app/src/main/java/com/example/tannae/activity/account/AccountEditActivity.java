@@ -51,7 +51,9 @@ public class AccountEditActivity extends AppCompatActivity {
         tvCheckPW = findViewById(R.id.tv_retrypw_account_edit);
         btnCheckID = findViewById(R.id.btn_checkid_account_edit);
         btnEdit = findViewById(R.id.btn_edit_account_edit);
-        toolbar = findViewById(R.id.topAppBar_accountedit);
+        (toolbar = findViewById(R.id.topAppBar_accountedit))
+                .setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), AccountActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -206,7 +208,5 @@ public class AccountEditActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
-
-        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), AccountActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
     }
 }

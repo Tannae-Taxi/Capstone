@@ -55,9 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setEventListeners() {
-        // Login [RETROFIT]
         btnLogin.setOnClickListener(v -> {
-            // Check if ID and PW is entered
             String id = etID.getText().toString();
             String pw = etPW.getText().toString();
             if (id.length() == 0 || pw.length() == 0)
@@ -66,10 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 login(id, pw, false);
         });
 
-        // Start Find Activity
         btnFind.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FindActivity.class)));
-
-        // Start Sign up Activity
         btnSignUp.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), SignUpActivity.class)));
 
     }
