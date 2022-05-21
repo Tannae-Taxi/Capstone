@@ -9,13 +9,13 @@
     android:padding="5dp">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal"
         android:layout_gravity="center">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="60"
             android:orientation="vertical">
