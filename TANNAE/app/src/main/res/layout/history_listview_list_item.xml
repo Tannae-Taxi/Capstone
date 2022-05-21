@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/tv_date_history_listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DATE"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/tv_origin_history_listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ORIGIN"/>
+
+    <TextView
+        android:id="@+id/tv_destination_history_listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DESTINATION"/>
+
+    <TextView
+        android:id="@+id/tv_cost_history_listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="COST"/>
+
+</LinearLayout>
