@@ -30,29 +30,23 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin, btnFind, btnSignUp;
     private long backKeyPressedTime = 0;
 
-    // < onCreate >
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Create Retrofit Client
         Network.service = RetrofitClient.getClient().create(ServiceApi.class);
         new InnerDB(getApplicationContext()).setSharedPreferences();
 
         String id = InnerDB.sp.getString("id", null);
         String pw = InnerDB.sp.getString("pw", null);
 
-        if (id != null) {
+        if (id != null)
             login(id, pw, true);
-        }
 
-        // Create Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Setting
         setViews();
         setEventListeners();
     }
 
-    // < Register views >
     private void setViews() {
         etID = findViewById(R.id.et_id_account_edit);
         etPW = findViewById(R.id.et_pw_account_edit);
@@ -61,7 +55,6 @@ public class LoginActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.btn_signup);
     }
 
-    // < Register event listeners >
     private void setEventListeners() {
         // Login [RETROFIT]
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -70,11 +63,10 @@ public class LoginActivity extends AppCompatActivity {
                 // Check if ID and PW is entered
                 String id = etID.getText().toString();
                 String pw = etPW.getText().toString();
-                if (id.length() == 0 || pw.length() == 0) {
+                if (id.length() == 0 || pw.length() == 0)
                     Toaster.show(getApplicationContext(), "로그인 정보를 입력하세요.");
-                    return;
-                }
-                login(id, pw, false);
+                else
+                    login(id, pw, false);
             }
         });
 
@@ -82,8 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), FindActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), FindActivity.class));
             }
         });
 
@@ -91,8 +82,7 @@ public class LoginActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
             }
         });
 
@@ -109,12 +99,10 @@ public class LoginActivity extends AppCompatActivity {
                     String message = res.getString("message");
 
                     if (message.equals("OK")) {
-                        JSONObject user = res.getJSONObject("result");
-                        InnerDB.setUser(user);
+                        InnerDB.setUser(res.getJSONObject("result"));
                         if (auto)
-                            Toaster.show(getApplicationContext(),InnerDB.sp.getString("uname", null) + "님이 자동로그인 되었습니다.");
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
+                            Toaster.show(getApplicationContext(), InnerDB.sp.getString("uname", null) + "님이 자동로그인 되었습니다.");
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     } else
                         Toaster.show(getApplicationContext(), message);
                 } catch (JSONException e) {
