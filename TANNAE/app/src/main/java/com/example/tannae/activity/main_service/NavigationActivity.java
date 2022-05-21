@@ -125,9 +125,7 @@ public class NavigationActivity extends AppCompatActivity {
                             message = "배차 오류가 발생하였습니다.\n고객센터에 문의하세요.";
                             break;
                     }
-                    Toaster.show(getApplicationContext(), message  + "FLAG : " + flag);
-                    System.out.println(path);
-
+                    Toaster.show(getApplicationContext(), message);
 
                     // Event handle by flag number
                     if (!(flag == -1 || flag == 0)) {
