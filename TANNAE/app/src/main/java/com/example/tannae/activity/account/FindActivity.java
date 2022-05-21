@@ -6,7 +6,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -76,54 +75,46 @@ public class FindActivity extends AppCompatActivity {
         });
 
         // Find account [RETROFIT]
-        btnFindAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Check if entered info's are available
-                if (etName.getText().toString().length() == 0)
-                    Toaster.show(getApplicationContext(), "이름을 입력하세요.");
-                else if (etRRN.getText().toString().length() != 14)
-                    Toaster.show(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.");
-                else if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString()).matches())
-                    Toaster.show(getApplicationContext(), "Email 을 정확하게 작성하세요.");
-                else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
-                    Toaster.show(getApplicationContext(), "전화번호를 정확하게 작성하세요.");
-                    // If available request server to find account [RETROFIT]
-                else {
-                    Network.service.findAccount(etName.getText().toString(), etRRN.getText().toString(), etEmail.getText().toString(), etPhone.getText().toString()).enqueue(new Callback<String>() {
-                        @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
-                            try {
-                                JSONObject res = new JSONObject(response.body());
-                                String message = res.getString("message");
+        btnFindAccount.setOnClickListener(v -> {
+            // Check if entered info's are available
+            if (etName.getText().toString().length() == 0)
+                Toaster.show(getApplicationContext(), "이름을 입력하세요.");
+            else if (etRRN.getText().toString().length() != 14)
+                Toaster.show(getApplicationContext(), "주민등록번호를 정확하게 입력하세요.");
+            else if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString()).matches())
+                Toaster.show(getApplicationContext(), "Email 을 정확하게 작성하세요.");
+            else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
+                Toaster.show(getApplicationContext(), "전화번호를 정확하게 작성하세요.");
+                // If available request server to find account [RETROFIT]
+            else {
+                Network.service.findAccount(etName.getText().toString(), etRRN.getText().toString(), etEmail.getText().toString(), etPhone.getText().toString()).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        try {
+                            JSONObject res = new JSONObject(response.body());
+                            String message = res.getString("message");
 
-                                if (message.equals("OK")) {
-                                    // Show ID and PW at screen
-                                    JSONObject user = res.getJSONObject("result");
-                                    tvMyId.setText("ID: " + user.getString("id"));
-                                    tvMyPw.setText("PW: " + user.getString("pw"));
-                                } else
-                                    Toaster.show(getApplicationContext(), message);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            if (message.equals("OK")) {
+                                // Show ID and PW at screen
+                                JSONObject user = res.getJSONObject("result");
+                                tvMyId.setText("ID: " + user.getString("id"));
+                                tvMyPw.setText("PW: " + user.getString("pw"));
+                            } else
+                                Toaster.show(getApplicationContext(), message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<String> call, Throwable t) {
-                            Toaster.show(getApplicationContext(), "Error");
-                            Log.e("Error", t.getMessage());
-                        }
-                    });
-                }
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Toaster.show(getApplicationContext(), "Error");
+                        Log.e("Error", t.getMessage());
+                    }
+                });
             }
         });
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class).putExtra("type", false));
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), LoginActivity.class).putExtra("type", false)));
     }
 }
