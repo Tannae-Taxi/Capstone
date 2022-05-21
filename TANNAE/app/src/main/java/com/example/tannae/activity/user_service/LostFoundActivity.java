@@ -1,29 +1,23 @@
 package com.example.tannae.activity.user_service;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
-import com.example.tannae.sub.Lost;
+import com.example.tannae.sub.Data;
+import com.example.tannae.sub.ListViewAdapter;
 import com.example.tannae.sub.Toaster;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,7 +71,7 @@ public class LostFoundActivity extends AppCompatActivity {
                         adapter = new ListViewAdapter();
                         for (int i = 0; i < lists.length(); i++) {
                             JSONObject list = lists.getJSONObject(i);
-                            adapter.addItem(new Lost(list.getString("date"), list.getString("license"), list.getString("type")));
+                            adapter.addItem(new Data(list.getString("date"), list.getString("license"), list.getString("type"), "Lost"));
                         }
                         listView.setAdapter(adapter);
                     } else {
@@ -95,53 +89,6 @@ public class LostFoundActivity extends AppCompatActivity {
                 Log.e("Error", t.getMessage());
             }
         });
-    }
-
-    public class ListViewAdapter extends BaseAdapter {
-        ArrayList<Lost> items = new ArrayList<Lost>();
-
-        @Override
-        public int getCount() {
-            return items.size();
-        }
-
-        public void addItem(Lost item) {
-            items.add(item);
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return items.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup viewGroup) {
-            final Context context = viewGroup.getContext();
-            final Lost lost = items.get(position);
-
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.lost_listview_list_item, viewGroup, false);
-            } else {
-                View view = new View(context);
-                view = (View) convertView;
-            }
-
-            TextView date = (TextView) convertView.findViewById(R.id.tv_date_lost_listview);
-            TextView license = (TextView) convertView.findViewById(R.id.tv_license_lost_listview);
-            TextView type = (TextView) convertView.findViewById(R.id.tv_type_lost_list_view);
-
-            date.setText("분실물 등록일 : " + lost.getData("date").toString());
-            license.setText("차량번호 : " + lost.getData("license").toString());
-            type.setText("분실물 : " + lost.getData("type").toString());
-
-            return convertView;
-        }
     }
 
     // < BackPress >

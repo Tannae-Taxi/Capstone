@@ -1,22 +1,15 @@
 package com.example.tannae.activity.user_service;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
-import com.example.tannae.sub.Content;
-
-import java.util.ArrayList;
+import com.example.tannae.sub.ListViewAdapter;
 
 public class FAQActivity extends AppCompatActivity {
 
@@ -32,14 +25,14 @@ public class FAQActivity extends AppCompatActivity {
         setViews();
         setEventListeners();
         adapter = new ListViewAdapter();
-        adapter.addItem(new Content("FAQ Title", "내용1"));
+        /*adapter.addItem(new Content("FAQ Title", "내용1"));
         adapter.addItem(new Content("제목2", "내용2"));
         adapter.addItem(new Content("제목1", "내용1"));
         adapter.addItem(new Content("제목2", "내용2"));
         adapter.addItem(new Content("제목1", "내용1"));
         adapter.addItem(new Content("제목2", "내용2"));
         adapter.addItem(new Content("제목1", "내용1"));
-        adapter.addItem(new Content("제목2", "내용2"));
+        adapter.addItem(new Content("제목2", "내용2"));*/
         listView.setAdapter(adapter);
     }
 
@@ -70,52 +63,5 @@ public class FAQActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    public class ListViewAdapter extends BaseAdapter {
-        ArrayList<Content> items = new ArrayList<Content>();
-
-        @Override
-        public int getCount() {
-            return items.size();
-        }
-
-        public void addItem(Content item) {
-            items.add(item);
-        }
-        @Override
-        public Object getItem(int position) {
-            return items.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup viewGroup) {
-            final Context context = viewGroup.getContext();
-            final Content list = items.get(position);
-
-            if(convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.community_listview_list_item, viewGroup, false);
-
-            }else {
-                View view = new View(context);
-                view = (View) convertView;
-
-            }
-
-            TextView title = (TextView) convertView.findViewById(R.id.tv_title);
-            TextView content = (TextView) convertView.findViewById(R.id.tv_content);
-
-            title.setText(list.getTitle());
-            content.setText(list.getContent());
-
-            return convertView;
-        }
-
     }
 }

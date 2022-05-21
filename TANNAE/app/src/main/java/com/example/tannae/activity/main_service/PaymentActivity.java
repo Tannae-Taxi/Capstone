@@ -1,17 +1,12 @@
 package com.example.tannae.activity.main_service;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,14 +14,14 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.tannae.R;
 import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
+import com.example.tannae.sub.Data;
 import com.example.tannae.sub.InnerDB;
-import com.example.tannae.sub.Receipt;
+import com.example.tannae.sub.ListViewAdapter;
 import com.example.tannae.sub.Toaster;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import retrofit2.Call;
@@ -142,63 +137,13 @@ public class PaymentActivity extends AppCompatActivity {
                 String origin = res.getString("start");
                 String destination = res.getString("end");
                 int cost = res.getInt("cost");
-                adapter.addItem(new Receipt(usn, origin, destination, cost));
+                adapter.addItem(new Data(usn, origin, destination, cost, "Payment"));
             }
 
             // Set adapter
             listView.setAdapter(adapter);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    private class ListViewAdapter extends BaseAdapter {
-        ArrayList<Receipt> items = new ArrayList<Receipt>();
-
-        @Override
-        public int getCount() {
-            return items.size();
-        }
-
-        public void addItem(Receipt item) {
-            items.add(item);
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return items.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup viewGroup) {
-            final Context context = viewGroup.getContext();
-            final Receipt receipt = items.get(position);
-
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.payment_listview_list_item, viewGroup, false);
-
-            } else {
-                View view = new View(context);
-                view = (View) convertView;
-            }
-
-            TextView usn = (TextView) convertView.findViewById(R.id.tv_usn_payment);
-            TextView origin = (TextView) convertView.findViewById(R.id.tv_origin_payment);
-            TextView destination = (TextView) convertView.findViewById(R.id.tv_destination_payment);
-            TextView cost = (TextView) convertView.findViewById(R.id.tv_cost_payment);
-
-            usn.setText(receipt.getData("usn").toString());
-            origin.setText(receipt.getData("origin").toString());
-            destination.setText(receipt.getData("destination").toString());
-            cost.setText(Integer.toString((Integer) receipt.getData("cost")));
-
-            return convertView;
         }
     }
 
