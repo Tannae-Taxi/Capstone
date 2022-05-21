@@ -22,11 +22,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+// << AccountActivity >>
 public class AccountActivity extends AppCompatActivity {
     private Button btnEdit;
     private Button btnSignOut;
-    private TextView tvID, tvPW, tvGender, tvUname, tvRrn, tvEmail, tvPhone;
     private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,47 +36,30 @@ public class AccountActivity extends AppCompatActivity {
         setEventListeners();
     }
 
-    private void setViews(){
+    private void setViews() {
         btnEdit = findViewById(R.id.btn_edit_account);
         btnSignOut = findViewById(R.id.btn_sign_out_account);
 
-        tvID = findViewById(R.id.tv_id_account);
-        tvID.setText("아이디: " + InnerDB.sp.getString("id", null));
+        ((TextView) findViewById(R.id.tv_id_account)).setText("ID : " + InnerDB.sp.getString("id", null));
+        ((TextView) findViewById(R.id.tv_pw_account)).setText("PW : " + InnerDB.sp.getString("pw", null));
+        ((TextView) findViewById(R.id.tv_gender_account)).setText("성별 : " + (InnerDB.sp.getInt("gender", 0) == 1 ? "남자" : "여자"));
+        ((TextView) findViewById(R.id.tv_uname_account)).setText("이름 : " + InnerDB.sp.getString("uname", null));
+        ((TextView) findViewById(R.id.tv_rrn_account)).setText("주민등록번호 : " + InnerDB.sp.getString("rrn", null));
+        ((TextView) findViewById(R.id.tv_email_account)).setText("E-mail : " + InnerDB.sp.getString("email", null));
+        ((TextView) findViewById(R.id.tv_phone_account)).setText("연락처 : " + InnerDB.sp.getString("phone", null));
 
-        tvPW = findViewById(R.id.tv_pw_account);
-        tvPW.setText("비밀번호: " + InnerDB.sp.getString("pw", null));
-
-        tvGender = findViewById(R.id.tv_gender_account);
-        String gender = InnerDB.sp.getInt("gender", 0) == 1? "남" : "여";
-        tvGender.setText("성별: " + gender);
-
-        tvUname = findViewById(R.id.tv_uname_account);
-        tvUname.setText("이름: " + InnerDB.sp.getString("uname", null));
-
-        tvRrn = findViewById(R.id.tv_rrn_account);
-        tvRrn.setText("주민등록번호: " + InnerDB.sp.getString("rrn", null));
-
-        tvEmail = findViewById(R.id.tv_email_account);
-        tvEmail.setText("이메일: " + InnerDB.sp.getString("email", null));
-
-        tvPhone = findViewById(R.id.tv_phone_account);
-        tvPhone.setText("연락처: " + InnerDB.sp.getString("phone", null));
-
-
-        toolbar = findViewById(R.id.topAppBar_account);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_account));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void setEventListeners(){
+    private void setEventListeners() {
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), AccountEditActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), AccountEditActivity.class));
             }
         });
+
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,9 +69,7 @@ public class AccountActivity extends AppCompatActivity {
                         public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                             Toaster.show(getApplicationContext(), "TANNAE를 이용해주셔서 감사합니다.");
                             InnerDB.editor.clear().apply();
-                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
+                            startActivity(new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         }
 
                         @Override
@@ -99,9 +81,9 @@ public class AccountActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,11 +94,8 @@ public class AccountActivity extends AppCompatActivity {
         });
     }
 
-    // < BackPress >
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 }
