@@ -44,7 +44,6 @@
         <activity android:name=".activity.user_service.QnADetailActivity"/>
         <activity android:name=".activity.user_service.QnAEditActivity"/>
         <activity android:name=".activity.user_service.FAQActivity"/>
-        <activity android:name=".activity.user_service.FAQEditActivity"/>
 
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="be32c53145962ae88db090324e2223b0"/>
     </application>

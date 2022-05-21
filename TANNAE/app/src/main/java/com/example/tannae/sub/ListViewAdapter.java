@@ -1,13 +1,16 @@
 package com.example.tannae.sub;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.tannae.R;
+import com.example.tannae.activity.user_service.QnADetailActivity;
 
 import java.util.ArrayList;
 
@@ -43,7 +46,8 @@ public class ListViewAdapter extends BaseAdapter {
             int layout = data.getType().equals("Payment") ? R.layout.payment_listview_list_item
                     : data.getType().equals("Lost") ? R.layout.lost_listview_list_item
                     : data.getType().equals("History") ? R.layout.history_listview_list_item
-                    : R.layout.content_listview_list_item;
+                    : data.getType().equals("QnA") ? R.layout.qna_listview_list_item
+                    : R.layout.faq_listview_list_item;
             convertView = inflater.inflate(layout, parent, false);
         } else {
             View view = new View(context);
@@ -64,8 +68,19 @@ public class ListViewAdapter extends BaseAdapter {
             ((TextView) convertView.findViewById(R.id.tv_origin_history_listview)).setText("출발지 : " + data.getData("origin").toString());
             ((TextView) convertView.findViewById(R.id.tv_destination_history_listview)).setText("도착지 : " + data.getData("destination").toString());
             ((TextView) convertView.findViewById(R.id.tv_cost_history_listview)).setText("요금 : " + data.getData("cost").toString());
-        } else if (data.getType().equals("Content")) {
-
+        } else if (data.getType().equals("QnA")) {
+            ((TextView) convertView.findViewById(R.id.tv_title_qna_listview)).setText(data.getData("title").toString());
+            ((LinearLayout) convertView.findViewById(R.id.layout_qna_listview)).setOnClickListener(v -> context.startActivity(new Intent(context, QnADetailActivity.class)
+                    .putExtra("csn", data.getData("csn").toString())
+                    .putExtra("usn", data.getData("usn").toString())
+                    .putExtra("title", data.getData("title").toString())
+                    .putExtra("content", data.getData("content").toString())
+                    .putExtra("answer", data.getData("answer").toString())));
+            ((TextView) convertView.findViewById(R.id.tv_title_qna_listview)).setText(data.getData("title").toString());
+        } else if(data.getType().equals("FAQ")) {
+            ((TextView) convertView.findViewById(R.id.tv_title_faq_listview)).setText(data.getData("title").toString());
+            ((TextView) convertView.findViewById(R.id.tv_content_faq_listview)).setText(data.getData("content").toString());
+            ((TextView) convertView.findViewById(R.id.tv_answer_faq_listview)).setText(data.getData("answer").toString());
         }
 
         return convertView;

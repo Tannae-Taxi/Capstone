@@ -2,19 +2,28 @@ package com.example.tannae.activity.user_service;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
+import com.example.tannae.network.Network;
+import com.example.tannae.sub.Data;
 import com.example.tannae.sub.ListViewAdapter;
+import com.example.tannae.sub.Toaster;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FAQActivity extends AppCompatActivity {
-
     private Toolbar toolbar;
-
     private ListView listView = null;
     private ListViewAdapter adapter = null;
 
@@ -24,43 +33,57 @@ public class FAQActivity extends AppCompatActivity {
         setContentView(R.layout.activity_faq);
         setViews();
         setEventListeners();
-        adapter = new ListViewAdapter();
-        /*adapter.addItem(new Content("FAQ Title", "내용1"));
-        adapter.addItem(new Content("제목2", "내용2"));
-        adapter.addItem(new Content("제목1", "내용1"));
-        adapter.addItem(new Content("제목2", "내용2"));
-        adapter.addItem(new Content("제목1", "내용1"));
-        adapter.addItem(new Content("제목2", "내용2"));
-        adapter.addItem(new Content("제목1", "내용1"));
-        adapter.addItem(new Content("제목2", "내용2"));*/
-        listView.setAdapter(adapter);
+        setAdapter();
     }
-
-    // < BackPress >
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
 
     private void setViews() {
         toolbar = findViewById(R.id.topAppBar_faq);
-
-        listView = (ListView) findViewById(R.id.lv_list_faq);
-
+        listView = findViewById(R.id.lv_list_faq);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setEventListeners() {
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
+    }
+
+    private void setAdapter() {
+        Network.service.getContent().enqueue(new Callback<String>() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+            public void onResponse(Call<String> call, Response<String> response) {
+                try {
+                    JSONObject res = new JSONObject(response.body());
+                    String message = res.getString("message");
+                    if (message.equals("OK")) {
+                        JSONArray lists = res.getJSONArray("result");
+                        adapter = new ListViewAdapter();
+                        boolean faq = false;
+                        for (int i = 0; i < lists.length(); i++) {
+                            JSONObject list = lists.getJSONObject(i);
+                            int state = list.getInt("state");
+                            if (state == 1) {
+                                adapter.addItem(new Data(list.getString("usn"),
+                                        list.getString("title"), list.getString("content"), list.getString("answer"),
+                                        state, "FAQ"));
+                                faq = true;
+                            }
+                        }
+                        if (!faq) {
+                            Toaster.show(getApplicationContext(), "등록된 FAQ 가 없습니다.");
+                            startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        } else
+                            listView.setAdapter(adapter);
+                    } else
+                        Toaster.show(getApplicationContext(), message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toaster.show(getApplicationContext(), "Error");
+                Log.e("Error", t.getMessage());
             }
         });
     }

@@ -37,6 +37,8 @@ public interface ServiceApi {
     Call<String> getContent();
     @POST("/user/editContent")              // Edit content
     Call<Boolean> editContent(@Body JSONObject content);
+    @POST("/user/deleteContent")            // Delete content
+    Call<Boolean> deleteContent(@Body JSONObject content);
     @POST("/user/postContent")              // Post Content
     Call<Boolean> postContent(@Body JSONObject content);
     @POST("/user/evaluate")                 // Post evaluate

@@ -3,7 +3,6 @@ package com.example.tannae.activity.user_service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,59 +35,39 @@ public class PointActivity extends AppCompatActivity {
         setEventListeners();
     }
 
-    // < BackPress >
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
     private void setViews() {
-        tvPoint = findViewById(R.id.tv_point_point);
+        (tvPoint = findViewById(R.id.tv_point_point)).setText(InnerDB.sp.getInt("points", 0) + "원");
         etCharge = findViewById(R.id.et_charge_point);
         btnCharge = findViewById(R.id.btn_charge_point);
-        toolbar = findViewById(R.id.topAppBar_point);
-        tvPoint.setText(InnerDB.sp.getInt("points", 0) + "원");
-        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_point));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
     }
 
     private void setEventListeners() {
-        btnCharge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int charge = Integer.parseInt(etCharge.getText().toString());
-                final int currentPoint = InnerDB.sp.getInt("points", 0) + charge;
-                InnerDB.editor.putInt("points", currentPoint).apply();
+        btnCharge.setOnClickListener(v -> {
+            int charge = Integer.parseInt(etCharge.getText().toString());
+            final int currentPoint = InnerDB.sp.getInt("points", 0) + charge;
+            InnerDB.editor.putInt("points", currentPoint).apply();
 
-                try {
-                    Network.service.charge(InnerDB.getUser()).enqueue(new Callback<Boolean>() {
-                        @Override
-                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                            etCharge.setText("");
-                            tvPoint.setText(InnerDB.sp.getInt("points", 0) + "원");
-                            Toaster.show(getApplicationContext(), "포인트가 충전되었습니다.");
-                        }
+            try {
+                Network.service.charge(InnerDB.getUser()).enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        etCharge.setText("");
+                        tvPoint.setText(InnerDB.sp.getInt("points", 0) + "원");
+                        Toaster.show(getApplicationContext(), "포인트가 충전되었습니다.");
+                    }
 
-                        @Override
-                        public void onFailure(Call<Boolean> call, Throwable t) {
-                            InnerDB.editor.putInt("points", currentPoint - charge).apply();
-                            Toaster.show(getApplicationContext(), "Error");
-                            Log.e("Error", t.getMessage());
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        InnerDB.editor.putInt("points", currentPoint - charge).apply();
+                        Toaster.show(getApplicationContext(), "Error");
+                        Log.e("Error", t.getMessage());
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         });
     }

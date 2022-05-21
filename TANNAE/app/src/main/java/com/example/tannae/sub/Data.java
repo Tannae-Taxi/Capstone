@@ -1,9 +1,12 @@
 package com.example.tannae.sub;
 
+import android.content.Context;
+
 import java.util.HashMap;
 
 public class Data<T> {
     private HashMap<String, Object> data = new HashMap<>();
+    private Context context;
     private String cType;
 
     public Data(String date, String license, String type, String cType) {
@@ -17,6 +20,25 @@ public class Data<T> {
         data.put("origin", origin);
         data.put("destination", destination);
         data.put("cost", cost);
+        this.cType = cType;
+    }
+    public Data(String usn, String title, String content, String answer, int state, String cType) {
+        data.put("usn", usn);
+        data.put("title", title);
+        data.put("content", content);
+        data.put("answer", answer);
+        data.put("state", state == 1);
+        this.cType = cType;
+    }
+
+    public Data(String csn, String usn, String title, String content, String answer, int state, Context context, String cType) {
+        data.put("csn", csn);
+        data.put("usn", usn);
+        data.put("title", title);
+        data.put("content", content);
+        data.put("answer", answer);
+        data.put("state", state == 1);
+        this.context = context;
         this.cType = cType;
     }
     public Object getData(String key) {

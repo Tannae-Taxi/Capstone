@@ -3,7 +3,6 @@ package com.example.tannae.activity.user_service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,9 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LostFoundActivity extends AppCompatActivity {
-
     private Toolbar toolbar;
-
     private ListView listView = null;
     private ListViewAdapter adapter = null;
 
@@ -40,23 +37,13 @@ public class LostFoundActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        toolbar = findViewById(R.id.topAppBar_lost_found);
-
         listView = (ListView) findViewById(R.id.lv_list_lost_found);
-
-        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_lost_found));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setEventListeners() {
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
     }
 
     private void setAdapter() {
@@ -76,7 +63,7 @@ public class LostFoundActivity extends AppCompatActivity {
                         listView.setAdapter(adapter);
                     } else {
                         Toaster.show(getApplicationContext(), message);
-                        onBackPressed();
+                        startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -89,13 +76,5 @@ public class LostFoundActivity extends AppCompatActivity {
                 Log.e("Error", t.getMessage());
             }
         });
-    }
-
-    // < BackPress >
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
     }
 }

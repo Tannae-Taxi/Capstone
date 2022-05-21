@@ -51,10 +51,7 @@ public class MainActivity extends AppCompatActivity {
         reqBtn = findViewById(R.id.req_button_main);
         bottomAppBar = findViewById(R.id.bottomAppBar_main);
         (drive = findViewById(R.id.item_drive_menu)).setVisibility(InnerDB.sp.getInt("drive", 0) == 1 ? View.VISIBLE : View.INVISIBLE);
-        (toolbar = findViewById(R.id.topAppBar_main)).setNavigationOnClickListener(v -> {
-            mapViewContainer.removeView(mapView);
-            startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        });
+        toolbar = findViewById(R.id.topAppBar_main);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
@@ -80,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
             mapViewContainer.removeView(mapView);
             startActivity(new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", true));
             return true;
+        });
+
+        toolbar.setNavigationOnClickListener(v -> {
+            mapViewContainer.removeView(mapView);
+            startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         });
     }
 
