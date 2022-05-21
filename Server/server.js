@@ -95,6 +95,7 @@ app.get('/account/checkUser', async (req, res) => {
         console.log(`MySQL error : ${err.code}`);
     }
 });
+
 // < Sign Up >
 app.post('/account/signup', async (req, res) => {
     let data = req.body.nameValuePairs;
@@ -111,6 +112,7 @@ app.post('/account/signup', async (req, res) => {
                 for (let j = 0; j < 5 - (i + 1).toString().length; j++)
                     usnNew += '0';
                 usnNew += (i + 1);
+                break;
             }
         }
         if (usnNew === 'u') {
@@ -323,8 +325,23 @@ app.post('/user/editContent', async (req, res) => {
 
     try {
         // Update Content
-        await connection.query(`update Content set title = '${data.title}', cont = '${data.cont}' where usn = '${data.usn}'`);
+        await connection.query(`update Content set title = '${data.title}', content = '${data.content}', answer = '${data.answer}' where usn = '${data.usn}'`);
         console.log(`/user/editContent : User ${data.usn} edited content`);
+        res.json(true);
+    } catch (err) {
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
+    }
+});
+
+// < Delete Content >
+app.post(`/user/deleteContent`, async (req, res) => {
+    let data = req.body.nameValuePairs;
+
+    try {
+        // Delete content
+        await connection.query(`delete from Content where csn = '${data.csn}' and usn = '${data.usn}'`);
+        console.log(`/user/deleteContent : User ${data.usn} deleted content ${data.csn}`);
         res.json(true);
     } catch (err) {
         // MySQL Error
@@ -348,6 +365,7 @@ app.post('/user/postContent', async (req, res) => {
                 for (let j = 0; j < 5 - (i + 1).toString().length; j++)
                     csnNew += '0';
                 csnNew += (i + 1);
+                break;
             }
         }
         if (csnNew === 'c') {
@@ -535,6 +553,7 @@ io.on('connection', (socket) => {
                     for (let j = 0; j < 5 - (i + 1).toString().length; j++)
                         hsnNew += '0';
                     hsnNew += (i + 1);
+                    break;
                 }
             }
             if (hsnNew === 'h') {
