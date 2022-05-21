@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -35,29 +34,21 @@ public class NavigationActivity extends AppCompatActivity {
     private MapView mapView;
     private ViewGroup mapViewContainer;
     private boolean type;
-    private MapPolyline polyline;
-    private MapPoint point;
 
-    // < onCreate >
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Create Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-
-        // Setting
         setViews();
         setEventListeners();
         setNetworks();
 
-        // If main -> navigation ? true : false
         type = getIntent().getBooleanExtra("type", false);
         btnPass.setBackgroundColor(Color.parseColor("#BDBDBD"));
         btnEndService.setBackgroundColor(Color.parseColor("#BDBDBD"));
 
-        // Set Map
         mapView = new MapView(this);
-        mapViewContainer = (ViewGroup) findViewById(R.id.map_view_navigation);
+        mapViewContainer = findViewById(R.id.map_view_navigation);
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
         mapViewContainer.addView(mapView);
         try {
@@ -77,14 +68,6 @@ public class NavigationActivity extends AppCompatActivity {
         }
     }
 
-    // < onPause >
-    /*Override
-    /protected void onPause() {
-        super.onPause();
-        mapViewContainer.removeView(mapView);
-    } */
-
-    // < Set Socket.io >
     private void setNetworks() {
         // Response service
         Network.socket.on("responseService", args -> {
@@ -159,10 +142,7 @@ public class NavigationActivity extends AppCompatActivity {
                                 InnerDB.editor.putString("path", null).apply();
 
                                 mapViewContainer.removeView(mapView);
-
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             } else if (path != null) {      // When not current user and path is still left
                                 // Set inner DB
                                 InnerDB.editor.putString("path", path.toString()).apply();
@@ -195,10 +175,7 @@ public class NavigationActivity extends AppCompatActivity {
                         }
                     } else {    // When there is no vehicle available
                         mapViewContainer.removeView(mapView);
-
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -207,18 +184,11 @@ public class NavigationActivity extends AppCompatActivity {
         });
 
         // End service
-        Network.socket.on("serviceEnd", args -> {
-            runOnUiThread(() -> {
-                JSONObject result = (JSONObject) args[0];
-                Toaster.show(getApplicationContext(), "운행이 종료되었습니다.\n영수증을 확인하여 주세요.");
-
-                mapViewContainer.removeView(mapView);
-
-                Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
-                intent.putExtra("result", result.toString());
-                startActivity(intent);
-            });
-        });
+        Network.socket.on("serviceEnd", args -> runOnUiThread(() -> {
+            Toaster.show(getApplicationContext(), "운행이 종료되었습니다.\n영수증을 확인하여 주세요.");
+            mapViewContainer.removeView(mapView);
+            startActivity(new Intent(getApplicationContext(), PaymentActivity.class).putExtra("result", args[0].toString()));
+        }));
     }
 
     // < Register views >
@@ -232,44 +202,31 @@ public class NavigationActivity extends AppCompatActivity {
     // < Register event listeners >
     private void setEventListeners() {
         // Pass next waypoint [SOCKET]
-        btnPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    JSONObject driver = InnerDB.getUser();
-                    Network.socket.emit("passWaypoint", driver);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+        btnPass.setOnClickListener(v -> {
+            try {
+                Network.socket.emit("passWaypoint", InnerDB.getUser());
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         });
         // End service [SOCKET]
-        btnEndService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    JSONObject driver = InnerDB.getUser();
-                    Network.socket.emit("serviceEnd", driver);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+        btnEndService.setOnClickListener(v -> {
+            try {
+                Network.socket.emit("serviceEnd", InnerDB.getUser());
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         });
         // Change service availability [SOCKET]
-        switchDrive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (btnEndService.isEnabled()) {
-                    Toaster.show(getApplicationContext(), "요금을 정산해주세요.");
-                    switchDrive.setChecked(false);
-                } else {
-                    try {
-                        JSONObject driver = InnerDB.getUser();
-                        driver.put("service", isChecked);
-                        Network.socket.emit(isChecked ? "serviceOn" : "serviceOff", driver);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+        switchDrive.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (btnEndService.isEnabled()) {
+                Toaster.show(getApplicationContext(), "요금을 정산해주세요.");
+                switchDrive.setChecked(false);
+            } else {
+                try {
+                    Network.socket.emit(isChecked ? "serviceOn" : "serviceOff", InnerDB.getUser().put("service", isChecked));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -283,19 +240,19 @@ public class NavigationActivity extends AppCompatActivity {
                 mapView.removePolyline(mp);
 
             // INIT
-            polyline = new MapPolyline();
+            MapPolyline polyline = new MapPolyline();
             polyline.setLineColor(Color.argb(128, 0, 0, 255));
             JSONObject origin = path.getJSONObject("origin");
             JSONObject destination = path.getJSONObject("destination");
             JSONArray waypoints = path.getJSONArray("waypoints");
 
             // Add points
-            polyline.addPoint(point.mapPointWithGeoCoord(origin.getDouble("y"), origin.getDouble("x")));
+            polyline.addPoint(MapPoint.mapPointWithGeoCoord(origin.getDouble("y"), origin.getDouble("x")));
             for (int i = 0; i < waypoints.length(); i++) {
                 JSONObject waypoint = waypoints.getJSONObject(i);
-                polyline.addPoint(point.mapPointWithGeoCoord(waypoint.getDouble("y"), waypoint.getDouble("x")));
+                polyline.addPoint(MapPoint.mapPointWithGeoCoord(waypoint.getDouble("y"), waypoint.getDouble("x")));
             }
-            polyline.addPoint(point.mapPointWithGeoCoord(destination.getDouble("y"), destination.getDouble("x")));
+            polyline.addPoint(MapPoint.mapPointWithGeoCoord(destination.getDouble("y"), destination.getDouble("x")));
 
             // Show
             mapView.addPolyline(polyline);
@@ -314,12 +271,8 @@ public class NavigationActivity extends AppCompatActivity {
             if (type && !InnerDB.sp.getString("path", "NULL").equals("NULL")) {
                 Toaster.show(getApplicationContext(), "운행중에는 내비게이션을 종료할 수 없습니다.");
             } else {
-
                 mapViewContainer.removeView(mapView);
-
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         }
     }

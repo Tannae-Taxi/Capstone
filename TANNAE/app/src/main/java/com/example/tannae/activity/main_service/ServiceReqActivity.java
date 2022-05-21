@@ -2,13 +2,11 @@ package com.example.tannae.activity.main_service;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,13 +24,11 @@ import org.json.JSONObject;
 
 // << ServiceReq Activity >>
 public class ServiceReqActivity extends AppCompatActivity implements MapView.MapViewEventListener, MapView.POIItemEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
-    private RadioGroup rgLocation;
     private TextView tvOrigin, tvDestination;
-    private Button btnServiceReq, btnBack;
+    private Button btnServiceReq;
     private Switch switchShare;
     private MapView mapView;
     private ViewGroup mapViewContainer;
-    private MapPoint mapPoint;
     private MapPOIItem marker;
     private boolean locationType = true;
     private String originLocation, destinationLocation;
@@ -41,17 +37,43 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
     // < onCreate >
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Create Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_servicereq);
-
-        // Setting
         setViews();
         setEventListeners();
+        setMapView();
+    }
 
-        // Set Map
+    private void setViews() {
+        btnServiceReq = findViewById(R.id.btn_request_servicereq);
+        tvOrigin = findViewById(R.id.tv_origin_servicereq);
+        tvDestination = findViewById(R.id.tv_destination_servicereq);
+        switchShare = findViewById(R.id.switch_share_servicereq);
+        findViewById(R.id.btn_back_servicereq).setOnClickListener(v -> onBackPressed());
+        ((RadioGroup) findViewById(R.id.rg_location_servicereq)).setOnCheckedChangeListener((group, checkedId) -> locationType = checkedId == R.id.rb_origin_servicereq);
+    }
+
+    private void setEventListeners() {
+        btnServiceReq.setOnClickListener(v -> {
+            if (!(originLocation == null || destinationLocation == null))
+                try {
+                    JSONObject data = new JSONObject().put("start", new JSONObject().put("name", originLocation).put("x", originX).put("y", originY))
+                            .put("end", new JSONObject().put("name", destinationLocation).put("x", destinationX).put("y", destinationY))
+                            .put("share", switchShare.isChecked()).put("user", InnerDB.getUser());
+
+                    mapViewContainer.removeView(mapView);
+                    startActivity(new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", false).putExtra("data", data.toString()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            else
+                Toaster.show(getApplicationContext(), "주변에 정차할 수 있는 도로가 없습니다.\n올바른 위치를 입력해주세요.");
+        });
+    }
+
+    private void setMapView() {
         mapView = new MapView(this);
-        mapViewContainer = (ViewGroup) findViewById(R.id.map_view_servicereq);
+        mapViewContainer = findViewById(R.id.map_view_servicereq);
 
         mapView.setMapViewEventListener(this);
         mapView.setPOIItemEventListener(this);
@@ -67,98 +89,17 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         mapViewContainer.addView(mapView);
     }
 
-
-    /*@Override
-    protected void onPause() {
-        super.onPause();
-        mapViewContainer.removeView(mapView);
-    } */
-
-    // < Register views >
-    private void setViews() {
-        rgLocation = findViewById(R.id.rg_location_servicereq);
-        btnServiceReq = findViewById(R.id.btn_request_servicereq);
-        btnBack = findViewById(R.id.btn_back_servicereq);
-        tvOrigin = findViewById(R.id.tv_origin_servicereq);
-        tvDestination = findViewById(R.id.tv_destination_servicereq);
-        switchShare = findViewById(R.id.switch_share_servicereq);
-    }
-
-    // < Register event listeners >
-    private void setEventListeners() {
-        // Back button
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        rgLocation.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                locationType = (checkedId == R.id.rb_origin_servicereq) ? true : false;
-            }
-        });
-
-
-        // Request Service [SOCKET]
-        btnServiceReq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!(originLocation == null || destinationLocation == null)) {
-                    try {
-                        // Create JSON
-                        JSONObject start = new JSONObject();
-                        start.put("name", originLocation);
-                        start.put("x", originX);
-                        start.put("y", originY);
-
-                        JSONObject end = new JSONObject();
-                        end.put("name", destinationLocation);
-                        end.put("x", destinationX);
-                        end.put("y", destinationY);
-
-                        JSONObject user = new JSONObject(); // 현재 로그인되어 있는 InnerDB(SharedPreferences에 저장된) 정보를 json 형태로 전환
-                        user = InnerDB.getUser();
-
-                        JSONObject data = new JSONObject();
-                        data.put("start", start);
-                        data.put("end", end);
-                        data.put("share", switchShare.isChecked());
-                        data.put("user", user);
-
-                        mapViewContainer.removeView(mapView);
-
-                        Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
-                        intent.putExtra("type", false);
-                        intent.putExtra("data", data.toString());
-                        startActivity(intent);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Toaster.show(getApplicationContext(), "주변에 정차할 수 있는 도로가 없습니다.\n올바른 위치를 입력해주세요.");
-                    //Toast.makeText(getApplicationContext(), "주변에 정차할 수 있는 도로가 없습니다.\n올바른 위치를 입력해주세요.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
     // < BackPress >
     @Override
     public void onBackPressed() {
         mapViewContainer.removeView(mapView);
-
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     // < Map Methods >
     @Override
     public void onMapViewInitialized(MapView mapView) {
-        mapPoint = mapView.getMapCenterPoint();
+        MapPoint mapPoint = mapView.getMapCenterPoint();
         MapReverseGeoCoder mapGeoCoder = new MapReverseGeoCoder("be32c53145962ae88db090324e2223b0",
                 mapPoint, this, ServiceReqActivity.this);
         mapGeoCoder.startFindingAddress();

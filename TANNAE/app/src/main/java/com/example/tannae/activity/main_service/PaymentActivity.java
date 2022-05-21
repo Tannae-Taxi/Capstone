@@ -51,68 +51,47 @@ public class PaymentActivity extends AppCompatActivity {
         setViews();
         setEventListeners();
         setAdapter();
-
     }
 
     private void setViews() {
         btnSend = findViewById(R.id.btn_send_payment);
         rbDriverRating = findViewById(R.id.rb_driverrating_payment);
         listView = findViewById(R.id.lv_receipt_payment);
-        toolbar = findViewById(R.id.topAppBar_payment);
+        (toolbar = findViewById(R.id.topAppBar_payment)).setNavigationOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setEventListeners() {
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if(InnerDB.getUser().getString("usn").equals(result.getString("driver"))) {
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    } else {
-                        JSONObject data = new JSONObject();
-                        data.put("license", license);
-                        data.put("score", rbDriverRating.getRating());
-                        data.put("usn", InnerDB.getUser().getString("usn"));
-                        Network.service.evaluate(data).enqueue(new Callback<Boolean>() {
-                            @Override
-                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                                Toaster.show(getApplicationContext(), "평가를 완료하였습니다.");
-                                //Toast.makeText(getApplicationContext(), "평가를 완료하였습니다.", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                            }
+        btnSend.setOnClickListener(v -> {
+            try {
+                if(InnerDB.getUser().getString("usn").equals(result.getString("driver")))
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                else {
+                    JSONObject data = new JSONObject();
+                    data.put("license", license);
+                    data.put("score", rbDriverRating.getRating());
+                    data.put("usn", InnerDB.getUser().getString("usn"));
+                    Network.service.evaluate(data).enqueue(new Callback<Boolean>() {
+                        @Override
+                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                            Toaster.show(getApplicationContext(), "평가를 완료하였습니다.");
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        }
 
-                            @Override
-                            public void onFailure(Call<Boolean> call, Throwable t) {
-                                Toaster.show(getApplicationContext(), "Error");
-                                //Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                                Log.e("Error", t.getMessage());
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                        @Override
+                        public void onFailure(Call<Boolean> call, Throwable t) {
+                            Toaster.show(getApplicationContext(), "Error");
+                            Log.e("Error", t.getMessage());
+                        }
+                    });
                 }
-            }
-        });
-        rbDriverRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-
-            }
-        });
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         });
     }
@@ -151,6 +130,5 @@ public class PaymentActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Toaster.show(getApplicationContext(), "확인 버튼을 눌러주세요.");
-        //Toast.makeText(getApplicationContext(), "확인 버튼을 눌러주세요.", Toast.LENGTH_SHORT).show();
     }
 }
