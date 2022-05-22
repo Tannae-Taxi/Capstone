@@ -39,22 +39,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="2022.05.19" />
+                android:text="DATE" />
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
             <Button
                 android:id="@+id/btn_edit_qna_detail"
+                style="@style/Widget.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
                 android:text="수정하기"/>
             <Button
                 android:id="@+id/btn_delete_qna_detail"
+                style="@style/Widget.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
                 android:text="삭제하기"/>
         </LinearLayout>
 
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:gravity="center"
-            android:hint="Question Title" />
+            android:hint="TITLE" />
 
         <TextView
             android:id="@+id/tv_content_qna_detail"
@@ -73,7 +73,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/text_border"
             android:inputType="textMultiLine"
-            android:hint="Question Content" />
+            android:text="CONTENT" />
 
 
         <TextView
@@ -82,7 +82,7 @@
             android:layout_height="100dp"
             android:layout_marginHorizontal="10dp"
             android:background="@drawable/text_border"
-            android:hint="아직 답변이 등록되지 않았습니다." />
+            android:text="ANSWER" />
 
 
         <EditText
@@ -97,6 +97,7 @@
 
         <Button
             android:id="@+id/btn_answer_qna_detail"
+            style="@style/Widget.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
