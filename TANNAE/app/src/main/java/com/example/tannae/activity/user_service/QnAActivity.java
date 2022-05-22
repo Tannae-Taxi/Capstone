@@ -57,7 +57,7 @@ public class QnAActivity extends AppCompatActivity {
     }
 
     private void setEventListeners() {
-        fabQnA.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), QnAEditActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
+        fabQnA.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), QnAEditActivity.class).putExtra("flag", true)));
     }
 
     private void setAdapter() {
@@ -74,7 +74,7 @@ public class QnAActivity extends AppCompatActivity {
                             JSONObject list = lists.getJSONObject(i);
 
                             adapter.addItem(new Data(list.getString("csn"), list.getString("usn"),
-                                    list.getString("title"), list.getString("content"), list.getString("answer"),
+                                    list.getString("title"), list.getString("content"), list.getString("answer"), list.getString("date"),
                                     list.getInt("state"), getApplicationContext(), "QnA"));
                         }
                         listView.setAdapter(adapter);

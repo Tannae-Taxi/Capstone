@@ -63,7 +63,7 @@ public class FAQActivity extends AppCompatActivity {
                             int state = list.getInt("state");
                             if (state == 1) {
                                 adapter.addItem(new Data(list.getString("usn"),
-                                        list.getString("title"), list.getString("content"), list.getString("answer"),
+                                        list.getString("title"), list.getString("content"), list.getString("answer"), list.getString("date"),
                                         state, "FAQ"));
                                 faq = true;
                             }

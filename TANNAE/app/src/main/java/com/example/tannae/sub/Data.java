@@ -15,6 +15,7 @@ public class Data<T> {
         data.put("type", type);
         this.cType = cType;
     }
+
     public Data(String ud, String origin, String destination, int cost, String cType) {
         data.put("ud", ud);
         data.put("origin", origin);
@@ -22,21 +23,24 @@ public class Data<T> {
         data.put("cost", cost);
         this.cType = cType;
     }
-    public Data(String usn, String title, String content, String answer, int state, String cType) {
+
+    public Data(String usn, String title, String content, String answer, String date, int state, String cType) {
         data.put("usn", usn);
         data.put("title", title);
         data.put("content", content);
         data.put("answer", answer);
+        data.put("date", date);
         data.put("state", state == 1);
         this.cType = cType;
     }
 
-    public Data(String csn, String usn, String title, String content, String answer, int state, Context context, String cType) {
+    public Data(String csn, String usn, String title, String content, String answer, String date, int state, Context context, String cType) {
         data.put("csn", csn);
         data.put("usn", usn);
         data.put("title", title);
         data.put("content", content);
         data.put("answer", answer);
+        data.put("date", date);
         data.put("state", state == 1);
         this.context = context;
         this.cType = cType;

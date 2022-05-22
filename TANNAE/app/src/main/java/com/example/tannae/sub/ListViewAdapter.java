@@ -75,12 +75,13 @@ public class ListViewAdapter extends BaseAdapter {
                     .putExtra("usn", data.getData("usn").toString())
                     .putExtra("title", data.getData("title").toString())
                     .putExtra("content", data.getData("content").toString())
-                    .putExtra("answer", data.getData("answer").toString())));
-            ((TextView) convertView.findViewById(R.id.tv_title_qna_listview)).setText(data.getData("title").toString());
+                    .putExtra("answer", data.getData("answer").toString())
+                    .putExtra("date", data.getData("date").toString())));
         } else if(data.getType().equals("FAQ")) {
             ((TextView) convertView.findViewById(R.id.tv_title_faq_listview)).setText(data.getData("title").toString());
             ((TextView) convertView.findViewById(R.id.tv_content_faq_listview)).setText(data.getData("content").toString());
             ((TextView) convertView.findViewById(R.id.tv_answer_faq_listview)).setText(data.getData("answer").toString());
+            ((TextView) convertView.findViewById(R.id.tv_date_faq_listview)).setText(data.getData("date").toString());
         }
 
         return convertView;

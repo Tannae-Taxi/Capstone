@@ -22,7 +22,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class QnADetailActivity extends AppCompatActivity {
-    private TextView tvDate, tvTitle, tvContent, tvAnswer;
+    private TextView tvAnswer;
     private EditText etAnswer;
     private Button btnEdit, btnDelete, btnAnswer;
 
@@ -35,9 +35,9 @@ public class QnADetailActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        (tvDate = findViewById(R.id.tv_date_qna_detail)).setText(getIntent().getStringExtra("date"));
-        (tvTitle = findViewById(R.id.tv_title_qna_detail)).setText(getIntent().getStringExtra("title"));
-        (tvContent = findViewById(R.id.tv_content_qna_detail)).setText(getIntent().getStringExtra("content"));
+        ((TextView) findViewById(R.id.tv_date_qna_detail)).setText(getIntent().getStringExtra("date"));
+        ((TextView) findViewById(R.id.tv_title_qna_detail)).setText(getIntent().getStringExtra("title"));
+        ((TextView) findViewById(R.id.tv_content_qna_detail)).setText(getIntent().getStringExtra("content"));
         (tvAnswer = findViewById(R.id.tv_answer_qna_detail)).setText(getIntent().getStringExtra("answer"));
         (btnEdit = findViewById(R.id.btn_edit_qna_detail))
                 .setVisibility(InnerDB.sp.getString("usn", null)
@@ -58,7 +58,8 @@ public class QnADetailActivity extends AppCompatActivity {
                 .putExtra("csn", getIntent().getStringExtra("csn"))
                 .putExtra("title", getIntent().getStringExtra("title"))
                 .putExtra("content", getIntent().getStringExtra("content"))
-                .putExtra("answer", getIntent().getStringExtra("answer"))));
+                .putExtra("answer", getIntent().getStringExtra("answer"))
+                .putExtra("flag", false)));
         btnDelete.setOnClickListener(v -> {
             try {
                 Network.service.deleteContent(InnerDB.getUser().put("csn", getIntent().getStringExtra("csn"))).enqueue(new Callback<Boolean>() {
