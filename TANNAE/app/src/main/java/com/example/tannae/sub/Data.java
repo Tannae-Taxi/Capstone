@@ -4,10 +4,10 @@ import android.content.Context;
 
 import java.util.HashMap;
 
-public class Data<T> {
-    private HashMap<String, Object> data = new HashMap<>();
+public class Data {
+    private final HashMap<String, Object> data = new HashMap<>();
     private Context context;
-    private String cType;
+    private final String cType;
 
     public Data(String date, String license, String type, String cType) {
         data.put("date", date);
