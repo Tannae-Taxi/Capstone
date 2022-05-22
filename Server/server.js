@@ -325,7 +325,7 @@ app.post('/user/editContent', async (req, res) => {
 
     try {
         // Update Content
-        await connection.query(`update Content set title = '${data.title}', content = '${data.content}', answer = '${data.answer}' where usn = '${data.usn}'`);
+        await connection.query(`update Content set title = '${data.title}', content = '${data.content}', answer = '아직 답변이 등록되지 않았습니다.', date = '${new Date().toLocaleString()}' where csn = '${data.csn}'`);
         console.log(`/user/editContent : User ${data.usn} edited content`);
         res.json(true);
     } catch (err) {
@@ -358,7 +358,7 @@ app.post('/user/postContent', async (req, res) => {
         let [result, field] = await connection.query('select csn from Content where csn like "c%" order by csn asc');
         let csnNew = 'c';
         for (let i = 0; i < result.length; i++) {
-            let csn = result[i].lsn;
+            let csn = result[i].csn;
             csn = csn.replace('c', '');
             csn = Number(csn);
             if (i + 1 !== csn) {
@@ -374,10 +374,25 @@ app.post('/user/postContent', async (req, res) => {
                 csnNew += '0';
             csnNew += csnNum;
         }
-
+        
         // Insert Content
-        await connection.query(`insert Content values('${csnNew}', '${data.title}', '${data.cont}', Null, '${data.usn}')`);
+        await connection.query(`insert Content values('${csnNew}', '${data.title}', '${data.content}', '아직 답변이 등록되지 않았습니다.', '${new Date().toLocaleString()}', false, '${data.usn}')`);
         console.log(`/user/postContent : User ${data.usn} inserted Content`);
+        res.json(true);
+    } catch (err) {
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
+    }
+});
+
+// < Post Answer >
+app.post('/manage/postAnswer', async (req, res) => {
+    let data = req.body.nameValuePairs;
+
+    try {
+        // Register answer to content
+        await connection.query(`update Content set answer = '${data.answer}' where csn = '${data.csn}'`);
+        console.log(`/manage/postAnswer : Manager ${data.usn} answered to content ${data.csn}`);
         res.json(true);
     } catch (err) {
         // MySQL Error
