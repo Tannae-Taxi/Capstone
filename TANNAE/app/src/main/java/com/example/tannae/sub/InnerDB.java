@@ -25,35 +25,34 @@ public class InnerDB extends AppCompatActivity {
     }
 
     public static void setUser(JSONObject user) throws JSONException {
-        editor.putString("usn", user.getString("usn"));
-        editor.putString("id", user.getString("id"));
-        editor.putString("pw", user.getString("pw"));
-        editor.putString("uname", user.getString("uname"));
-        editor.putString("rrn", user.getString("rrn"));
-        editor.putInt("gender", user.getInt("gender"));
-        editor.putString("phone", user.getString("phone"));
-        editor.putString("email", user.getString("email"));
-        editor.putInt("drive", user.getInt("drive"));
-        editor.putInt("points", user.getInt("points"));
-        editor.putFloat("score", BigDecimal.valueOf(user.getDouble("score")).floatValue());
-        editor.putInt("state", user.getInt("state"));
-        editor.apply();
+        editor.putString("usn", user.getString("usn"))
+                .putString("id", user.getString("id"))
+                .putString("pw", user.getString("pw"))
+                .putString("uname", user.getString("uname"))
+                .putString("rrn", user.getString("rrn"))
+                .putInt("gender", user.getInt("gender"))
+                .putString("phone", user.getString("phone"))
+                .putString("email", user.getString("email"))
+                .putInt("drive", user.getInt("drive"))
+                .putInt("points", user.getInt("points"))
+                .putFloat("score", BigDecimal.valueOf(user.getDouble("score")).floatValue())
+                .putInt("state", user.getInt("state"))
+                .apply();
     }
 
     public static JSONObject getUser() throws JSONException {
-        JSONObject user = new JSONObject();
-        user.put("usn", sp.getString("usn", ""));
-        user.put("id", sp.getString("id", ""));
-        user.put("pw", sp.getString("pw", ""));
-        user.put("uname", sp.getString("uname", ""));
-        user.put("rrn", sp.getString("rrn", ""));
-        user.put("gender", sp.getInt("gender", 1));
-        user.put("phone", sp.getString("phone", ""));
-        user.put("email", sp.getString("email", ""));
-        user.put("drive", sp.getInt("drive", 0));
-        user.put("points", sp.getInt("points", 0));
-        user.put("score", sp.getFloat("score", (float) 0.0));
-        user.put("state", sp.getInt("state", 0));
-        return user;
+        return new JSONObject()
+                .put("usn", sp.getString("usn", ""))
+                .put("id", sp.getString("id", ""))
+                .put("pw", sp.getString("pw", ""))
+                .put("uname", sp.getString("uname", ""))
+                .put("rrn", sp.getString("rrn", ""))
+                .put("gender", sp.getInt("gender", 1))
+                .put("phone", sp.getString("phone", ""))
+                .put("email", sp.getString("email", ""))
+                .put("drive", sp.getInt("drive", 0))
+                .put("points", sp.getInt("points", 0))
+                .put("score", sp.getFloat("score", (float) 0.0))
+                .put("state", sp.getInt("state", 0));
     }
 }
