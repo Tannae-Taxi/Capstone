@@ -72,7 +72,7 @@ public class QnAEditActivity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                                         Toaster.show(getApplicationContext(), "QnA가 수정되었습니다.");
-                                        onBackPressed();
+                                        startActivity(new Intent(getApplicationContext(), QnAActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                                     }
 
                                     @Override
