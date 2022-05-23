@@ -36,10 +36,9 @@ public class QnAActivity extends AppCompatActivity {
         setViews();
         setAdapter();
     }
-
-
+    
     private void setViews() {
-        listView = (ListView) findViewById(R.id.lv_list_qna);
+        listView = findViewById(R.id.lv_list_qna);
         (fabQnA = findViewById(R.id.fab_qna)).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), QnAEditActivity.class).putExtra("flag", true)));
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_qna));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
