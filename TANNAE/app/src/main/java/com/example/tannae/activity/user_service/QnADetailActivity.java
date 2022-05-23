@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
 import com.example.tannae.network.Network;
@@ -25,6 +26,7 @@ public class QnADetailActivity extends AppCompatActivity {
     private TextView tvAnswer;
     private EditText etAnswer;
     private Button btnEdit, btnDelete, btnAnswer;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,9 @@ public class QnADetailActivity extends AppCompatActivity {
         (btnAnswer = findViewById(R.id.btn_answer_qna_detail))
                 .setVisibility(InnerDB.sp.getString("usn", null).charAt(0) == 'm'
                         ? View.VISIBLE : View.INVISIBLE);
+        setSupportActionBar((toolbar = findViewById(R.id.topAppBar_qna)));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void setEventListeners() {
