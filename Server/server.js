@@ -62,7 +62,7 @@ app.get('/account/checkID', async (req, res) => {
     let message = "OK";
     try {
         let [result, field] = await connection.query(`select * from User where binary id = '${data.id}'`);
-        if (result.length !== 0) {
+        if (result !== undefined) {
             // When entered ID is already registered
             console.log(`/account/checkID : ID ${data.id} is already used`);
             message = "이미 등록된 ID입니다.";
@@ -82,7 +82,7 @@ app.get('/account/checkUser', async (req, res) => {
     let message = "OK";
     try {
         let [result, field] = await connection.query(`select * from User where uname = '${data.name}' and rrn = '${data.rrn}'`);
-        if (result.length !== 0) {
+        if (result !== undefined) {
             // When user is already signed in
             console.log(`/account.checkUser : User ${data.name} is already signed in`);
             message = "이미 등록된 사용자입니다.\n등록된 계정으로 로그인해주세요.";
@@ -220,7 +220,7 @@ app.get('/user/getHistory', async (req, res) => {
         let [result, field] = await connection.query(`select * from History where usn = '${data.usn}'`);
         response.result = result;
 
-        if (result.length === 0) {
+        if (result === undefined) {
             // When no history is searched
             console.log(`/user/getHistory : User ${data.usn} has no history`);
             response.message = "이용 현황이 없습니다.";
@@ -243,14 +243,13 @@ app.get('/user/getLost', async (req, res) => {
         let [result, field] = await connection.query('select * from Lost');
         response.result = result;
 
-        if (result.length === 0) {
+        if (result === undefined) {
             // When no Lost are searched
             console.log('/user/getLost : No Lost data exist');
             response.message = "등록된 분실물이 없습니다.";
         } else
             // When Lost are searched
             console.log('/user/getLost : Lost list is returned');
-        console.log(response);
         res.json(JSON.stringify(response));
     } catch (err) {
         // MySQL Error
@@ -305,7 +304,7 @@ app.get('/user/getContent', async (req, res) => {
         let [result, field] = await connection.query('select * from Content');
         response.result = result;
 
-        if (result.length === 0) {
+        if (result === undefined) {
             // When no Content are searched
             console.log('/user/getContent : No Content data exist');
             response.message = "등록된 컨텐츠가 없습니다.";
@@ -416,6 +415,7 @@ app.post('/user/evaluate', async (req, res) => {
         console.log(`MySQL error : ${err.code}`);
     }
 });
+
 
 
 // <<< Socket.io >>>
