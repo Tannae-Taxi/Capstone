@@ -28,7 +28,6 @@ import retrofit2.Response;
 // << Sign Up Activity >>
 public class SignUpActivity extends AppCompatActivity {
     private Button btnCheckID, btnSignUp, btnCheckUser;
-    private RadioGroup rgGender;
     private EditText etID, etPW, etPWR, etName, etRRN, etPhone, etEmail;
     private TextView tvCheckId, tvCheckPW;
     private Toolbar toolbar;
@@ -58,9 +57,9 @@ public class SignUpActivity extends AppCompatActivity {
         tvCheckId = findViewById(R.id.tv_checkID_sign_up);
         tvCheckPW = findViewById(R.id.tv_retrypw_sign_up);
 
-        (rgGender = findViewById(R.id.rg_gender_sign_up)).setOnCheckedChangeListener((group, checkedId) -> genderType = (checkedId == R.id.rb_man_sign_up) ? true : false);
+        ((RadioGroup) findViewById(R.id.rg_gender_sign_up)).setOnCheckedChangeListener((group, checkedId) -> genderType = (checkedId == R.id.rb_man_sign_up) ? true : false);
 
-        setSupportActionBar((toolbar = findViewById(R.id.topAppBar_sign_up)));
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_sign_up));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }

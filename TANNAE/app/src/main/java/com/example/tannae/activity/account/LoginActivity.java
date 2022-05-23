@@ -3,7 +3,6 @@ package com.example.tannae.activity.account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +25,6 @@ import retrofit2.Response;
 // < Login Activity >
 public class LoginActivity extends AppCompatActivity {
     private EditText etID, etPW;
-    private Button btnLogin, btnFind, btnSignUp;
     private long backKeyPressedTime = 0;
 
     @Override
@@ -46,9 +44,9 @@ public class LoginActivity extends AppCompatActivity {
     private void setViews() {
         etID = findViewById(R.id.et_id_account_edit);
         etPW = findViewById(R.id.et_pw_account_edit);
-        (btnFind = findViewById(R.id.btn_find)).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FindActivity.class)));;
-        (btnSignUp = findViewById(R.id.btn_signup)).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), SignUpActivity.class)));
-        (btnLogin = findViewById(R.id.btn_login)).setOnClickListener(v -> {
+        findViewById(R.id.btn_find).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FindActivity.class)));;
+        findViewById(R.id.btn_signup).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), SignUpActivity.class)));
+        findViewById(R.id.btn_login).setOnClickListener(v -> {
             String id = etID.getText().toString();
             String pw = etPW.getText().toString();
             if (id.length() == 0 || pw.length() == 0)

@@ -36,7 +36,7 @@ public class LostFoundActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        listView = (ListView) findViewById(R.id.lv_list_lost_found);
+        listView = findViewById(R.id.lv_list_lost_found);
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_lost_found));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());

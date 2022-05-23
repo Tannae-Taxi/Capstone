@@ -20,7 +20,7 @@ import retrofit2.Response;
 
 // << AccountActivity >>
 public class AccountActivity extends AppCompatActivity {
-    private Button btnEdit, btnSignOut;
+    private Button btnSignOut;
     private Toolbar toolbar;
 
     @Override
@@ -33,7 +33,7 @@ public class AccountActivity extends AppCompatActivity {
 
     private void setViews() {
         btnSignOut = findViewById(R.id.btn_sign_out_account);
-        (btnEdit = findViewById(R.id.btn_edit_account)).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), AccountEditActivity.class)));
+        findViewById(R.id.btn_edit_account).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), AccountEditActivity.class)));
 
         ((TextView) findViewById(R.id.tv_id_account)).setText("ID : " + InnerDB.sp.getString("id", null));
         ((TextView) findViewById(R.id.tv_pw_account)).setText("PW : " + InnerDB.sp.getString("pw", null));
@@ -43,7 +43,7 @@ public class AccountActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tv_email_account)).setText("E-mail : " + InnerDB.sp.getString("email", null));
         ((TextView) findViewById(R.id.tv_phone_account)).setText("연락처 : " + InnerDB.sp.getString("phone", null));
 
-        setSupportActionBar((toolbar = findViewById(R.id.topAppBar_account)));
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_account));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitle("회원 정보");

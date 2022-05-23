@@ -48,7 +48,7 @@ public class FindActivity extends AppCompatActivity {
         tvMyId = findViewById(R.id.tv_myid_find);
         tvMyPw = findViewById(R.id.tv_mypw_find);
 
-        setSupportActionBar((toolbar = findViewById(R.id.topAppBar_find)));
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_find));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), LoginActivity.class)
                 .putExtra("type", false).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));

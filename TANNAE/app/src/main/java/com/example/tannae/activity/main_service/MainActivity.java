@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
@@ -26,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton reqBtn;
     private long backKeyPressedTime = 0;
     private Toolbar toolbar;
-    private ActionMenuItemView drive;
     private BottomAppBar bottomAppBar;
     private MapView mapView;
     private ViewGroup mapViewContainer;
@@ -50,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private void setViews() {
         reqBtn = findViewById(R.id.req_button_main);
         bottomAppBar = findViewById(R.id.bottomAppBar_main);
-        (drive = findViewById(R.id.item_drive_menu)).setVisibility(InnerDB.sp.getInt("drive", 0) == 1 ? View.VISIBLE : View.INVISIBLE);
-        setSupportActionBar((toolbar = findViewById(R.id.topAppBar_main)));
+        findViewById(R.id.item_drive_menu).setVisibility(InnerDB.sp.getInt("drive", 0) == 1 ? View.VISIBLE : View.INVISIBLE);
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_main));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
     }

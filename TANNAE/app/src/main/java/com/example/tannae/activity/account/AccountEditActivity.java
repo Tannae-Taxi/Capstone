@@ -52,7 +52,7 @@ public class AccountEditActivity extends AppCompatActivity {
         btnCheckID = findViewById(R.id.btn_checkid_account_edit);
         btnEdit = findViewById(R.id.btn_edit_account_edit);
 
-        setSupportActionBar((toolbar = findViewById(R.id.topAppBar_accountedit)));
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_accountedit));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitle("회원 정보 수정");

@@ -37,7 +37,7 @@ public class QnAEditActivity extends AppCompatActivity {
         (etTitle = findViewById(R.id.et_title_qna_edit)).setText(getIntent().getStringExtra("title"));
         (etContent = findViewById(R.id.et_content_qna_edit)).setText(getIntent().getStringExtra("content"));
         btnEdit = findViewById(R.id.btn_edit_qna_edit);
-        setSupportActionBar((toolbar = findViewById(R.id.topAppBar_qnaedit)));
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_qnaedit));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }

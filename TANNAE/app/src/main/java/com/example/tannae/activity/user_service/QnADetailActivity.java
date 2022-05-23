@@ -53,7 +53,7 @@ public class QnADetailActivity extends AppCompatActivity {
         (btnAnswer = findViewById(R.id.btn_answer_qna_detail))
                 .setVisibility(InnerDB.sp.getString("usn", null).charAt(0) == 'm'
                         ? View.VISIBLE : View.INVISIBLE);
-        setSupportActionBar((toolbar = findViewById(R.id.topAppBar_qna)));
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_qna));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
