@@ -1,6 +1,5 @@
 package com.example.tannae.activity.user_service;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
@@ -33,7 +32,6 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         setViews();
-        setEventListeners();
         setAdapter();
     }
 
@@ -42,10 +40,7 @@ public class HistoryActivity extends AppCompatActivity {
         listView = findViewById(R.id.lv_list_history);
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_history));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void setEventListeners() {
-        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void setAdapter() {

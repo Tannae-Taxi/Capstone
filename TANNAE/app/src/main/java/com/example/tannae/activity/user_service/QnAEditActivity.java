@@ -39,6 +39,7 @@ public class QnAEditActivity extends AppCompatActivity {
         btnEdit = findViewById(R.id.btn_edit_qna_edit);
         setSupportActionBar((toolbar = findViewById(R.id.topAppBar_qnaedit)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void setEventListeners() {
@@ -83,6 +84,5 @@ public class QnAEditActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 }

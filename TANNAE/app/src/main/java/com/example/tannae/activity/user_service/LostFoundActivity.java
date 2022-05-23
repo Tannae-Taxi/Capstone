@@ -32,7 +32,6 @@ public class LostFoundActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lost_found);
         setViews();
-        setEventListeners();
         setAdapter();
     }
 
@@ -40,10 +39,7 @@ public class LostFoundActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.lv_list_lost_found);
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_lost_found));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void setEventListeners() {
-        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void setAdapter() {

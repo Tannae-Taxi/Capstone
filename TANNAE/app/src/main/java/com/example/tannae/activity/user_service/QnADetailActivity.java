@@ -60,6 +60,7 @@ public class QnADetailActivity extends AppCompatActivity {
                 .putExtra("content", getIntent().getStringExtra("content"))
                 .putExtra("answer", getIntent().getStringExtra("answer"))
                 .putExtra("flag", false)));
+
         btnDelete.setOnClickListener(v -> {
             try {
                 Network.service.deleteContent(InnerDB.getUser().put("csn", getIntent().getStringExtra("csn"))).enqueue(new Callback<Boolean>() {
@@ -79,25 +80,26 @@ public class QnADetailActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+
         btnAnswer.setOnClickListener(v -> {
             try {
                 Network.service.postAnswer(InnerDB.getUser()
                         .put("answer", etAnswer.getText().toString())
                         .put("csn", getIntent().getStringExtra("csn")))
                         .enqueue(new Callback<Boolean>() {
-                    @Override
-                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                        tvAnswer.setText(etAnswer.getText().toString());
-                        etAnswer.setText("");
-                        Toaster.show(getApplicationContext(), "답변이 등록되었습니다.");
-                    }
+                            @Override
+                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                tvAnswer.setText(etAnswer.getText().toString());
+                                etAnswer.setText("");
+                                Toaster.show(getApplicationContext(), "답변이 등록되었습니다.");
+                            }
 
-                    @Override
-                    public void onFailure(Call<Boolean> call, Throwable t) {
-                        Toaster.show(getApplicationContext(), "Error");
-                        Log.e("Error", t.getMessage());
-                    }
-                });
+                            @Override
+                            public void onFailure(Call<Boolean> call, Throwable t) {
+                                Toaster.show(getApplicationContext(), "Error");
+                                Log.e("Error", t.getMessage());
+                            }
+                        });
             } catch (JSONException e) {
                 e.printStackTrace();
             }

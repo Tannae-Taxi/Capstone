@@ -1,6 +1,5 @@
 package com.example.tannae.activity.user_service;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -34,12 +33,12 @@ public class PointActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        (tvPoint = findViewById(R.id.tv_point_point)).setText(InnerDB.sp.getInt("points", 0) + "원");
         etCharge = findViewById(R.id.et_charge_point);
         btnCharge = findViewById(R.id.btn_charge_point);
+        (tvPoint = findViewById(R.id.tv_point_point)).setText(InnerDB.sp.getInt("points", 0) + "원");
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_point));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void setEventListeners() {

@@ -26,12 +26,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class QnAActivity extends AppCompatActivity {
-
     private Button btnSearch;
     private EditText etSearchTitle;
     private FloatingActionButton fabQnA;
     private Toolbar toolbar;
-
     private ListView listView = null;
     private ListViewAdapter adapter = null;
 
@@ -40,7 +38,6 @@ public class QnAActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qna);
         setViews();
-        setEventListeners();
         setAdapter();
     }
 
@@ -49,15 +46,10 @@ public class QnAActivity extends AppCompatActivity {
         btnSearch = findViewById(R.id.btn_search_qna);
         etSearchTitle = findViewById(R.id.et_search_title_qna);
         listView = (ListView) findViewById(R.id.lv_list_qna);
-        fabQnA = findViewById(R.id.fab_qna);
-
+        (fabQnA = findViewById(R.id.fab_qna)).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), QnAEditActivity.class).putExtra("flag", true)));
         setSupportActionBar((toolbar = findViewById(R.id.topAppBar_qna)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
-    }
-
-    private void setEventListeners() {
-        fabQnA.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), QnAEditActivity.class).putExtra("flag", true)));
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void setAdapter() {
@@ -72,7 +64,6 @@ public class QnAActivity extends AppCompatActivity {
                         adapter = new ListViewAdapter();
                         for (int i = 0; i < lists.length(); i++) {
                             JSONObject list = lists.getJSONObject(i);
-
                             adapter.addItem(new Data(list.getString("csn"), list.getString("usn"),
                                     list.getString("title"), list.getString("content"), list.getString("answer"), list.getString("date"),
                                     list.getInt("state"), getApplicationContext(), "QnA"));

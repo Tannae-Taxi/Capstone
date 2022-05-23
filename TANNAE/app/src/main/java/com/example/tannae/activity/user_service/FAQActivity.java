@@ -1,6 +1,5 @@
 package com.example.tannae.activity.user_service;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
@@ -32,19 +31,14 @@ public class FAQActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faq);
         setViews();
-        setEventListeners();
         setAdapter();
     }
 
     private void setViews() {
-        toolbar = findViewById(R.id.topAppBar_faq);
         listView = findViewById(R.id.lv_list_faq);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_faq));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void setEventListeners() {
-        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void setAdapter() {
@@ -70,7 +64,7 @@ public class FAQActivity extends AppCompatActivity {
                         }
                         if (!faq) {
                             Toaster.show(getApplicationContext(), "등록된 FAQ 가 없습니다.");
-                            startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            onBackPressed();
                         } else
                             listView.setAdapter(adapter);
                     } else
