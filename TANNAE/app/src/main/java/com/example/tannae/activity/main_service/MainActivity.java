@@ -3,6 +3,7 @@ package com.example.tannae.activity.main_service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_app_bar, menu);
-        getMenuInflater().inflate(R.menu.bottom_app_bar, menu);
         return true;
     }
 
@@ -73,10 +73,17 @@ public class MainActivity extends AppCompatActivity {
             mapViewContainer.removeView(mapView);
         });
 
-        bottomAppBar.setOnMenuItemClickListener(item -> {
-            mapViewContainer.removeView(mapView);
-            startActivity(new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", true));
-            return true;
+        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.item_drive_menu:
+                        mapViewContainer.removeView(mapView);
+                        startActivity(new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", true));
+                        return true;
+                }
+                return false;
+            }
         });
 
         toolbar.setNavigationOnClickListener(v -> {
