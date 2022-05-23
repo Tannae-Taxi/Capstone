@@ -54,6 +54,8 @@ public class AccountEditActivity extends AppCompatActivity {
 
         setSupportActionBar((toolbar = findViewById(R.id.topAppBar_accountedit)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("회원 정보 수정");
         toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), AccountActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
     }
 

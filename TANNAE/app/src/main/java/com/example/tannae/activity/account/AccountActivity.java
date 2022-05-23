@@ -45,6 +45,8 @@ public class AccountActivity extends AppCompatActivity {
 
         setSupportActionBar((toolbar = findViewById(R.id.topAppBar_account)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("회원 정보");
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 

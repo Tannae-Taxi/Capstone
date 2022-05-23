@@ -38,6 +38,8 @@ public class PointActivity extends AppCompatActivity {
         (tvPoint = findViewById(R.id.tv_point_point)).setText(InnerDB.sp.getInt("points", 0) + "원");
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_point));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("포인트");
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
