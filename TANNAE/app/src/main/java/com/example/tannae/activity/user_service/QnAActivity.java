@@ -26,8 +26,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class QnAActivity extends AppCompatActivity {
-    private Button btnSearch;
-    private EditText etSearchTitle;
     private FloatingActionButton fabQnA;
     private Toolbar toolbar;
     private ListView listView = null;
@@ -43,8 +41,6 @@ public class QnAActivity extends AppCompatActivity {
 
 
     private void setViews() {
-        btnSearch = findViewById(R.id.btn_search_qna);
-        etSearchTitle = findViewById(R.id.et_search_title_qna);
         listView = (ListView) findViewById(R.id.lv_list_qna);
         (fabQnA = findViewById(R.id.fab_qna)).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), QnAEditActivity.class).putExtra("flag", true)));
         setSupportActionBar((toolbar = findViewById(R.id.topAppBar_qna)));
