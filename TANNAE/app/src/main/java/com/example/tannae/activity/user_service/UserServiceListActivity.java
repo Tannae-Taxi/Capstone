@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.tannae.R;
 import com.example.tannae.activity.account.AccountActivity;
 import com.example.tannae.activity.account.LoginActivity;
+import com.example.tannae.activity.main_service.MainActivity;
 import com.example.tannae.sub.InnerDB;
 import com.example.tannae.sub.Toaster;
 
@@ -32,5 +33,10 @@ public class UserServiceListActivity extends AppCompatActivity {
             Toaster.show(getApplicationContext(), "안전하게 로그아웃 되었습니다.");
             startActivity(new Intent(getApplicationContext(), LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 }

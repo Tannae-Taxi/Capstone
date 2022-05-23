@@ -45,7 +45,13 @@ public class QnAEditActivity extends AppCompatActivity {
     private void setEventListeners() {
         btnEdit.setOnClickListener(v -> {
             try {
-                if (getIntent().getBooleanExtra("flag", true))
+                String title = etTitle.getText().toString();
+                String content = etContent.getText().toString();
+                if (title.length() == 0)
+                    Toaster.show(getApplicationContext(), "제목을 입력해주세요.");
+                else if (content.length() == 0)
+                    Toaster.show(getApplicationContext(), "내용을 입력해주세요.");
+                else if (getIntent().getBooleanExtra("flag", true))
                     Network.service.postContent(InnerDB.getUser()
                             .put("title", etTitle.getText().toString())
                             .put("content", etContent.getText().toString()))

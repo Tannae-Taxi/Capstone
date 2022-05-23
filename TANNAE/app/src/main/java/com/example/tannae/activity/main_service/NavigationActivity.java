@@ -208,7 +208,7 @@ public class NavigationActivity extends AppCompatActivity {
 
             // INIT
             MapPolyline polyline = new MapPolyline();
-            polyline.setLineColor(Color.argb(0, 255, 0, 0));
+            polyline.setLineColor(Color.argb(255, 255, 0, 0));
             JSONObject origin = path.getJSONObject("origin");
             JSONObject destination = path.getJSONObject("destination");
             JSONArray waypoints = path.getJSONArray("waypoints");

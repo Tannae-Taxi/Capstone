@@ -54,13 +54,14 @@ public class HistoryActivity extends AppCompatActivity {
                         if (message.equals("OK")) {
                             JSONArray lists = res.getJSONArray("result");
                             adapter = new ListViewAdapter();
+                            boolean history = false;
                             for (int i = 0; i < lists.length(); i++) {
                                 JSONObject list = lists.getJSONObject(i);
                                 adapter.addItem(new Data(list.getString("date"), list.getString("origin"), list.getString("dest"), list.getInt("cost"), "History"));
                             }
-                            listView.setAdapter(adapter);
                         } else {
                             Toaster.show(getApplicationContext(), message);
+                            onBackPressed();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

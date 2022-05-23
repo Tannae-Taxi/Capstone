@@ -1,5 +1,6 @@
 package com.example.tannae.sub;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ public class ListViewAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Context context = parent.getContext();
@@ -58,7 +60,7 @@ public class ListViewAdapter extends BaseAdapter {
             ((TextView) convertView.findViewById(R.id.tv_usn_payment)).setText("탑승자 : " + data.getData("ud").toString());
             ((TextView) convertView.findViewById(R.id.tv_origin_payment)).setText("출발지 : " + data.getData("origin").toString());
             ((TextView) convertView.findViewById(R.id.tv_destination_payment)).setText("도착지 : " + data.getData("destination").toString());
-            ((TextView) convertView.findViewById(R.id.tv_cost_payment)).setText("요금 : " + data.getData("cost").toString());
+            ((TextView) convertView.findViewById(R.id.tv_cost_payment)).setText("요금 : " + data.getData("cost" + "원").toString());
         } else if (data.getType().equals("Lost")) {
             ((TextView) convertView.findViewById(R.id.tv_date_lost_listview)).setText("분실물 등록일 : " + data.getData("date").toString());
             ((TextView) convertView.findViewById(R.id.tv_license_lost_listview)).setText("차량번호 : " + data.getData("license").toString());
@@ -67,7 +69,7 @@ public class ListViewAdapter extends BaseAdapter {
             ((TextView) convertView.findViewById(R.id.tv_date_history_listview)).setText("이용 날짜 : " + data.getData("ud").toString());
             ((TextView) convertView.findViewById(R.id.tv_origin_history_listview)).setText("출발지 : " + data.getData("origin").toString());
             ((TextView) convertView.findViewById(R.id.tv_destination_history_listview)).setText("도착지 : " + data.getData("destination").toString());
-            ((TextView) convertView.findViewById(R.id.tv_cost_history_listview)).setText("요금 : " + data.getData("cost").toString());
+            ((TextView) convertView.findViewById(R.id.tv_cost_history_listview)).setText("요금 : " + data.getData("cost" + "원").toString());
         } else if (data.getType().equals("QnA")) {
             ((TextView) convertView.findViewById(R.id.tv_title_qna_listview)).setText(data.getData("title").toString());
             ((LinearLayout) convertView.findViewById(R.id.layout_qna_listview)).setOnClickListener(v -> context.startActivity(new Intent(context, QnADetailActivity.class)

@@ -45,25 +45,30 @@ public class PointActivity extends AppCompatActivity {
 
     private void setEventListeners() {
         btnCharge.setOnClickListener(v -> {
-            int charge = Integer.parseInt(etCharge.getText().toString());
-            final int currentPoint = InnerDB.sp.getInt("points", 0) + charge;
-            InnerDB.editor.putInt("points", currentPoint).apply();
+            String chargeStr = etCharge.getText().toString();
+            if (chargeStr.length() == 0)
+                Toaster.show(getApplicationContext(), "충전 금액을 입력해주세요.");
+            else {
+                int charge = Integer.parseInt(etCharge.getText().toString());
+                final int currentPoint = InnerDB.sp.getInt("points", 0) + charge;
+                InnerDB.editor.putInt("points", currentPoint).apply();
 
-            Network.service.charge(InnerDB.getUser()).enqueue(new Callback<Boolean>() {
-                @Override
-                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                    etCharge.setText("");
-                    tvPoint.setText(InnerDB.sp.getInt("points", 0) + "원");
-                    Toaster.show(getApplicationContext(), "포인트가 충전되었습니다.");
-                }
+                Network.service.charge(InnerDB.getUser()).enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        etCharge.setText("");
+                        tvPoint.setText(InnerDB.sp.getInt("points", 0) + "원");
+                        Toaster.show(getApplicationContext(), "포인트가 충전되었습니다.");
+                    }
 
-                @Override
-                public void onFailure(Call<Boolean> call, Throwable t) {
-                    InnerDB.editor.putInt("points", currentPoint - charge).apply();
-                    Toaster.show(getApplicationContext(), "Error");
-                    Log.e("Error", t.getMessage());
-                }
-            });
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        InnerDB.editor.putInt("points", currentPoint - charge).apply();
+                        Toaster.show(getApplicationContext(), "Error");
+                        Log.e("Error", t.getMessage());
+                    }
+                });
+            }
         });
     }
 }
