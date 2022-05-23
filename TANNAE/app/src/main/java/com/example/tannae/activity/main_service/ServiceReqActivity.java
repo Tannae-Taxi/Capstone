@@ -57,12 +57,11 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         btnServiceReq.setOnClickListener(v -> {
             if (!(originLocation == null || destinationLocation == null))
                 try {
-                    JSONObject data = new JSONObject().put("start", new JSONObject().put("name", originLocation).put("x", originX).put("y", originY))
-                            .put("end", new JSONObject().put("name", destinationLocation).put("x", destinationX).put("y", destinationY))
-                            .put("share", switchShare.isChecked()).put("user", InnerDB.getUser());
-
                     mapViewContainer.removeView(mapView);
-                    startActivity(new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", false).putExtra("data", data.toString()));
+                    startActivity(new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", false).putExtra("data", (new JSONObject()
+                            .put("start", new JSONObject().put("name", originLocation).put("x", originX).put("y", originY))
+                            .put("end", new JSONObject().put("name", destinationLocation).put("x", destinationX).put("y", destinationY))
+                            .put("share", switchShare.isChecked()).put("user", InnerDB.getUser())).toString()));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -157,6 +156,24 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
     }
 
     @Override
+    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
+        mapPoint = mapView.getMapCenterPoint();
+        MapReverseGeoCoder mapGeoCoder = new MapReverseGeoCoder("be32c53145962ae88db090324e2223b0",
+                mapPoint, this, ServiceReqActivity.this);
+        mapGeoCoder.startFindingAddress();
+
+        if (locationType) {
+            originX = mapPoint.getMapPointGeoCoord().longitude;
+            originY = mapPoint.getMapPointGeoCoord().latitude;
+        } else {
+            destinationX = mapPoint.getMapPointGeoCoord().longitude;
+            destinationY = mapPoint.getMapPointGeoCoord().latitude;
+        }
+
+        marker.setMapPoint(mapPoint);
+    }
+
+    @Override
     public void onMapViewZoomLevelChanged(MapView mapView, int i) {
 
     }
@@ -184,24 +201,6 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
     @Override
     public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
 
-    }
-
-    @Override
-    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
-        mapPoint = mapView.getMapCenterPoint();
-        MapReverseGeoCoder mapGeoCoder = new MapReverseGeoCoder("be32c53145962ae88db090324e2223b0",
-                mapPoint, this, ServiceReqActivity.this);
-        mapGeoCoder.startFindingAddress();
-
-        if (locationType) {
-            originX = mapPoint.getMapPointGeoCoord().longitude;
-            originY = mapPoint.getMapPointGeoCoord().latitude;
-        } else {
-            destinationX = mapPoint.getMapPointGeoCoord().longitude;
-            destinationY = mapPoint.getMapPointGeoCoord().latitude;
-        }
-
-        marker.setMapPoint(mapPoint);
     }
 
     @Override

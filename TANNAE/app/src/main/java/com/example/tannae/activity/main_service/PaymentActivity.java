@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
-import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
 import com.example.tannae.sub.Data;
 import com.example.tannae.sub.InnerDB;
@@ -57,38 +56,29 @@ public class PaymentActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.btn_send_payment);
         rbDriverRating = findViewById(R.id.rb_driverrating_payment);
         listView = findViewById(R.id.lv_receipt_payment);
-        (toolbar = findViewById(R.id.topAppBar_payment)).setNavigationOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        });
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setEventListeners() {
         btnSend.setOnClickListener(v -> {
             try {
-                if(InnerDB.getUser().getString("usn").equals(result.getString("driver")))
+                if (InnerDB.getUser().getString("usn").equals(result.getString("driver")))
                     startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 else {
-                    JSONObject data = new JSONObject();
-                    data.put("license", license);
-                    data.put("score", rbDriverRating.getRating());
-                    data.put("usn", InnerDB.getUser().getString("usn"));
-                    Network.service.evaluate(data).enqueue(new Callback<Boolean>() {
-                        @Override
-                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                            Toaster.show(getApplicationContext(), "평가를 완료하였습니다.");
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                        }
+                    Network.service.evaluate(new JSONObject()
+                            .put("license", license).put("score", rbDriverRating.getRating()).put("usn", InnerDB.getUser().getString("usn")))
+                            .enqueue(new Callback<Boolean>() {
+                                @Override
+                                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                    Toaster.show(getApplicationContext(), "평가를 완료하였습니다.");
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                }
 
-                        @Override
-                        public void onFailure(Call<Boolean> call, Throwable t) {
-                            Toaster.show(getApplicationContext(), "Error");
-                            Log.e("Error", t.getMessage());
-                        }
-                    });
+                                @Override
+                                public void onFailure(Call<Boolean> call, Throwable t) {
+                                    Toaster.show(getApplicationContext(), "Error");
+                                    Log.e("Error", t.getMessage());
+                                }
+                            });
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -51,13 +51,14 @@ public class NavigationActivity extends AppCompatActivity {
         mapViewContainer = findViewById(R.id.map_view_navigation);
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
         mapViewContainer.addView(mapView);
+
         try {
             if (!type) {
                 btnPass.setVisibility(View.INVISIBLE);
                 btnEndService.setVisibility(View.INVISIBLE);
                 switchDrive.setVisibility(View.INVISIBLE);
                 if (InnerDB.sp.getInt("state", 0) == 1) {
-                    Toaster.show(getApplicationContext(),"서비스를 이용중입니다.");
+                    Toaster.show(getApplicationContext(), "서비스를 이용중입니다.");
                     JSONObject path = new JSONObject(InnerDB.sp.getString("path", ""));
                     showPathOnMap(path);
                 } else
@@ -66,6 +67,30 @@ public class NavigationActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    // < Register views >
+    private void setViews() {
+        (btnPass = findViewById(R.id.btn_pass_navigation)).setOnClickListener(v -> Network.socket.emit("passWaypoint", InnerDB.getUser()));
+        (btnEndService = findViewById(R.id.btn_end_service_navigation)).setOnClickListener(v -> Network.socket.emit("serviceEnd", InnerDB.getUser()));
+        switchDrive = findViewById(R.id.switch_drive_state_navigation);
+        tvNext = findViewById(R.id.tv_waypoints_navigation);
+    }
+
+    // < Register event listeners >
+    private void setEventListeners() {
+        // Change service availability [SOCKET]
+        switchDrive.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (btnEndService.isEnabled()) {
+                Toaster.show(getApplicationContext(), "요금을 정산해주세요.");
+                switchDrive.setChecked(false);
+            } else
+                try {
+                    Network.socket.emit(isChecked ? "serviceOn" : "serviceOff", InnerDB.getUser().put("service", isChecked));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+        });
     }
 
     private void setNetworks() {
@@ -84,31 +109,13 @@ public class NavigationActivity extends AppCompatActivity {
                     JSONArray waypoints = path != null ? path.getJSONArray("waypoints") : null;
 
                     // Toast
-                    String message;
-                    switch (flag) {
-                        case 0:
-                            message = "이용 가능한 차량이 없습니다.";
-                            break;
-                        case 1:
-                            message = usnOut.equals(usnIn) ? "동승 차량이 배차되었습니다." : "추가 인원이 배차되었습니다.\n경로를 수정합니다..";
-                            break;
-                        case 2:
-                            message = usnOut.equals(usnIn) ? "동승 가능한 차량이 없습니다.\n일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다.";
-                            break;
-                        case 3:
-                            message = usnOut.equals(usnIn) ? "일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다.";
-                            break;
-                        case 4:
-                            message = usnOut.equals(usnIn) ? "차량이 도착하였습니다.\n탑승해 주시기 바랍니다." : "탑승자가 승차하였습니다.\n경로를 수정합니다.";
-                            break;
-                        case 5:
-                            message = usnOut.equals(usnIn) ? "목적지에 도착하였습니다.\n하차해 주시기 바랍니다." : path != null ? "탑승자가 하차하였습니다.\n경로를 수정합니다." : "마지막 탑승자가 하차하였습니다.";
-                            break;
-                        default:
-                            message = "배차 오류가 발생하였습니다.\n고객센터에 문의하세요.";
-                            break;
-                    }
-                    Toaster.show(getApplicationContext(), message);
+                    Toaster.show(getApplicationContext(), flag == 0 ? "이용 가능한 차량이 없습니다."
+                            : flag == 1 ? (usnOut.equals(usnIn) ? "동승 차량이 배차되었습니다." : "추가 인원이 배차되었습니다.\n경로를 수정합니다..")
+                            : flag == 2 ? (usnOut.equals(usnIn) ? "동승 가능한 차량이 없습니다.\n일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다.")
+                            : flag == 3 ? (usnOut.equals(usnIn) ? "일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다.")
+                            : flag == 4 ? (usnOut.equals(usnIn) ? "차량이 도착하였습니다.\n탑승해 주시기 바랍니다." : "탑승자가 승차하였습니다.\n경로를 수정합니다.")
+                            : flag == 5 ? (usnOut.equals(usnIn) ? "목적지에 도착하였습니다.\n하차해 주시기 바랍니다." : path != null ? "탑승자가 하차하였습니다.\n경로를 수정합니다." : "마지막 탑승자가 하차하였습니다.")
+                            : "배차 오류가 발생하였습니다.\n고객센터에 문의하세요.");
 
                     // Event handle by flag number
                     if (!(flag == -1 || flag == 0)) {
@@ -191,47 +198,6 @@ public class NavigationActivity extends AppCompatActivity {
         }));
     }
 
-    // < Register views >
-    private void setViews() {
-        btnPass = findViewById(R.id.btn_pass_navigation);
-        btnEndService = findViewById(R.id.btn_end_service_navigation);
-        switchDrive = findViewById(R.id.switch_drive_state_navigation);
-        tvNext = findViewById(R.id.tv_waypoints_navigation);
-    }
-
-    // < Register event listeners >
-    private void setEventListeners() {
-        // Pass next waypoint [SOCKET]
-        btnPass.setOnClickListener(v -> {
-            try {
-                Network.socket.emit("passWaypoint", InnerDB.getUser());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-        // End service [SOCKET]
-        btnEndService.setOnClickListener(v -> {
-            try {
-                Network.socket.emit("serviceEnd", InnerDB.getUser());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-        // Change service availability [SOCKET]
-        switchDrive.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (btnEndService.isEnabled()) {
-                Toaster.show(getApplicationContext(), "요금을 정산해주세요.");
-                switchDrive.setChecked(false);
-            } else {
-                try {
-                    Network.socket.emit(isChecked ? "serviceOn" : "serviceOff", InnerDB.getUser().put("service", isChecked));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
     // < Show path data on map >
     private void showPathOnMap(JSONObject path) {
         try {
@@ -241,7 +207,7 @@ public class NavigationActivity extends AppCompatActivity {
 
             // INIT
             MapPolyline polyline = new MapPolyline();
-            polyline.setLineColor(Color.argb(128, 0, 0, 255));
+            polyline.setLineColor(Color.argb(0, 255, 0, 0));
             JSONObject origin = path.getJSONObject("origin");
             JSONObject destination = path.getJSONObject("destination");
             JSONArray waypoints = path.getJSONArray("waypoints");
@@ -265,15 +231,13 @@ public class NavigationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (switchDrive.isChecked()) {
+        if (switchDrive.isChecked())
             Toaster.show(getApplicationContext(), "서비스 제공 중에는 종료할 수 없습니다.");
-        } else {
-            if (type && !InnerDB.sp.getString("path", "NULL").equals("NULL")) {
-                Toaster.show(getApplicationContext(), "운행중에는 내비게이션을 종료할 수 없습니다.");
-            } else {
-                mapViewContainer.removeView(mapView);
-                startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            }
+        else if (type && !InnerDB.sp.getString("path", "NULL").equals("NULL"))
+            Toaster.show(getApplicationContext(), "운행중에는 내비게이션을 종료할 수 없습니다.");
+        else {
+            mapViewContainer.removeView(mapView);
+            startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         }
     }
 }

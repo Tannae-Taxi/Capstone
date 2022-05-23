@@ -3,7 +3,6 @@ package com.example.tannae.activity.main_service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
         setViews();
         setEventListeners();
-
         if (!Network.socket.isActive())
             Network.socket.connect();
 
@@ -52,17 +50,9 @@ public class MainActivity extends AppCompatActivity {
         reqBtn = findViewById(R.id.req_button_main);
         bottomAppBar = findViewById(R.id.bottomAppBar_main);
         (drive = findViewById(R.id.item_drive_menu)).setVisibility(InnerDB.sp.getInt("drive", 0) == 1 ? View.VISIBLE : View.INVISIBLE);
-        toolbar = findViewById(R.id.topAppBar_main);
-        setSupportActionBar(toolbar);
+        setSupportActionBar((toolbar = findViewById(R.id.topAppBar_main)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_app_bar, menu);
-        return true;
     }
 
     private void setEventListeners() {
@@ -73,23 +63,25 @@ public class MainActivity extends AppCompatActivity {
             mapViewContainer.removeView(mapView);
         });
 
-        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId()){
-                    case R.id.item_drive_menu:
-                        mapViewContainer.removeView(mapView);
-                        startActivity(new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", true));
-                        return true;
-                }
-                return false;
+        bottomAppBar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.item_drive_menu) {
+                mapViewContainer.removeView(mapView);
+                startActivity(new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", true));
+                return true;
             }
+            return false;
         });
 
         toolbar.setNavigationOnClickListener(v -> {
             mapViewContainer.removeView(mapView);
             startActivity(new Intent(getApplicationContext(), UserServiceListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_app_bar, menu);
+        return true;
     }
 
     // < BackPress >

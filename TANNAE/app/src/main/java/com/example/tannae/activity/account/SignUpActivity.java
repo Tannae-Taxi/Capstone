@@ -59,7 +59,7 @@ public class SignUpActivity extends AppCompatActivity {
         tvCheckPW = findViewById(R.id.tv_retrypw_sign_up);
 
         (rgGender = findViewById(R.id.rg_gender_sign_up)).setOnCheckedChangeListener((group, checkedId) -> genderType = (checkedId == R.id.rb_man_sign_up) ? true : false);
-        
+
         setSupportActionBar((toolbar = findViewById(R.id.topAppBar_sign_up)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
