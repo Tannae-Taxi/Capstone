@@ -51,11 +51,10 @@ public class AccountEditActivity extends AppCompatActivity {
         tvCheckPW = findViewById(R.id.tv_retrypw_account_edit);
         btnCheckID = findViewById(R.id.btn_checkid_account_edit);
         btnEdit = findViewById(R.id.btn_edit_account_edit);
-        (toolbar = findViewById(R.id.topAppBar_accountedit))
-                .setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), AccountActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
-        setSupportActionBar(toolbar);
+
+        setSupportActionBar((toolbar = findViewById(R.id.topAppBar_accountedit)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), AccountActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
     }
 
     private void setEventListeners() {
@@ -182,14 +181,10 @@ public class AccountEditActivity extends AppCompatActivity {
                 else if (!Patterns.PHONE.matcher(etPhone.getText().toString()).matches())
                     Toaster.show(getApplicationContext(), "전화번호를 정확하게 작성하세요.");
                 else {
-                    JSONObject newUser = new JSONObject();
-                    newUser.put("usn", InnerDB.sp.getString("usn", null));
-                    newUser.put("id", etID.getText().toString());
-                    newUser.put("pw", etPW.getText().toString());
-                    newUser.put("email", etEmail.getText().toString());
-                    newUser.put("phone", etPhone.getText().toString());
+                    Network.service.editAccount(new JSONObject().put("usn", InnerDB.sp.getString("usn", null))
+                            .put("id", etID.getText().toString()).put("pw", etPW.getText().toString())
+                            .put("email", etEmail.getText().toString()).put("phone", etPhone.getText().toString())).enqueue(new Callback<Boolean>() {
 
-                    Network.service.editAccount(newUser).enqueue(new Callback<Boolean>() {
                         @Override
                         public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                             InnerDB.editor.clear().apply();

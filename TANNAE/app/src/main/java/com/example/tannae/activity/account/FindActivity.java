@@ -47,12 +47,11 @@ public class FindActivity extends AppCompatActivity {
         btnFindAccount = findViewById(R.id.btn_find_find);
         tvMyId = findViewById(R.id.tv_myid_find);
         tvMyPw = findViewById(R.id.tv_mypw_find);
-        (toolbar = findViewById(R.id.topAppBar_find))
-                .setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), LoginActivity.class)
-                        .putExtra("type", false)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
-        setSupportActionBar(toolbar);
+
+        setSupportActionBar((toolbar = findViewById(R.id.topAppBar_find)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), LoginActivity.class)
+                .putExtra("type", false).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
     }
 
     // < Register event listeners >

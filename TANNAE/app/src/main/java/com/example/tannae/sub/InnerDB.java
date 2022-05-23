@@ -40,19 +40,24 @@ public class InnerDB extends AppCompatActivity {
                 .apply();
     }
 
-    public static JSONObject getUser() throws JSONException {
-        return new JSONObject()
-                .put("usn", sp.getString("usn", ""))
-                .put("id", sp.getString("id", ""))
-                .put("pw", sp.getString("pw", ""))
-                .put("uname", sp.getString("uname", ""))
-                .put("rrn", sp.getString("rrn", ""))
-                .put("gender", sp.getInt("gender", 1))
-                .put("phone", sp.getString("phone", ""))
-                .put("email", sp.getString("email", ""))
-                .put("drive", sp.getInt("drive", 0))
-                .put("points", sp.getInt("points", 0))
-                .put("score", sp.getFloat("score", (float) 0.0))
-                .put("state", sp.getInt("state", 0));
+    public static JSONObject getUser() {
+        try {
+            return new JSONObject()
+                    .put("usn", sp.getString("usn", ""))
+                    .put("id", sp.getString("id", ""))
+                    .put("pw", sp.getString("pw", ""))
+                    .put("uname", sp.getString("uname", ""))
+                    .put("rrn", sp.getString("rrn", ""))
+                    .put("gender", sp.getInt("gender", 1))
+                    .put("phone", sp.getString("phone", ""))
+                    .put("email", sp.getString("email", ""))
+                    .put("drive", sp.getInt("drive", 0))
+                    .put("points", sp.getInt("points", 0))
+                    .put("score", sp.getFloat("score", (float) 0.0))
+                    .put("state", sp.getInt("state", 0));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -46,7 +46,6 @@ public class SignUpActivity extends AppCompatActivity {
         btnCheckID = findViewById(R.id.btn_checkID_sign_up);
         btnSignUp = findViewById(R.id.btn_sign_up);
         btnCheckUser = findViewById(R.id.btn_check_user_sign_up);
-        rgGender = findViewById(R.id.rg_gender_sign_up);
 
         etID = findViewById(R.id.et_id_sign_up);
         etPW = findViewById(R.id.et_pw_sign_up);
@@ -58,11 +57,12 @@ public class SignUpActivity extends AppCompatActivity {
 
         tvCheckId = findViewById(R.id.tv_checkID_sign_up);
         tvCheckPW = findViewById(R.id.tv_retrypw_sign_up);
-        (toolbar = findViewById(R.id.topAppBar_sign_up))
-                .setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), LoginActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
-        setSupportActionBar(toolbar);
+
+        (rgGender = findViewById(R.id.rg_gender_sign_up)).setOnCheckedChangeListener((group, checkedId) -> genderType = (checkedId == R.id.rb_man_sign_up) ? true : false);
+        
+        setSupportActionBar((toolbar = findViewById(R.id.topAppBar_sign_up)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     // < Register event listeners >
@@ -157,9 +157,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        // Change gender type by user input
-        rgGender.setOnCheckedChangeListener((group, checkedId) -> genderType = (checkedId == R.id.rb_man_sign_up) ? true : false);
-
         // Change checkedUser by name input
         etName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -175,6 +172,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+
         // Store RRN by user input
         etRRN.addTextChangedListener(new TextWatcher() {
             @Override
@@ -203,6 +201,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Toaster.show(getApplicationContext(), "지원되지 않는 ID 형식입니다. \n다른 ID를 사용해주세요.");
                 return;
             }
+
             // Request if ID is not user [RETROFIT]
             Network.service.checkID(etID.getText().toString()).enqueue(new Callback<String>() {
                 @Override

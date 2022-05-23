@@ -36,26 +36,19 @@ public class LoginActivity extends AppCompatActivity {
 
         String id = InnerDB.sp.getString("id", null);
         String pw = InnerDB.sp.getString("pw", null);
-
-        if (id != null)
-            login(id, pw, true);
+        if (id != null) login(id, pw, true);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setViews();
-        setEventListeners();
     }
 
     private void setViews() {
         etID = findViewById(R.id.et_id_account_edit);
         etPW = findViewById(R.id.et_pw_account_edit);
-        btnLogin = findViewById(R.id.btn_login);
-        btnFind = findViewById(R.id.btn_find);
-        btnSignUp = findViewById(R.id.btn_signup);
-    }
-
-    private void setEventListeners() {
-        btnLogin.setOnClickListener(v -> {
+        (btnFind = findViewById(R.id.btn_find)).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FindActivity.class)));;
+        (btnSignUp = findViewById(R.id.btn_signup)).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), SignUpActivity.class)));
+        (btnLogin = findViewById(R.id.btn_login)).setOnClickListener(v -> {
             String id = etID.getText().toString();
             String pw = etPW.getText().toString();
             if (id.length() == 0 || pw.length() == 0)
@@ -63,10 +56,6 @@ public class LoginActivity extends AppCompatActivity {
             else
                 login(id, pw, false);
         });
-
-        btnFind.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FindActivity.class)));
-        btnSignUp.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), SignUpActivity.class)));
-
     }
 
     // < Login >
