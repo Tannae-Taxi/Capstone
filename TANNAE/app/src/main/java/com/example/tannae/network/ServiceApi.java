@@ -13,7 +13,7 @@ public interface ServiceApi {
     Call<String> login(@Query("id") String id, @Query("pw") String pw);
     @GET("/account/checkID")                 // Check ID Duplication
     Call<String> checkID(@Query("id") String id);
-    @GET("/account/checkUser")
+    @GET("/account/checkUser")              // Check User
     Call<String> checkUser(@Query("name") String name, @Query("rrn") String rrn);
     @POST("/account/signup")                // Sign Up
     Call<Boolean> signup(@Body JSONObject user);
