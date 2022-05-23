@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             Network.socket.connect();
 
         (mapView = new MapView(this)).setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
+        mapView.setZoomLevel(2, true);
         (mapViewContainer = findViewById(R.id.map_view_main)).addView(mapView);
     }
 
