@@ -608,16 +608,17 @@ io.on('connection', (socket) => {
             let flag = await service.setVehicle();
             // Check if vehicle is allowed
             if (service.vehicle != null) {
-                service.setPath();                                                                              // Set request path
-                service.pathR = await service.reqPath();                                                         // Request path to kakao navigation api and return path data
+                service.setPath();                                                                                  // Set request path
+                service.pathR = await service.reqPath();                                                            // Request path to kakao navigation api and return path data
                 if (service.pathR.result_code === 0) {
                     await service.updateDB();                                                                       // Update Database
+                    console.log(service.path)
                     socket.join(service.vehicle.vsn);                                                               // Join vsn room
                     io.to(service.vehicle.vsn).emit('responseService', service.flag, service.path, data.user.usn);  // Send response to vsn room users
                     console.log(`User ${data.user.usn} is matched with vehicle ${service.vehicle.vsn}`);
                 } else {
-                    socket.emit('responseService', 0, null, null, null);
-                    console.log(`User ${data.user.usn} is rejected becuase of path is unavailable`);
+                    socket.emit('responseService', -1, null, null, null);
+                    console.log(`User ${data.user.usn} is rejected by unavailable path`);
                 }
             } else {
                 // When there is no vehicle available
@@ -627,7 +628,7 @@ io.on('connection', (socket) => {
         } catch (err) {
             // MySQL Error
             console.log(err);
-            socket.emit('responseService', -1, null, null, null);
+            socket.emit('responseService', -2, null, null, null);
         }
     });
 });
