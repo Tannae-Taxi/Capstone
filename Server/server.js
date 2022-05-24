@@ -81,7 +81,7 @@ app.get('/account/checkUser', async (req, res) => {
     let data = req.query;
     let message = "OK";
     try {
-        let [result, field] = await connection.query(`select * from User where uname = '${data.name}' and rrn = '${data.rrn}'`);
+        let [result, field] = await connection.query(`select * from User where rrn = '${data.rrn}'`);
         if (result.length !== 0) {
             // When user is already signed in
             console.log(`/account.checkUser : User ${data.name} is already signed in`);
