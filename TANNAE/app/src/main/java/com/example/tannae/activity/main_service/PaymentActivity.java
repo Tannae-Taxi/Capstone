@@ -103,10 +103,7 @@ public class PaymentActivity extends AppCompatActivity {
                 } else if (usn.equals("driver"))
                     continue;
                 JSONObject res = result.getJSONObject(usn);
-                String origin = res.getString("start");
-                String destination = res.getString("end");
-                int cost = res.getInt("cost");
-                adapter.addItem(new Data(usn, origin, destination, cost, "Payment"));
+                adapter.addItem(new Data(usn, res.getString("start"), res.getString("end"), res.getInt("cost"), "Payment"));
             }
 
             // Set adapter

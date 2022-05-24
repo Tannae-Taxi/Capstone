@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.tannae.R;
@@ -42,6 +41,7 @@ public class ListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         final Context context = parent.getContext();
         final Data data = items.get(position);
+        System.out.println(data.getType());
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -69,10 +69,10 @@ public class ListViewAdapter extends BaseAdapter {
             ((TextView) convertView.findViewById(R.id.tv_date_history_listview)).setText("이용 날짜 : " + data.getData("ud").toString());
             ((TextView) convertView.findViewById(R.id.tv_origin_history_listview)).setText("출발지 : " + data.getData("origin").toString());
             ((TextView) convertView.findViewById(R.id.tv_destination_history_listview)).setText("도착지 : " + data.getData("destination").toString());
-            ((TextView) convertView.findViewById(R.id.tv_cost_history_listview)).setText("요금 : " + data.getData("cost" + "원").toString());
+            ((TextView) convertView.findViewById(R.id.tv_cost_history_listview)).setText("요금 : " + data.getData("cost").toString() + "원");
         } else if (data.getType().equals("QnA")) {
             ((TextView) convertView.findViewById(R.id.tv_title_qna_listview)).setText(data.getData("title").toString());
-            ((LinearLayout) convertView.findViewById(R.id.layout_qna_listview)).setOnClickListener(v -> context.startActivity(new Intent(context, QnADetailActivity.class)
+            convertView.findViewById(R.id.layout_qna_listview).setOnClickListener(v -> context.startActivity(new Intent(context, QnADetailActivity.class)
                     .putExtra("csn", data.getData("csn").toString())
                     .putExtra("usn", data.getData("usn").toString())
                     .putExtra("title", data.getData("title").toString())

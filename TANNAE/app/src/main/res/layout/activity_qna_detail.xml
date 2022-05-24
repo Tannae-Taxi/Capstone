@@ -43,19 +43,20 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
             <Button
                 android:id="@+id/btn_edit_qna_detail"
                 style="@style/Widget.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="수정하기"/>
+
             <Button
                 android:id="@+id/btn_delete_qna_detail"
                 style="@style/Widget.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="삭제하기"/>
+                android:text="삭제하기" />
         </LinearLayout>
 
         <TextView

@@ -25,9 +25,9 @@ public class UserServiceListActivity extends AppCompatActivity {
         findViewById(R.id.layout_point_userservicelist).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), PointActivity.class)));
         findViewById(R.id.layout_qna_userservicelist).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), QnAActivity.class)));
         findViewById(R.id.layout_history_userservicelist).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), HistoryActivity.class)));
-        (findViewById(R.id.layout_lost_found_userservicelist)).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), LostFoundActivity.class)));
-        (findViewById(R.id.layout_faq_userservicelist)).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FAQActivity.class)));
-        (findViewById(R.id.btn_logout_userservicelist)).setOnClickListener(v -> {
+        findViewById(R.id.layout_lost_found_userservicelist).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), LostFoundActivity.class)));
+        findViewById(R.id.layout_faq_userservicelist).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FAQActivity.class)));
+        findViewById(R.id.btn_logout_userservicelist).setOnClickListener(v -> {
             InnerDB.sp.edit().clear().apply();
             Toaster.show(getApplicationContext(), "안전하게 로그아웃 되었습니다.");
             startActivity(new Intent(getApplicationContext(), LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));

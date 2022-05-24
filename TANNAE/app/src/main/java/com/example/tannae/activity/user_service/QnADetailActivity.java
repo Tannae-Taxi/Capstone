@@ -37,7 +37,8 @@ public class QnADetailActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        ((TextView) findViewById(R.id.tv_date_qna_detail)).setText(getIntent().getStringExtra("date"));
+        String[] date = getIntent().getStringExtra("date").split(", ");
+        ((TextView) findViewById(R.id.tv_date_qna_detail)).setText(date[0] + "\n" + date[1]);
         ((TextView) findViewById(R.id.tv_title_qna_detail)).setText(getIntent().getStringExtra("title"));
         ((TextView) findViewById(R.id.tv_content_qna_detail)).setText(getIntent().getStringExtra("content"));
         (tvAnswer = findViewById(R.id.tv_answer_qna_detail)).setText(getIntent().getStringExtra("answer"));
