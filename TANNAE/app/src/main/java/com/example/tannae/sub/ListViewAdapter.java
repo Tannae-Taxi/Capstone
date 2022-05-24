@@ -60,7 +60,7 @@ public class ListViewAdapter extends BaseAdapter {
             ((TextView) convertView.findViewById(R.id.tv_usn_payment)).setText("탑승자 : " + data.getData("ud").toString());
             ((TextView) convertView.findViewById(R.id.tv_origin_payment)).setText("출발지 : " + data.getData("origin").toString());
             ((TextView) convertView.findViewById(R.id.tv_destination_payment)).setText("도착지 : " + data.getData("destination").toString());
-            ((TextView) convertView.findViewById(R.id.tv_cost_payment)).setText("요금 : " + data.getData("cost" + "원").toString());
+            ((TextView) convertView.findViewById(R.id.tv_cost_payment)).setText("요금 : " + data.getData("cost").toString() + "원");
         } else if (data.getType().equals("Lost")) {
             ((TextView) convertView.findViewById(R.id.tv_date_lost_listview)).setText("분실물 등록일 : " + data.getData("date").toString());
             ((TextView) convertView.findViewById(R.id.tv_license_lost_listview)).setText("차량번호 : " + data.getData("license").toString());

@@ -1,5 +1,6 @@
 package com.example.tannae.activity.main_service;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -94,6 +95,7 @@ public class NavigationActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void setNetworks() {
         // Response service
         Network.socket.on("responseService", args -> {
@@ -101,7 +103,7 @@ public class NavigationActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 try {
                     System.out.println();
-                    // Flag : -1 (Server Error) / 0 (No Vehicle) / 1 (Share vehicle) / 2 (Non-share vehicle to share user) / 3 (Non-share vehicle to non-share user)
+                    // Flag : -2 (Server Error) / -1 (Unavailable Path) / 0 (No Vehicle) / 1 (Share vehicle) / 2 (Non-share vehicle to share user) / 3 (Non-share vehicle to non-share user)
                     // 4 (Passenger boarding) / 5 (Passenger get off)
                     int flag = (int) args[0];
                     JSONObject path = (JSONObject) args[1];
@@ -110,7 +112,8 @@ public class NavigationActivity extends AppCompatActivity {
                     JSONArray waypoints = path != null ? path.getJSONArray("waypoints") : null;
 
                     // Toast
-                    Toaster.show(getApplicationContext(), flag == 0 ? "이용 가능한 차량이 없습니다."
+                    Toaster.show(getApplicationContext(), flag == -1 ? "해당 경로는 현재 교통 상황으로 인해 서비스가 불가합니다."
+                            : flag == 0 ? "이용 가능한 차량이 없습니다."
                             : flag == 1 ? (usnOut.equals(usnIn) ? "동승 차량이 배차되었습니다." : "추가 인원이 배차되었습니다.\n경로를 수정합니다..")
                             : flag == 2 ? (usnOut.equals(usnIn) ? "동승 가능한 차량이 없습니다.\n일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다.")
                             : flag == 3 ? (usnOut.equals(usnIn) ? "일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다.")
