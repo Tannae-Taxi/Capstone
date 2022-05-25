@@ -39,6 +39,8 @@ public class QnAEditActivity extends AppCompatActivity {
         btnEdit = findViewById(R.id.btn_edit_qna_edit);
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_qnaedit));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("QnA 수정");
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 

@@ -39,6 +39,8 @@ public class LostFoundActivity extends AppCompatActivity {
         listView = findViewById(R.id.lv_list_lost_found);
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_lost_found));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("분실물 조회");
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 

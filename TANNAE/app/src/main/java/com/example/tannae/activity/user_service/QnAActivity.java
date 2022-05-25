@@ -42,6 +42,8 @@ public class QnAActivity extends AppCompatActivity {
         (fabQnA = findViewById(R.id.fab_qna)).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), QnAEditActivity.class).putExtra("flag", true)));
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_qna));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("QnA");
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 

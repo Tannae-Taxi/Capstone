@@ -56,6 +56,8 @@ public class QnADetailActivity extends AppCompatActivity {
                         ? View.VISIBLE : View.INVISIBLE);
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_qna_detail));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("QnA");
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 

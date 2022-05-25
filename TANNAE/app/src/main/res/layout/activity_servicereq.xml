@@ -37,13 +37,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="25dp"
+        android:layout_marginLeft="20dp"
+        android:padding="10dp"
         android:orientation="horizontal">
 
         <RadioGroup
             android:id="@+id/rg_location_servicereq"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:orientation="vertical">
             <RadioButton
                 android:id="@+id/rb_origin_servicereq"
@@ -66,18 +68,18 @@
             <TextView
                 android:id="@+id/tv_origin_servicereq"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="   출발지"
+                android:layout_height="0dp"
+                android:hint="출발지"
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
                 android:gravity="left|center_vertical"/>
             <TextView
                 android:id="@+id/tv_destination_servicereq"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
-                android:hint="   목적지"
+                android:hint="목적지"
                 android:gravity="left|center_vertical"/>
         </LinearLayout>
         <Switch

@@ -17,7 +17,7 @@
 
     <style name="Widget.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="hintTextAppearance">@color/main</item>
-        <item name="hintTextColor">@color/main</item>
+        <item name="hintTextColor">@color/black</item>
         <item name="android:paddingBottom">8dp</item>
         <item name="boxStrokeColor">@color/main</item>
     </style>

@@ -61,6 +61,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_sign_up));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("회원 가입");
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 

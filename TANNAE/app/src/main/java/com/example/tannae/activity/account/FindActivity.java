@@ -50,6 +50,8 @@ public class FindActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_find));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("회원 정보 찾기");
         toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(), LoginActivity.class)
                 .putExtra("type", false).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
     }

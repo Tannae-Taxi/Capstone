@@ -30,22 +30,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/cardview"
+            android:layout_marginHorizontal="20dp"
             android:elevation="20dp"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_personal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginVertical="10dp"
-                android:text="계정 찾기"
-                android:textSize="32dp" />
 
             <EditText
                 android:id="@+id/et_name_find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
+                android:layout_marginVertical="5dp"
                 android:ems="10"
                 android:hint="Name"
                 android:inputType="textPersonName" />
@@ -54,7 +47,7 @@
                 android:id="@+id/et_rrn_find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
+                android:layout_marginVertical="5dp"
                 android:ems="15"
                 android:hint="주민등록번호 ( - 기호를 입력하지 마세요)"
                 android:inputType="number"
@@ -64,7 +57,7 @@
                 android:id="@+id/et_email_find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
+                android:layout_marginVertical="5dp"
                 android:ems="10"
                 android:hint="Email"
                 android:inputType="textEmailAddress" />
@@ -73,7 +66,7 @@
                 android:id="@+id/et_phone_find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
+                android:layout_marginVertical="5dp"
                 android:ems="10"
                 android:hint="Phone Number"
                 android:inputType="phone"

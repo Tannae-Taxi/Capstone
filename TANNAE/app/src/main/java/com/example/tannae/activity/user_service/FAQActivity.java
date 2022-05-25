@@ -38,6 +38,8 @@ public class FAQActivity extends AppCompatActivity {
         listView = findViewById(R.id.lv_list_faq);
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_faq));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("FAQ");
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 

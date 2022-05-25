@@ -40,6 +40,8 @@ public class HistoryActivity extends AppCompatActivity {
         listView = findViewById(R.id.lv_list_history);
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_history));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("이용기록");
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
