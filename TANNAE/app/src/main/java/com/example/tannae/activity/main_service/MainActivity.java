@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton reqBtn;
     private long backKeyPressedTime = 0;
     private Toolbar toolbar;
-    private BottomAppBar bottomAppBar;
     private MapView mapView;
     private ViewGroup mapViewContainer;
 
@@ -47,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
     // < Register views >
     private void setViews() {
         reqBtn = findViewById(R.id.req_button_main);
-        bottomAppBar = findViewById(R.id.bottomAppBar_main);
-        findViewById(R.id.item_drive_menu).setVisibility(InnerDB.sp.getInt("drive", 0) == 1 ? View.VISIBLE : View.INVISIBLE);
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_main));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
@@ -62,14 +59,6 @@ public class MainActivity extends AppCompatActivity {
             mapViewContainer.removeView(mapView);
         });
 
-        bottomAppBar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.item_drive_menu) {
-                mapViewContainer.removeView(mapView);
-                startActivity(new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", true));
-                return true;
-            }
-            return false;
-        });
 
         toolbar.setNavigationOnClickListener(v -> {
             mapViewContainer.removeView(mapView);
