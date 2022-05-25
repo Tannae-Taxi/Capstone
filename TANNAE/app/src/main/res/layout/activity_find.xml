@@ -86,6 +86,7 @@
 
         <Button
             android:id="@+id/btn_find_find"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -98,7 +99,7 @@
             android:id="@+id/tv_myid_find"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginLeft="70dp"
             android:layout_marginVertical="10dp"
             android:text="ID:" />
 
@@ -106,7 +107,7 @@
             android:id="@+id/tv_mypw_find"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginLeft="70dp"
             android:layout_marginVertical="10dp"
             android:text="PW:" />
     </LinearLayout>
