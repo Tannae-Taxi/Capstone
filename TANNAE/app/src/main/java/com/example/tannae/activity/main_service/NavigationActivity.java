@@ -18,6 +18,7 @@ import com.example.tannae.sub.InnerDB;
 import com.example.tannae.sub.Toaster;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
+import net.daum.mf.map.api.MapCircle;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapPolyline;
@@ -205,18 +206,22 @@ public class NavigationActivity extends AppCompatActivity {
     // < Show path data on map >
     private void showPathOnMap(JSONObject path) {
         try {
-            // Erase map
-            for (MapPolyline mp : mapView.getPolylines())
-                mapView.removePolyline(mp);
-
-            // INIT
-            MapPolyline polyline = new MapPolyline();
-            polyline.setLineColor(Color.argb(255, 255, 0, 0));
+            // Get path
             JSONObject origin = path.getJSONObject("origin");
             JSONObject destination = path.getJSONObject("destination");
             JSONArray waypoints = path.getJSONArray("waypoints");
 
-            // Add points
+            // Erase map
+            for (MapPolyline mp : mapView.getPolylines())
+                mapView.removePolyline(mp);
+
+            // INIT Polyline
+            MapPolyline polyline = new MapPolyline();
+            polyline.setLineColor(Color.argb(255, 240, 128, 128));
+
+            // Add total path
+            MapCircle circle = new MapCircle(MapPoint.mapPointWithGeoCoord(origin.getDouble("y"), origin.getDouble("x")), 10,
+                    Color.argb(255, 255, 0, 0), Color.argb(255, 255, 0, 0));
             polyline.addPoint(MapPoint.mapPointWithGeoCoord(origin.getDouble("y"), origin.getDouble("x")));
             for (int i = 0; i < waypoints.length(); i++) {
                 JSONObject waypoint = waypoints.getJSONObject(i);
@@ -226,6 +231,7 @@ public class NavigationActivity extends AppCompatActivity {
 
             // Show
             mapView.addPolyline(polyline);
+            mapView.addCircle(circle);
             MapPointBounds bounds = new MapPointBounds(polyline.getMapPoints());
             mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(bounds, 100));
         } catch (JSONException e) {
