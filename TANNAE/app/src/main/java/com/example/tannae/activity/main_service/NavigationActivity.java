@@ -52,7 +52,7 @@ public class NavigationActivity extends AppCompatActivity {
         mapView = new MapView(this);
         mapViewContainer = findViewById(R.id.map_view_navigation);
         mapView.setZoomLevel(2, true);
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(35.1761175, 126.9058167), true);
         mapViewContainer.addView(mapView);
 
         try {

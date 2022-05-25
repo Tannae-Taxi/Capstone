@@ -3,7 +3,6 @@ package com.example.tannae.activity.main_service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +13,6 @@ import com.example.tannae.activity.user_service.UserServiceListActivity;
 import com.example.tannae.network.Network;
 import com.example.tannae.sub.InnerDB;
 import com.example.tannae.sub.Toaster;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.daum.mf.map.api.MapPoint;
@@ -22,7 +20,7 @@ import net.daum.mf.map.api.MapView;
 
 // << Main Activity >>
 public class MainActivity extends AppCompatActivity {
-    private FloatingActionButton reqBtn;
+    private FloatingActionButton btnReq;
     private long backKeyPressedTime = 0;
     private Toolbar toolbar;
     private MapView mapView;
@@ -38,27 +36,31 @@ public class MainActivity extends AppCompatActivity {
         if (!Network.socket.isActive())
             Network.socket.connect();
 
-        (mapView = new MapView(this)).setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
+        (mapView = new MapView(this)).setMapCenterPoint(MapPoint.mapPointWithGeoCoord(35.1761175, 126.9058167), true);
         mapView.setZoomLevel(2, true);
         (mapViewContainer = findViewById(R.id.map_view_main)).addView(mapView);
     }
 
     // < Register views >
     private void setViews() {
-        reqBtn = findViewById(R.id.req_button_main);
+        btnReq = findViewById(R.id.req_button_main);
         setSupportActionBar(toolbar = findViewById(R.id.topAppBar_main));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
     }
 
     private void setEventListeners() {
-        reqBtn.setOnClickListener(v -> {
-            startActivity(InnerDB.sp.getInt("state", 0) == 1
-                    ? new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", false)
-                    : new Intent(getApplicationContext(), ServiceReqActivity.class));
-            mapViewContainer.removeView(mapView);
+        btnReq.setOnClickListener(v -> {
+            if (InnerDB.sp.getInt("drive", 0) == 1) {
+                mapViewContainer.removeView(mapView);
+                startActivity(new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", true));
+            } else {
+                mapViewContainer.removeView(mapView);
+                startActivity(InnerDB.sp.getInt("state", 0) == 1
+                        ? new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", false)
+                        : new Intent(getApplicationContext(), ServiceReqActivity.class));
+            }
         });
-
 
         toolbar.setNavigationOnClickListener(v -> {
             mapViewContainer.removeView(mapView);
