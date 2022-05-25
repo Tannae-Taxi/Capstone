@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tannae.R;
+import com.example.tannae.network.Network;
 import com.example.tannae.sub.InnerDB;
 import com.example.tannae.sub.Toaster;
 
@@ -21,6 +23,10 @@ import net.daum.mf.map.api.MapView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 // << ServiceReq Activity >>
 public class ServiceReqActivity extends AppCompatActivity implements MapView.MapViewEventListener, MapView.POIItemEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
@@ -51,6 +57,26 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         switchShare = findViewById(R.id.switch_share_servicereq);
         findViewById(R.id.btn_back_servicereq).setOnClickListener(v -> onBackPressed());
         ((RadioGroup) findViewById(R.id.rg_location_servicereq)).setOnCheckedChangeListener((group, checkedId) -> locationType = checkedId == R.id.rb_origin_servicereq);
+        // 좌표 추출용 코드
+        findViewById(R.id.send).setOnClickListener(v -> {
+            try {
+                Network.service.send(new JSONObject().put("name", ((EditText) findViewById(R.id.name)).getText().toString())
+                        .put("road", originLocation).put("x", originX).put("y", originY))
+                        .enqueue(new Callback<Boolean>() {
+                            @Override
+                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                Toaster.show(getApplicationContext(), originLocation + "추가 완료");
+                            }
+
+                            @Override
+                            public void onFailure(Call<Boolean> call, Throwable t) {
+                                Toaster.show(getApplicationContext(), "ERROR");
+                            }
+                        });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void setEventListeners() {
@@ -76,12 +102,12 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
 
         mapView.setMapViewEventListener(this);
         mapView.setPOIItemEventListener(this);
-
+/*
         marker = new MapPOIItem();
         marker.setItemName("위치");
         marker.setMapPoint(mapView.getMapCenterPoint());
         marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
-
+*/
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.566406178655534, 126.97786868931414), true);
         mapView.setZoomLevel(2, true);
         mapViewContainer.addView(mapView);
@@ -110,8 +136,8 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
             destinationY = mapPoint.getMapPointGeoCoord().latitude;
         }
 
-        marker.setMapPoint(mapPoint);
-        mapView.addPOIItem(marker);
+        /*marker.setMapPoint(mapPoint);
+        mapView.addPOIItem(marker);*/
     }
 
     @Override
@@ -129,7 +155,7 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
             destinationY = mapPoint.getMapPointGeoCoord().latitude;
         }
 
-        marker.setMapPoint(mapPoint);
+        //marker.setMapPoint(mapPoint);
     }
 
     @Override
@@ -169,7 +195,7 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
             destinationY = mapPoint.getMapPointGeoCoord().latitude;
         }
 
-        marker.setMapPoint(mapPoint);
+        //marker.setMapPoint(mapPoint);
     }
 
     @Override

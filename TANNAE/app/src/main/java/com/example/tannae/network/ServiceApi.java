@@ -45,4 +45,8 @@ public interface ServiceApi {
     Call<Boolean> postAnswer(@Body JSONObject content);
     @POST("/user/evaluate")                 // Post evaluate
     Call<Boolean> evaluate(@Body JSONObject data);
+
+    // 좌표 추출용 코드
+    @POST("/send")
+    Call<Boolean> send(@Body JSONObject data);
 }
