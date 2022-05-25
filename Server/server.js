@@ -28,6 +28,17 @@ server.listen(3000, () => {
     console.log('Listening on port 3000');
 });
 
+// 좌표 추출용 임시 코드
+app.post('/send', async (req, res) => {
+    let data = req.body.nameValuePairs;
+    try {
+        await connection.query(`insert Cosy values('${data.name}', '${data.road}', '${data.x}', '${data.y}')`);
+        console.log('SUCCESS');
+        res.json(true);
+    } catch (err) {
+        console.log('FAIL');
+    }
+});
 // <<< Reqeust & Response >>>
 // << Account >>
 // < Login >
@@ -612,7 +623,6 @@ io.on('connection', (socket) => {
                 service.pathR = await service.reqPath();                                                            // Request path to kakao navigation api and return path data
                 if (service.pathR.result_code === 0) {
                     await service.updateDB();                                                                       // Update Database
-                    console.log(service.path)
                     socket.join(service.vehicle.vsn);                                                               // Join vsn room
                     io.to(service.vehicle.vsn).emit('responseService', service.flag, service.path, data.user.usn);  // Send response to vsn room users
                     console.log(`User ${data.user.usn} is matched with vehicle ${service.vehicle.vsn}`);
