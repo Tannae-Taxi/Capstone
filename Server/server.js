@@ -36,7 +36,7 @@ app.post('/send', async (req, res) => {
         console.log('SUCCESS');
         res.json(true);
     } catch (err) {
-        console.log('FAIL');
+        console.log(err);
     }
 });
 // <<< Reqeust & Response >>>
@@ -181,7 +181,7 @@ app.post('/account/editAccount', async (req, res) => {
 
     try {
         // Update user infos to new infos
-        await connection.query(`update User set id = '${data.id}', pw = '${data.pw}', email = '${data.email}', phone = '${data.phone}' where usn = '${data.usn}'`);
+        await connection.query(`update User set pw = '${data.pw}', email = '${data.email}', phone = '${data.phone}' where usn = '${data.usn}'`);
         console.log(`/account/editAccount : User ${data.usn} account is updated`);
         res.json(true);
     } catch (err) {
@@ -336,7 +336,9 @@ app.post('/user/editContent', async (req, res) => {
 
     try {
         // Update Content
-        await connection.query(`update Content set title = '${data.title}', content = '${data.content}', answer = '아직 답변이 등록되지 않았습니다.', date = '${new Date().toLocaleString()}' where csn = '${data.csn}'`);
+        let date = new Date();
+        date = new Date(date.getTime() + date.getTimezoneOffset() * 60000 + 32400000).toLocaleString();
+        await connection.query(`update Content set title = '${data.title}', content = '${data.content}', answer = '아직 답변이 등록되지 않았습니다.', date = '${date}' where csn = '${data.csn}'`);
         console.log(`/user/editContent : User ${data.usn} edited content`);
         res.json(true);
     } catch (err) {
@@ -385,9 +387,11 @@ app.post('/user/postContent', async (req, res) => {
                 csnNew += '0';
             csnNew += csnNum;
         }
-
+        
         // Insert Content
-        await connection.query(`insert Content values('${csnNew}', '${data.title}', '${data.content}', '아직 답변이 등록되지 않았습니다.', '${new Date().toLocaleString()}', false, '${data.usn}')`);
+        let date = new Date();
+        date = new Date(date.getTime() + date.getTimezoneOffset() * 60000 + 32400000).toLocaleString();
+        await connection.query(`insert Content values('${csnNew}', '${data.title}', '${data.content}', '아직 답변이 등록되지 않았습니다.', '${date}', false, '${data.usn}')`);
         console.log(`/user/postContent : User ${data.usn} inserted Content`);
         res.json(true);
     } catch (err) {
@@ -590,7 +594,9 @@ io.on('connection', (socket) => {
                 hsnNew += hsnNum;
             }
 
-            await connection.query(`insert History values('${hsnNew}', '${vehicle.license}', '${new Date().toLocaleString()}', '${result[usn].start}', '${result[usn].end}', ${result[usn].cost}, '${usn}')`);
+            let date = new Date();
+            date = new Date(date.getTime() + date.getTimezoneOffset() * 60000 + 32400000).toLocaleString();
+            await connection.query(`insert History values('${hsnNew}', '${vehicle.license}', '${date}', '${result[usn].start}', '${result[usn].end}', ${result[usn].cost}, '${usn}')`);
         }
 
         // Emit result
