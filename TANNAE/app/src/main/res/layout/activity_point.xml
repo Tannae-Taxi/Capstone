@@ -81,10 +81,13 @@
     </LinearLayout>
     <Button
         android:id="@+id/btn_charge_point"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="25dp"
+        android:background="@drawable/button_rounded"
+        android:elevation="3dp"
         android:text="Charge"/>
 
 </LinearLayout>

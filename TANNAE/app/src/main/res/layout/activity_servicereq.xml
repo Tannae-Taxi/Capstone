@@ -92,13 +92,14 @@
     </LinearLayout>
 
     <Button
-        style="@style/Widget.Material3.Button"
-        android:textSize="13dp"
         android:id="@+id/btn_request_servicereq"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
+        android:background="@drawable/button_rounded"
+        android:elevation="3dp"
         android:text="서비스 요청" />
     <!-- 좌표 추출용 코드 -->
     <LinearLayout
