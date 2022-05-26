@@ -1,32 +1,31 @@
 package com.example.tannae.activity.user_service;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
+import android.util.Log;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
-import com.example.tannae.activity.main_service.MainActivity;
-import com.example.tannae.sub.List;
+import com.example.tannae.network.Network;
+import com.example.tannae.sub.Data;
+import com.example.tannae.sub.ListViewAdapter;
+import com.example.tannae.sub.Toaster;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QnAActivity extends AppCompatActivity {
-
-    private Button btnsearch;
-    private EditText etsearchtitle;
+    private FloatingActionButton fabQnA;
     private Toolbar toolbar;
-
     private ListView listView = null;
     private ListViewAdapter adapter = null;
 
@@ -35,93 +34,47 @@ public class QnAActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qna);
         setViews();
-        setEventListeners();
-        adapter = new ListViewAdapter();
-        adapter.addItem(new List("제목1", "내용1"));
-        adapter.addItem(new List("제목2", "내용2"));
-        adapter.addItem(new List("제목1", "내용1"));
-        adapter.addItem(new List("제목2", "내용2"));
-        adapter.addItem(new List("제목1", "내용1"));
-        adapter.addItem(new List("제목2", "내용2"));
-        adapter.addItem(new List("제목1", "내용1"));
-        adapter.addItem(new List("제목2", "내용2"));
-        listView.setAdapter(adapter);
-
+        setAdapter();
     }
-
-    // < BackPress >
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
+    
     private void setViews() {
-        btnsearch = findViewById(R.id.btn_search_qna);
-        etsearchtitle = findViewById(R.id.et_search_title_qna);
-        toolbar = findViewById(R.id.topAppBar_qna);
-        listView = (ListView) findViewById(R.id.lv_list_qna);
-
-        setSupportActionBar(toolbar);
+        listView = findViewById(R.id.lv_list_qna);
+        (fabQnA = findViewById(R.id.fab_qna)).setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), QnAEditActivity.class).putExtra("flag", true)));
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_qna));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("QnA");
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
-    private void setEventListeners() {
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+    private void setAdapter() {
+        Network.service.getContent().enqueue(new Callback<String>() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+            public void onResponse(Call<String> call, Response<String> response) {
+                try {
+                    JSONObject res = new JSONObject(response.body());
+                    String message = res.getString("message");
+                    if (message.equals("OK")) {
+                        JSONArray lists = res.getJSONArray("result");
+                        adapter = new ListViewAdapter();
+                        for (int i = 0; i < lists.length(); i++) {
+                            JSONObject list = lists.getJSONObject(i);
+                            adapter.addItem(new Data(list.getString("csn"), list.getString("usn"),
+                                    list.getString("title"), list.getString("content"), list.getString("answer"), list.getString("date"),
+                                    list.getInt("state"), getApplicationContext(), "QnA"));
+                        }
+                        listView.setAdapter(adapter);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toaster.show(getApplicationContext(), "Error");
+                Log.e("Error", t.getMessage());
             }
         });
-    }
-
-    public class ListViewAdapter extends BaseAdapter {
-        ArrayList<List> items = new ArrayList<List>();
-
-        @Override
-        public int getCount() {
-            return items.size();
-        }
-
-        public void addItem(List item) {
-            items.add(item);
-        }
-        @Override
-        public Object getItem(int position) {
-            return items.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup viewGroup) {
-            final Context context = viewGroup.getContext();
-            final List list = items.get(position);
-
-            if(convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.community_listview_list_item, viewGroup, false);
-
-            }else {
-                View view = new View(context);
-                view = (View) convertView;
-
-            }
-
-            TextView title = (TextView) convertView.findViewById(R.id.tv_title);
-            TextView content = (TextView) convertView.findViewById(R.id.tv_content);
-
-            title.setText(list.getTitle());
-            content.setText(list.getContent());
-
-            return convertView;
-        }
-
     }
 }

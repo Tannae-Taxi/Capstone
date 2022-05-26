@@ -26,28 +26,21 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="25dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/text_border"
+            android:background="@drawable/cardview"
             android:elevation="20dp"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="REGISTER"
-                android:textSize="30sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/et_id_sign_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
+                    android:ems="8"
                     android:hint="ID"
                     android:inputType="textPersonName" />
 
@@ -101,18 +94,33 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginHorizontal="25dp"
-            android:background="@drawable/text_border"
+            android:background="@drawable/cardview"
             android:elevation="20dp"
             android:orientation="vertical">
 
-
-            <EditText
-                android:id="@+id/et_name_sign_up"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Name"
-                android:inputType="text" />
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/et_name_sign_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="8"
+                    android:hint="Name"
+                    android:inputType="text" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <Button
+                    android:id="@+id/btn_check_user_sign_up"
+                    style="@style/Widget.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="본인인증"/>
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/et_rrn_sign_up"
@@ -162,10 +170,11 @@
 
         <Button
             android:id="@+id/btn_sign_up"
-            style="@style/Widget.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center"
+            android:background="@drawable/button_rounded"
             android:text="Sign Up" />
 
         </LinearLayout>

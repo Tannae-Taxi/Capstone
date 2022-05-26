@@ -16,7 +16,7 @@
             android:id="@+id/topAppBar_find"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"/>
+            android:layout_height="?attr/actionBarSize" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -24,83 +24,91 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_personal"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="Personal"
-            android:textSize="32dp" />
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/cardview"
+            android:elevation="20dp"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/et_name_find"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:ems="10"
-            android:hint="Name"
-            android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/et_name_find"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:ems="10"
+                android:hint="Name"
+                android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/et_rrn_find"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:ems="15"
-            android:hint="주민등록번호 ( - 기호를 입력하지 마세요)"
-            android:inputType="number"
-            android:maxLength="14" />
+            <EditText
+                android:id="@+id/et_rrn_find"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:ems="15"
+                android:hint="주민등록번호 ( - 기호를 입력하지 마세요)"
+                android:inputType="number"
+                android:maxLength="14" />
 
-        <EditText
-            android:id="@+id/et_email_find"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:ems="10"
-            android:hint="Email"
-            android:inputType="textEmailAddress" />
+            <EditText
+                android:id="@+id/et_email_find"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:ems="10"
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
 
-        <EditText
-            android:id="@+id/et_phone_find"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:ems="10"
-            android:hint="Phone Number"
-            android:inputType="phone"
-            android:maxLength="11"/>
+            <EditText
+                android:id="@+id/et_phone_find"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:ems="10"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:maxLength="11" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="30dp">
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/cardview"
+        android:elevation="20dp"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/btn_find_find"
-            style="@style/Widget.Button.TextButton"
-            android:layout_width="0dp"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_rounded"
+            android:elevation="20dp"
             android:text="Find Account" />
 
         <TextView
             android:id="@+id/tv_myid_find"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginLeft="70dp"
+            android:layout_marginVertical="10dp"
             android:text="ID:" />
 
         <TextView
             android:id="@+id/tv_mypw_find"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginLeft="70dp"
+            android:layout_marginVertical="10dp"
             android:text="PW:" />
     </LinearLayout>
 

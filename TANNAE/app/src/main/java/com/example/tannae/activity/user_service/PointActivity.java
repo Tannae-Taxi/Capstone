@@ -1,11 +1,7 @@
 package com.example.tannae.activity.user_service;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,8 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tannae.R;
-import com.example.tannae.activity.account.LoginActivity;
-import com.example.tannae.activity.main_service.MainActivity;
+import com.example.tannae.network.Network;
+import com.example.tannae.sub.InnerDB;
+import com.example.tannae.sub.Toaster;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PointActivity extends AppCompatActivity {
     private TextView tvPoint;
@@ -31,52 +32,42 @@ public class PointActivity extends AppCompatActivity {
         setEventListeners();
     }
 
-    // < BackPress >
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
     private void setViews() {
-        tvPoint = findViewById(R.id.tv_point_point);
         etCharge = findViewById(R.id.et_charge_point);
         btnCharge = findViewById(R.id.btn_charge_point);
-        toolbar = findViewById(R.id.topAppBar_point);
-        setSupportActionBar(toolbar);
+        (tvPoint = findViewById(R.id.tv_point_point)).setText(InnerDB.sp.getInt("points", 0) + "원");
+        setSupportActionBar(toolbar = findViewById(R.id.topAppBar_point));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), UserServiceListActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("포인트");
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void setEventListeners() {
-        etCharge.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        btnCharge.setOnClickListener(v -> {
+            String chargeStr = etCharge.getText().toString();
+            if (chargeStr.length() == 0)
+                Toaster.show(getApplicationContext(), "충전 금액을 입력해주세요.");
+            else {
+                int charge = Integer.parseInt(etCharge.getText().toString());
+                final int currentPoint = InnerDB.sp.getInt("points", 0) + charge;
+                InnerDB.editor.putInt("points", currentPoint).apply();
 
-            }
+                Network.service.charge(InnerDB.getUser()).enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        etCharge.setText("");
+                        tvPoint.setText(InnerDB.sp.getInt("points", 0) + "원");
+                        Toaster.show(getApplicationContext(), "포인트가 충전되었습니다.");
+                    }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        btnCharge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        InnerDB.editor.putInt("points", currentPoint - charge).apply();
+                        Toaster.show(getApplicationContext(), "Error");
+                        Log.e("Error", t.getMessage());
+                    }
+                });
             }
         });
     }

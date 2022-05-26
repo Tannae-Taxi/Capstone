@@ -1,2 +1,2 @@
-let i = {"a":{'a':1, 'b':2}, 'c':2}
-console.log(i.l === undefined)
+let now = new Date();
+console.log(new Date(now.getTime() + now.getTimezoneOffset() * 60000 + 32400000).toLocaleString());
