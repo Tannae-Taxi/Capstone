@@ -1,4 +1,5 @@
-let mysql = require('mysql');
+const mysql = require('mysql');
+const fs = require('fs');
 
 // < MySQL Connection >
 connection = mysql.createConnection({
@@ -56,11 +57,16 @@ function matchDV() {
 
 // Set vehicle coordinate
 async function veco()  {
-    let [result, fields] = await connection.query(`select usn from Vehicle`);
-    [
-        {}
-    ]
-    for (let i = 0; i < result.length; i++) {
-
-    }
+    fs.readFile('coordinate.txt', 'utf8', async (err, data) => {
+        try {
+            let [result, field] = await connection.query('select vsn from Vehicle');
+            let dat = data.split("\r\n");
+            for (let i = 0; i < dat.length; i++) {
+                let da = dat[i].split(",");
+                connection.query(`update Vehicle set pos = '${da[2]} ${da[1]}' where vsn = '${result[i].vsn}'`);
+            }
+        } catch (errs) {
+            console.log(errs);
+        }
+    });
 }
