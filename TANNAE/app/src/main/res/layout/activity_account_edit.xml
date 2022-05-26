@@ -34,37 +34,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"/>
 
             <EditText
-                android:id="@+id/et_id_account_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="8"
-                android:hint="ID"
-                android:inputType="textPersonName"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/btn_checkid_account_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="중복검사" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_checkid_account_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="잘못된 ID 형식입니다." />
-
-        <EditText
             android:id="@+id/et_pw_account_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
