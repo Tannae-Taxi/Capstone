@@ -101,23 +101,4 @@
         android:background="@drawable/button_rounded"
         android:elevation="3dp"
         android:text="서비스 요청" />
-    <!-- 좌표 추출용 코드 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <EditText
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="NAME"
-            android:layout_weight="1"/>
-        <Button
-            android:id="@+id/send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="send"
-            android:layout_gravity="center"/>
-    </LinearLayout>
 </LinearLayout>
