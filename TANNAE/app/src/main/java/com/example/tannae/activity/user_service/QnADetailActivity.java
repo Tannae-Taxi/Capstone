@@ -43,8 +43,7 @@ public class QnADetailActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tv_content_qna_detail)).setText(getIntent().getStringExtra("content"));
         (tvAnswer = findViewById(R.id.tv_answer_qna_detail)).setText(getIntent().getStringExtra("answer"));
         (btnEdit = findViewById(R.id.btn_edit_qna_detail))
-                .setVisibility(InnerDB.sp.getString("usn", null)
-                        .equals(getIntent().getStringExtra("usn")) ? View.VISIBLE : View.INVISIBLE);
+                .setVisibility((InnerDB.sp.getString("usn", null).equals(getIntent().getStringExtra("usn")) && tvAnswer.getText().toString().equals("아직 답변이 등록되지 않았습니다.")) ? View.VISIBLE : View.INVISIBLE);
         (btnDelete = findViewById(R.id.btn_delete_qna_detail))
                 .setVisibility(InnerDB.sp.getString("usn", null)
                         .equals(getIntent().getStringExtra("usn")) ? View.VISIBLE : View.INVISIBLE);
