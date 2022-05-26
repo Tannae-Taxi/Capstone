@@ -43,7 +43,9 @@ public class QnADetailActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tv_content_qna_detail)).setText(getIntent().getStringExtra("content"));
         (tvAnswer = findViewById(R.id.tv_answer_qna_detail)).setText(getIntent().getStringExtra("answer"));
         (btnEdit = findViewById(R.id.btn_edit_qna_detail))
-                .setVisibility((InnerDB.sp.getString("usn", null).equals(getIntent().getStringExtra("usn")) && tvAnswer.getText().toString().equals("아직 답변이 등록되지 않았습니다.")) ? View.VISIBLE : View.INVISIBLE);
+                .setVisibility((InnerDB.sp.getString("usn", null).equals(getIntent().getStringExtra("usn"))
+                        && tvAnswer.getText().toString().equals("아직 답변이 등록되지 않았습니다."))
+                        ? View.VISIBLE : View.INVISIBLE);
         (btnDelete = findViewById(R.id.btn_delete_qna_detail))
                 .setVisibility(InnerDB.sp.getString("usn", null)
                         .equals(getIntent().getStringExtra("usn")) ? View.VISIBLE : View.INVISIBLE);
@@ -96,9 +98,8 @@ public class QnADetailActivity extends AppCompatActivity {
                         .enqueue(new Callback<Boolean>() {
                             @Override
                             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                                tvAnswer.setText(etAnswer.getText().toString());
-                                etAnswer.setText("");
                                 Toaster.show(getApplicationContext(), "답변이 등록되었습니다.");
+                                startActivity(new Intent(getApplicationContext(), QnAActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             }
 
                             @Override
