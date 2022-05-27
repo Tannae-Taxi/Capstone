@@ -525,11 +525,13 @@ io.on('connection', (socket) => {
         pass.duration -= pass.sections[0].duration;
         pass.waypoints.shift();
         pass.sections.shift();
+        console.log(`TOTAL COST : ${cost}`);  
 
         // Initial setting
         let result = {};    // Result for receipt { 'usn' : {name:String, start:String, end:String, cost:int}, ... , license:String }
         let count = 0;      // Number of users in the vehicle
         let current = [];   // User's usn who is riding
+        let dataO = {};     // For analyze
         result.license = vehicle.license;
         result.driver = driver.usn;
 
@@ -543,21 +545,34 @@ io.on('connection', (socket) => {
             if (type === 'start') {
                 current.push(usn);
                 result[usn] = { start: point.name, end: null, cost: 0 };
+                dataO[usn] = 0;                                                                   // For analzye
                 count++;
             } else {
                 current.splice(current.indexOf(usn), 1);
                 result[usn].end = point.name;
                 count--;
             }
+
             if (count !== 0) {
                 let pathCost = parseInt(cost * pass.sections[i].distance / pass.distance);
-                for (let j = 0; j < current.length; j++)
+                console.log(pathCost);
+                for (let j = 0; j < current.length; j++) {
                     result[current[j]].cost += pathCost / count;
+                    dataO[current[j]] += pathCost                                                 // For analyze
+                }
+                    
             }
         }
 
-        // Update User DB
+        
+        // Update Data DB
         let usns = Object.keys(result);
+        let dataN = {};
+        for (let i = 0; i < usns.length; i++)
+            dataN[usns[i]] = result[usns[i]].cost
+        await connection.query(`insert Data values(${cost}, '${JSON.stringify(dataO)}', '${JSON.stringify(dataN)}')`);
+
+        // Update User DB
         for (let i = 0; i < usns.length; i++) {
             let usn = usns[i];
             if (usn === 'license') continue;

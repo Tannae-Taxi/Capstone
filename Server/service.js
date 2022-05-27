@@ -171,7 +171,7 @@ module.exports.Service = class Service {
             else {
                 points.splice(endIndex, 0, end);
                 points.splice(startIndex, 0, start);
-                return [true, points, startIndex, endIndex];
+                return [true, points, startIndex, endIndex + 1];
             }
         } else if (innerStart) {
             // Get last point and pre last point
@@ -184,10 +184,9 @@ module.exports.Service = class Service {
             let theta = Math.acos((uva[0] * uvb[0] + uva[1] * uvb[1]) / (Math.sqrt(Math.pow(uva[0], 2) + Math.pow(uva[1], 2)) * Math.sqrt(Math.pow(uvb[0], 2) + Math.pow(uvb[1], 2))));
             // Available when angle is smaller than 45 degrees
             if (theta < Math.PI / 4) {
-                endIndex = points.length + 2;
                 points.push(end);
                 points.splice(startIndex, 0, start);
-                return [true, points, startIndex, endIndex];
+                return [true, points, startIndex, points.length];
             } else
                 return [false, null, null, null];
         } else
@@ -224,10 +223,10 @@ module.exports.Service = class Service {
         let start = this.path.waypoints[this.starts - 1];
         let end = this.path.waypoints.length > this.ends - 1 ? this.path.waypoints[this.ends - 1] : this.path.destination;
 
-        let names = {};
-        names = this.flag === 1 ? JSON.parse(this.vehicle.names) : {};
+        let names = this.flag === 1 ? JSON.parse(this.vehicle.names) : {};
         names[`${start.x}_${start.y}_${start.name}`] = { 'usn': this.data.user.usn, 'type': 'start' };
         names[`${end.x}_${end.y}_${end.name}`] = { 'usn': this.data.user.usn, 'type': 'end' };
+
         await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi}, names = '${JSON.stringify(names)}' where vsn = '${this.vehicle.vsn}'`);
         await this.connection.query(`update User set state = true where usn = '${this.data.user.usn}'`);
     }
