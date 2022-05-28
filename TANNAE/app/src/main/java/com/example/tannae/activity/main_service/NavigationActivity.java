@@ -46,6 +46,7 @@ public class NavigationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+        type = getIntent().getBooleanExtra("type", false);
         setViews();
         setEventListeners();
         setNetworks();
@@ -62,7 +63,7 @@ public class NavigationActivity extends AppCompatActivity {
         tvNext = findViewById(R.id.tv_waypoints_navigation);
 
         try {
-            if (!getIntent().getBooleanExtra("type", false)) {
+            if (!type) {
                 btnPass.setVisibility(View.INVISIBLE);
                 btnEndService.setVisibility(View.INVISIBLE);
                 switchDrive.setVisibility(View.INVISIBLE);
@@ -99,6 +100,8 @@ public class NavigationActivity extends AppCompatActivity {
     private void setNetworks() {
         // Response service
         Network.socket.on("responseService", args -> {
+            if (InnerDB.state == 3)
+                return;
             // args[0] = flag:int / args[1] = path:JSONObject / args[2] = usn:String
             runOnUiThread(() -> {
                 try {
@@ -124,6 +127,7 @@ public class NavigationActivity extends AppCompatActivity {
                     if (!(flag == -1 || flag == 0)) {
                         if (flag == 1 || flag == 2 || flag == 3) {
                             // Set inner DB
+                            InnerDB.state = usnOut.equals(usnIn) ? 1 : InnerDB.state;
                             InnerDB.editor.putInt("state", usnOut.equals(usnIn) ? 1 : InnerDB.sp.getInt("state", 0)).apply();
                             InnerDB.editor.putString("path", path.toString()).apply();
 
@@ -148,6 +152,7 @@ public class NavigationActivity extends AppCompatActivity {
                             showPathOnMap(path);
                         } else if (flag == 5) {
                             if (usnOut.equals(usnIn)) {     // When current user get off
+                                InnerDB.state = 3;
                                 InnerDB.editor.putInt("state", 0).apply();
                                 InnerDB.editor.putString("path", null).apply();
 
@@ -195,6 +200,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         // End service
         Network.socket.on("serviceEnd", args -> runOnUiThread(() -> {
+            InnerDB.state = 0;
             Toaster.show(getApplicationContext(), "운행이 종료되었습니다.\n영수증을 확인하여 주세요.");
             mapViewContainer.removeView(mapView);
             startActivity(new Intent(getApplicationContext(), PaymentActivity.class).putExtra("result", args[0].toString()));
@@ -206,7 +212,7 @@ public class NavigationActivity extends AppCompatActivity {
         mapViewContainer = findViewById(R.id.map_view_navigation);
         mapView.setZoomLevel(2, true);
 
-        if (getIntent().getBooleanExtra("type", false)) {
+        if (type) {
             Network.service.getPos(InnerDB.sp.getString("usn", null)).enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
