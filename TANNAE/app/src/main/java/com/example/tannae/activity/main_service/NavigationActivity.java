@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,6 +29,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 // << Navigation Activity >>
 public class NavigationActivity extends AppCompatActivity {
     private Button btnEndService, btnPass;
@@ -44,22 +49,24 @@ public class NavigationActivity extends AppCompatActivity {
         setViews();
         setEventListeners();
         setNetworks();
+        setMap();
+    }
 
-        type = getIntent().getBooleanExtra("type", false);
+    // < Register views >
+    private void setViews() {
+        (btnPass = findViewById(R.id.btn_pass_navigation)).setOnClickListener(v -> Network.socket.emit("passWaypoint", InnerDB.getUser()));
+        (btnEndService = findViewById(R.id.btn_end_service_navigation)).setOnClickListener(v -> Network.socket.emit("serviceEnd", InnerDB.getUser()));
         btnPass.setBackgroundColor(Color.parseColor("#BDBDBD"));
         btnEndService.setBackgroundColor(Color.parseColor("#BDBDBD"));
-
-        mapView = new MapView(this);
-        mapViewContainer = findViewById(R.id.map_view_navigation);
-        mapView.setZoomLevel(2, true);
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(35.1761175, 126.9058167), true);
-        mapViewContainer.addView(mapView);
+        switchDrive = findViewById(R.id.switch_drive_state_navigation);
+        tvNext = findViewById(R.id.tv_waypoints_navigation);
 
         try {
-            if (!type) {
+            if (!getIntent().getBooleanExtra("type", false)) {
                 btnPass.setVisibility(View.INVISIBLE);
                 btnEndService.setVisibility(View.INVISIBLE);
                 switchDrive.setVisibility(View.INVISIBLE);
+
                 if (InnerDB.sp.getInt("state", 0) == 1) {
                     Toaster.show(getApplicationContext(), "서비스를 이용중입니다.");
                     JSONObject path = new JSONObject(InnerDB.sp.getString("path", ""));
@@ -70,14 +77,6 @@ public class NavigationActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    // < Register views >
-    private void setViews() {
-        (btnPass = findViewById(R.id.btn_pass_navigation)).setOnClickListener(v -> Network.socket.emit("passWaypoint", InnerDB.getUser()));
-        (btnEndService = findViewById(R.id.btn_end_service_navigation)).setOnClickListener(v -> Network.socket.emit("serviceEnd", InnerDB.getUser()));
-        switchDrive = findViewById(R.id.switch_drive_state_navigation);
-        tvNext = findViewById(R.id.tv_waypoints_navigation);
     }
 
     // < Register event listeners >
@@ -103,7 +102,6 @@ public class NavigationActivity extends AppCompatActivity {
             // args[0] = flag:int / args[1] = path:JSONObject / args[2] = usn:String
             runOnUiThread(() -> {
                 try {
-                    System.out.println();
                     // Flag : -2 (Server Error) / -1 (Unavailable Path) / 0 (No Vehicle) / 1 (Share vehicle) / 2 (Non-share vehicle to share user) / 3 (Non-share vehicle to non-share user)
                     // 4 (Passenger boarding) / 5 (Passenger get off)
                     int flag = (int) args[0];
@@ -201,6 +199,39 @@ public class NavigationActivity extends AppCompatActivity {
             mapViewContainer.removeView(mapView);
             startActivity(new Intent(getApplicationContext(), PaymentActivity.class).putExtra("result", args[0].toString()));
         }));
+    }
+
+    public void setMap() {
+        mapView = new MapView(this);
+        mapViewContainer = findViewById(R.id.map_view_navigation);
+        mapView.setZoomLevel(2, true);
+
+        if (getIntent().getBooleanExtra("type", false)) {
+            Network.service.getPos(InnerDB.sp.getString("usn", null)).enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    try {
+                        JSONObject res = new JSONObject(response.body());
+                        String[] pos = res.getString("pos").split(" ");
+                        double longitude = Double.parseDouble(pos[0]);
+                        double latitude = Double.parseDouble(pos[1]);
+                        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude, longitude), true);
+                        mapViewContainer.addView(mapView);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toaster.show(getApplicationContext(), "Error");
+                    Log.e("Error", t.getMessage());
+                }
+            });
+        } else {
+            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(35.1761175, 126.9058167), true);
+            mapViewContainer.addView(mapView);
+        }
     }
 
     // < Show path data on map >
