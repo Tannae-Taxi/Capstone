@@ -432,6 +432,21 @@ app.post('/user/evaluate', async (req, res) => {
     }
 });
 
+// < Get Position >
+app.get('/driver/getPos', async (req, res) => {
+    let data = req.query;
+    let response = { "message": "OK" };
+
+    try {
+        let [result, field] = await connection.query(`select pos from Vehicle where usn = '${data.usn}'`);
+        response.pos = result[0].pos;
+        res.json(JSON.stringify(response));
+        console.log(`Driver ${data.usn}'s position is returned`);
+    } catch (err) {
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
+    }
+});
 
 
 // <<< Socket.io >>>
