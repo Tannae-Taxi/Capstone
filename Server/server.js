@@ -540,7 +540,6 @@ io.on('connection', (socket) => {
         pass.duration -= pass.sections[0].duration;
         pass.waypoints.shift();
         pass.sections.shift();
-        console.log(`TOTAL COST : ${cost}`);  
 
         // Initial setting
         let result = {};    // Result for receipt { 'usn' : {name:String, start:String, end:String, cost:int}, ... , license:String }
@@ -570,7 +569,6 @@ io.on('connection', (socket) => {
 
             if (count !== 0) {
                 let pathCost = parseInt(cost * pass.sections[i].distance / pass.distance);
-                console.log(pathCost);
                 for (let j = 0; j < current.length; j++) {
                     result[current[j]].cost += pathCost / count;
                     dataO[current[j]] += pathCost                                                 // For analyze
