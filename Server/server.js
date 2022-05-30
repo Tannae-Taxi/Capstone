@@ -28,17 +28,6 @@ server.listen(3000, () => {
     console.log('Listening on port 3000');
 });
 
-// 좌표 추출용 임시 코드
-app.post('/send', async (req, res) => {
-    let data = req.body.nameValuePairs;
-    try {
-        await connection.query(`insert Cosy values('${data.name}', '${data.road}', '${data.x}', '${data.y}')`);
-        console.log('SUCCESS');
-        res.json(true);
-    } catch (err) {
-        console.log(err);
-    }
-});
 // <<< Reqeust & Response >>>
 // << Account >>
 // < Login >
@@ -73,6 +62,7 @@ app.get('/account/checkID', async (req, res) => {
     let message = "OK";
     try {
         let [result, field] = await connection.query(`select * from User where binary id = '${data.id}'`);
+
         if (result.length !== 0) {
             // When entered ID is already registered
             console.log(`/account/checkID : ID ${data.id} is already used`);
