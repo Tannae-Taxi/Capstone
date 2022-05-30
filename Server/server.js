@@ -651,8 +651,9 @@ io.on('connection', (socket) => {
         try {
             // Set vechile
             let flag = await service.setVehicle();
+            
             // Check if vehicle is allowed
-            if (service.vehicle != null) {
+            if (service.vehicle !== null) {
                 service.setPath();                                                                                  // Set request path
                 service.pathR = await service.reqPath();                                                            // Request path to kakao navigation api and return path data
                 if (service.pathR.result_code === 0) {
