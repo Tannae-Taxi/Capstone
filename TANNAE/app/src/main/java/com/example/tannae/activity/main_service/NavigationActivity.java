@@ -221,6 +221,8 @@ public class NavigationActivity extends AppCompatActivity {
                         String[] pos = res.getString("pos").split(" ");
                         double longitude = Double.parseDouble(pos[0]);
                         double latitude = Double.parseDouble(pos[1]);
+                        mapView.addCircle(new MapCircle(MapPoint.mapPointWithGeoCoord(latitude, longitude), 20,
+                                Color.argb(200, 255, 0, 0), Color.argb(255, 255, 0, 0)));
                         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude, longitude), true);
                         mapViewContainer.addView(mapView);
                     } catch (JSONException e) {
@@ -249,16 +251,16 @@ public class NavigationActivity extends AppCompatActivity {
             JSONArray waypoints = path.getJSONArray("waypoints");
 
             // Erase map
-            for (MapPolyline mp : mapView.getPolylines())
-                mapView.removePolyline(mp);
+            mapView.removeAllPolylines();
+            mapView.removeAllCircles();
 
             // INIT Polyline
             MapPolyline polyline = new MapPolyline();
             polyline.setLineColor(Color.argb(255, 240, 128, 128));
 
             // Add total path
-            MapCircle circle = new MapCircle(MapPoint.mapPointWithGeoCoord(origin.getDouble("y"), origin.getDouble("x")), 10,
-                    Color.argb(255, 255, 0, 0), Color.argb(255, 255, 0, 0));
+            MapCircle circle = new MapCircle(MapPoint.mapPointWithGeoCoord(origin.getDouble("y"), origin.getDouble("x")), 15,
+                    Color.argb(200, 255, 0, 0), Color.argb(255, 255, 0, 0));
             polyline.addPoint(MapPoint.mapPointWithGeoCoord(origin.getDouble("y"), origin.getDouble("x")));
             for (int i = 0; i < waypoints.length(); i++) {
                 JSONObject waypoint = waypoints.getJSONObject(i);
