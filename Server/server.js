@@ -560,14 +560,12 @@ io.on('connection', (socket) => {
             if (count !== 0) {
                 let pathCost = parseInt(cost * pass.sections[i].distance / pass.distance);
                 for (let j = 0; j < current.length; j++) {
-                    result[current[j]].cost += pathCost / count;
+                    result[current[j]].cost += parseInt(pathCost / count);
                     dataO[current[j]] += pathCost                                                 // For analyze
                 }
-                    
             }
         }
 
-        
         // Update Data DB
         let usns = Object.keys(result);
         let dataN = {};
