@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:icon="@drawable/tannae_logo"
-        android:title="notification"
+        android:title="어떻게알있지?!?"
         app:showAsAction="always" />
 
 </menu>
