@@ -116,7 +116,7 @@ public class NavigationActivity extends AppCompatActivity {
                     // Toast
                     Toaster.show(getApplicationContext(), flag == -1 ? "해당 경로는 현재 교통 상황으로 인해 서비스가 불가합니다."
                             : flag == 0 ? "이용 가능한 차량이 없습니다."
-                            : flag == 1 ? (usnOut.equals(usnIn) ? "동승 차량이 배차되었습니다." : "추가 인원이 배차되었습니다.\n경로를 수정합니다..")
+                            : flag == 1 ? (usnOut.equals(usnIn) ? "동승 차량이 배차되었습니다." : "추가 인원이 배차되었습니다.\n경로를 수정합니다.")
                             : flag == 2 ? (usnOut.equals(usnIn) ? "동승 가능한 차량이 없습니다.\n일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다.")
                             : flag == 3 ? (usnOut.equals(usnIn) ? "일반 차량이 배차되었습니다." : "요청이 들어왔습니다.\n운행을 시작합니다.")
                             : flag == 4 ? (usnOut.equals(usnIn) ? "차량이 도착하였습니다.\n탑승해 주시기 바랍니다." : "탑승자가 승차하였습니다.\n경로를 수정합니다.")

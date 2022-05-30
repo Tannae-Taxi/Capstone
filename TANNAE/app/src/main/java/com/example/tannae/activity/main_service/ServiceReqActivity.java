@@ -47,7 +47,7 @@ public class ServiceReqActivity extends AppCompatActivity implements MapView.Map
         btnServiceReq = findViewById(R.id.btn_request_servicereq);
         tvOrigin = findViewById(R.id.tv_origin_servicereq);
         tvDestination = findViewById(R.id.tv_destination_servicereq);
-        switchShare = findViewById(R.id.switch_share_servicereq);
+        (switchShare = findViewById(R.id.switch_share_servicereq)).setChecked(true);
         findViewById(R.id.btn_back_servicereq).setOnClickListener(v -> onBackPressed());
         ((RadioGroup) findViewById(R.id.rg_location_servicereq)).setOnCheckedChangeListener((group, checkedId) -> locationType = checkedId == R.id.rb_origin_servicereq);
     }

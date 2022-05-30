@@ -50,7 +50,7 @@ public class PaymentActivity extends AppCompatActivity {
         setViews();
         setEventListeners();
         setAdapter();
-        if(InnerDB.sp.getInt("point", 0) < 0)
+        if(InnerDB.sp.getInt("drive", 0) == 0 && InnerDB.sp.getInt("points", 0) < 0)
             Toaster.show(getApplicationContext(), "요금이 부족합니다.\n요금을 충전하기 전까지 이용이 제합됩니다.");
     }
 
