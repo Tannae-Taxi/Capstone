@@ -12,7 +12,7 @@ connection = mysql.createConnection({
 connection = connection.promise();
 
 // Create vehicles
-function vechileTemp() {
+function vechile() {
     for (let i = 0; i < 100; i++) {
         let vsn = 'v';
         for (let j = 0; j < 5 - (i + 1).toString().length; j++)
@@ -23,7 +23,7 @@ function vechileTemp() {
 };
 
 // Create drivers       100
-function createDrivers() {
+function driver() {
     for (let i = 0; i < 100; i++) {
         let usn = 'u';
         for (let j = 0; j < 5 - (i + 1).toString().length; j++)
@@ -35,7 +35,7 @@ function createDrivers() {
 };
 
 // Create Passengers    100
-function createUsers() {
+function pass() {
     for (let i = 100; i < 200; i++) {
         let usn = 'u';
         for (let j = 0; j < 5 - (i + 1).toString().length; j++)
@@ -47,7 +47,7 @@ function createUsers() {
 };
 
 // Match Vehicle and Drivers
-function matchDV() {
+function match() {
     try {
         for (let i = 0; i < 100; i++) {
             let usn = 'u';
@@ -78,4 +78,40 @@ function veco() {
     });
 };
 
-veco();
+async function calc() {
+    let [result, field] = await connection.query('select * from Data');
+    let total = 0, choi = 0, dong = 0, leee = 0;
+
+    for (let i = 0; i < result.length; i++) {
+        let data = result[i];
+        let costo = JSON.parse(data.costo);
+        let costn = JSON.parse(data.costn);
+
+        let choiR = parseInt(costn['m00001'] / costo['m00001'] * 100);
+        let dongR = parseInt(costn['m00002'] / costo['m00002'] * 100);
+        let leeeR = parseInt(costn['m00003'] / costo['m00003'] * 100);
+
+        total += choiR + dongR + leeeR;
+        choi += choiR;
+        dong += dongR;
+        leee += leeeR;
+    }
+
+    total /= result.length * 3;
+    choi /= result.length;
+    dong /= result.length;
+    leee /= result.length;
+
+    console.log(`TOTAL : ${total}%\nCHOI : ${choi}%\nDONG : ${dong}\nLEEE : ${leee}%`);
+}
+
+// Main
+switch(process.argv[2]) {
+    case 'vehicle': vechile(); break;
+    case 'driver': driver(); break;
+    case 'pass': user(); break;
+    case 'match': match(); break;
+    case 'veco': veco(); break;
+    case 'calc': calc(); break;
+    default: console.log('default');
+};
