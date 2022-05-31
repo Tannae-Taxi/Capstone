@@ -51,16 +51,6 @@ public class NavigationActivity extends AppCompatActivity {
         setEventListeners();
         setNetworks();
         setMap();
-    }
-
-    // < Register views >
-    private void setViews() {
-        (btnPass = findViewById(R.id.btn_pass_navigation)).setOnClickListener(v -> Network.socket.emit("passWaypoint", InnerDB.getUser()));
-        (btnEndService = findViewById(R.id.btn_end_service_navigation)).setOnClickListener(v -> Network.socket.emit("serviceEnd", InnerDB.getUser()));
-        btnPass.setBackgroundColor(Color.parseColor("#BDBDBD"));
-        btnEndService.setBackgroundColor(Color.parseColor("#BDBDBD"));
-        switchDrive = findViewById(R.id.switch_drive_state_navigation);
-        tvNext = findViewById(R.id.tv_waypoints_navigation);
 
         try {
             if (!type) {
@@ -78,6 +68,16 @@ public class NavigationActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    // < Register views >
+    private void setViews() {
+        (btnPass = findViewById(R.id.btn_pass_navigation)).setOnClickListener(v -> Network.socket.emit("passWaypoint", InnerDB.getUser()));
+        (btnEndService = findViewById(R.id.btn_end_service_navigation)).setOnClickListener(v -> Network.socket.emit("serviceEnd", InnerDB.getUser()));
+        btnPass.setBackgroundColor(Color.parseColor("#BDBDBD"));
+        btnEndService.setBackgroundColor(Color.parseColor("#BDBDBD"));
+        switchDrive = findViewById(R.id.switch_drive_state_navigation);
+        tvNext = findViewById(R.id.tv_waypoints_navigation);
     }
 
     // < Register event listeners >
