@@ -29,12 +29,19 @@
         android:background="@drawable/cardview"
         android:elevation="20dp"
         android:orientation="vertical">
+
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="2"
             android:gravity="center"
-            android:layout_marginVertical="30dp"
-            android:orientation="vertical">
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="vertical"
+            android:background="@drawable/cardview"
+            android:elevation="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -51,11 +58,22 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_baseline_straight_24" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="2"
             android:gravity="center"
-            android:layout_marginVertical="30dp"
+            android:layout_marginVertical="20dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/cardview"
+            android:elevation="10dp"
             android:orientation="vertical">
 
             <TextView
@@ -77,14 +95,20 @@
                 tools:layout_editor_absoluteX="101dp"
                 tools:layout_editor_absoluteY="379dp" />
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"/>
     </LinearLayout>
     <Button
         android:id="@+id/btn_charge_point"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="25dp"
+        android:background="@drawable/button_rounded"
+        android:elevation="3dp"
         android:text="Charge"/>
 
 </LinearLayout>

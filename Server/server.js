@@ -28,17 +28,6 @@ server.listen(3000, () => {
     console.log('Listening on port 3000');
 });
 
-// 좌표 추출용 임시 코드
-app.post('/send', async (req, res) => {
-    let data = req.body.nameValuePairs;
-    try {
-        await connection.query(`insert Cosy values('${data.name}', '${data.road}', '${data.x}', '${data.y}')`);
-        console.log('SUCCESS');
-        res.json(true);
-    } catch (err) {
-        console.log(err);
-    }
-});
 // <<< Reqeust & Response >>>
 // << Account >>
 // < Login >
@@ -73,6 +62,7 @@ app.get('/account/checkID', async (req, res) => {
     let message = "OK";
     try {
         let [result, field] = await connection.query(`select * from User where binary id = '${data.id}'`);
+
         if (result.length !== 0) {
             // When entered ID is already registered
             console.log(`/account/checkID : ID ${data.id} is already used`);
@@ -432,6 +422,21 @@ app.post('/user/evaluate', async (req, res) => {
     }
 });
 
+// < Get Position >
+app.get('/driver/getPos', async (req, res) => {
+    let data = req.query;
+    let response = { "message": "OK" };
+
+    try {
+        let [result, field] = await connection.query(`select pos from Vehicle where usn = '${data.usn}'`);
+        response.pos = result[0].pos;
+        res.json(JSON.stringify(response));
+        console.log(`Driver ${data.usn}'s position is returned`);
+    } catch (err) {
+        // MySQL Error
+        console.log(`MySQL error : ${err.code}`);
+    }
+});
 
 
 // <<< Socket.io >>>
@@ -530,6 +535,7 @@ io.on('connection', (socket) => {
         let result = {};    // Result for receipt { 'usn' : {name:String, start:String, end:String, cost:int}, ... , license:String }
         let count = 0;      // Number of users in the vehicle
         let current = [];   // User's usn who is riding
+        let dataO = {};     // For analyze
         result.license = vehicle.license;
         result.driver = driver.usn;
 
@@ -543,21 +549,31 @@ io.on('connection', (socket) => {
             if (type === 'start') {
                 current.push(usn);
                 result[usn] = { start: point.name, end: null, cost: 0 };
+                dataO[usn] = 0;                                                                   // For analzye
                 count++;
             } else {
                 current.splice(current.indexOf(usn), 1);
                 result[usn].end = point.name;
                 count--;
             }
+
             if (count !== 0) {
                 let pathCost = parseInt(cost * pass.sections[i].distance / pass.distance);
-                for (let j = 0; j < current.length; j++)
-                    result[current[j]].cost += pathCost / count;
+                for (let j = 0; j < current.length; j++) {
+                    result[current[j]].cost += parseInt(pathCost / count);
+                    dataO[current[j]] += pathCost                                                 // For analyze
+                }
             }
         }
 
-        // Update User DB
+        // Update Data DB
         let usns = Object.keys(result);
+        let dataN = {};
+        for (let i = 0; i < usns.length; i++)
+            dataN[usns[i]] = result[usns[i]].cost
+        await connection.query(`insert Data values(${cost}, '${JSON.stringify(dataO)}', '${JSON.stringify(dataN)}')`);
+
+        // Update User DB
         for (let i = 0; i < usns.length; i++) {
             let usn = usns[i];
             if (usn === 'license') continue;
@@ -623,8 +639,9 @@ io.on('connection', (socket) => {
         try {
             // Set vechile
             let flag = await service.setVehicle();
+            
             // Check if vehicle is allowed
-            if (service.vehicle != null) {
+            if (service.vehicle !== null) {
                 service.setPath();                                                                                  // Set request path
                 service.pathR = await service.reqPath();                                                            // Request path to kakao navigation api and return path data
                 if (service.pathR.result_code === 0) {

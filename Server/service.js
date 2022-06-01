@@ -28,7 +28,6 @@ module.exports.Service = class Service {
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 여기서부터 주석처리와 코드 재확인하기
     // < Set vehicle >
     async setVehicle() {
         // Search vehicles available (share ? check available vehicles which is serving : check available vehicles which is on service but not serving)
@@ -36,11 +35,11 @@ module.exports.Service = class Service {
         let [vehicles, field] = await this.connection.query(sql);
         let nearestIndex = -1;
         let minDistance = Number.MAX_VALUE;
-        this.flag = 0;       // 0 : No vehicle / 1 : Share vehicle / 2 : Non share vehicle for share user / 3 : Non share vehicle for non-share user
+        this.flag = 0;      // 0 : No vehicle / 1 : Share vehicle / 2 : Non share vehicle for share user / 3 : Non share vehicle for non-share user
+        this.pointss = [];  // Stores points for each vehicle (Unavailable : null, available : Point)
+        this.starts = [];   // Stores startIndex
+        this.ends = [];     // Stores endIndex
 
-        this.pointss = [];
-        this.starts = [];
-        this.ends = [];
         // Select nearest vehicle which is available
         for (let i = 0; i < vehicles.length; i++) {
             // If share than check if requested path is available on vehicle's path
@@ -54,6 +53,7 @@ module.exports.Service = class Service {
                     continue;
                 this.flag = 1;
             }
+
             // Check current vehicle and see if is the nearest one
             let position = vehicles[i].pos.split(' ');
             let distance = Math.sqrt(Math.pow(this.data.start.x - position[0], 2) + Math.pow(this.data.start.y - position[1], 2));
@@ -73,10 +73,10 @@ module.exports.Service = class Service {
         }
 
         // Set start index and end index
-        if (this.flag === 1) {
+        if (this.flag === 1) {                          // When share vehicle is matched
             this.starts = this.starts[nearestIndex];
             this.ends = this.ends[nearestIndex];
-        } else if (nearestIndex !== -1) {
+        } else if (nearestIndex !== -1) {               // When non-share vehicle is matched
             this.starts = 1;
             this.ends = 2;
         }
@@ -86,10 +86,8 @@ module.exports.Service = class Service {
             this.vehicle = vehicles[nearestIndex];
             this.pointss = this.pointss[nearestIndex];
             this.flag = this.flag === 0 ? (this.data.share ? 2 : 3) : 1;
-        } else {
+        } else
             this.vehicle = null;
-        }
-        this.vehicle = nearestIndex != -1 ? vehicles[nearestIndex] : null;
     }
 
     // < Set path >
@@ -112,17 +110,15 @@ module.exports.Service = class Service {
     reqPath() {
         return new Promise((resolve, reject) => {
             request.post(this.pathReq, (err, httpResponse, body) => {
-                if (!err && httpResponse.statusCode == 200) {
-                    resolve(body.routes[0]);
-                } else {
-                    reject(err);
-                }
+                if (!err && httpResponse.statusCode == 200) resolve(body.routes[0]);
+                else reject(err);
             });
         });
     }
 
     // < Check if user coordinates are available >
     checkInnerPath(vehicle) {
+        // Setting
         let start = this.data.start;
         let end = this.data.end;
         let path = JSON.parse(vehicle.unpass);
@@ -130,9 +126,8 @@ module.exports.Service = class Service {
         points.unshift(path.origin);
         points.push(path.destination);
 
-        let startIndex, endIndex, innerStart, innerEnd;
-
         // Search starting point range
+        let startIndex, endIndex, innerStart, innerEnd;
         for (let s = 0; s < points.length - 1; s++) {
             let prePoint = points[s];
             let postPoint = points[s + 1];
@@ -171,7 +166,7 @@ module.exports.Service = class Service {
             else {
                 points.splice(endIndex, 0, end);
                 points.splice(startIndex, 0, start);
-                return [true, points, startIndex, endIndex];
+                return [true, points, startIndex, endIndex + 1];
             }
         } else if (innerStart) {
             // Get last point and pre last point
@@ -184,10 +179,9 @@ module.exports.Service = class Service {
             let theta = Math.acos((uva[0] * uvb[0] + uva[1] * uvb[1]) / (Math.sqrt(Math.pow(uva[0], 2) + Math.pow(uva[1], 2)) * Math.sqrt(Math.pow(uvb[0], 2) + Math.pow(uvb[1], 2))));
             // Available when angle is smaller than 45 degrees
             if (theta < Math.PI / 4) {
-                endIndex = points.length + 2;
                 points.push(end);
                 points.splice(startIndex, 0, start);
-                return [true, points, startIndex, endIndex];
+                return [true, points, startIndex, points.length];
             } else
                 return [false, null, null, null];
         } else
@@ -224,10 +218,10 @@ module.exports.Service = class Service {
         let start = this.path.waypoints[this.starts - 1];
         let end = this.path.waypoints.length > this.ends - 1 ? this.path.waypoints[this.ends - 1] : this.path.destination;
 
-        let names = {};
-        names = this.flag === 1 ? JSON.parse(this.vehicle.names) : {};
+        let names = this.flag === 1 ? JSON.parse(this.vehicle.names) : {};
         names[`${start.x}_${start.y}_${start.name}`] = { 'usn': this.data.user.usn, 'type': 'start' };
         names[`${end.x}_${end.y}_${end.name}`] = { 'usn': this.data.user.usn, 'type': 'end' };
+
         await this.connection.query(`update Vehicle set num = ${this.vehicle.num + 1}, unpass = '${JSON.stringify(this.path)}', share = ${this.data.share}, gender = ${this.data.user.gender}, cost = ${summary.fare.taxi}, names = '${JSON.stringify(names)}' where vsn = '${this.vehicle.vsn}'`);
         await this.connection.query(`update User set state = true where usn = '${this.data.user.usn}'`);
     }

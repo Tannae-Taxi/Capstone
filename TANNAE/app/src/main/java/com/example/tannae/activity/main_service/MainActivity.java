@@ -55,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
                 mapViewContainer.removeView(mapView);
                 startActivity(new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", true));
             } else {
+                if (InnerDB.sp.getInt("points", 0) <= 1000) {
+                    Toaster.show(getApplicationContext(), "요금이 미납되었거나 충전량이 부족합니다.\n요금을 충전해주세요.");
+                    return;
+                }
                 mapViewContainer.removeView(mapView);
                 startActivity(InnerDB.sp.getInt("state", 0) == 1
                         ? new Intent(getApplicationContext(), NavigationActivity.class).putExtra("type", false)

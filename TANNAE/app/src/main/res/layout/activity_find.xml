@@ -86,13 +86,13 @@
 
         <Button
             android:id="@+id/btn_find_find"
-            style="@style/Widget.AppCompat.Button"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_rounded"
-            android:elevation="20dp"
+            android:elevation="3dp"
             android:text="Find Account" />
 
         <TextView

@@ -14,6 +14,7 @@ public class InnerDB extends AppCompatActivity {
     public static SharedPreferences sp;
     public static SharedPreferences.Editor editor;
     public static Context context;
+    public static int state = 0;
 
     public InnerDB(Context context) {
         this.context = context;
