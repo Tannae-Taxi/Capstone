@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tannae">
+    package="com.team_seven.tannae">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,7 +18,7 @@
 
 
         <activity
-            android:name=".activity.account.LoginActivity"
+            android:name="com.team_seven.tannae.activity.account.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,24 +26,24 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.account.AccountActivity"/>
-        <activity android:name=".activity.account.AccountEditActivity"/>
-        <activity android:name=".activity.account.SignUpActivity"/>
-        <activity android:name=".activity.account.FindActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.account.AccountActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.account.AccountEditActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.account.SignUpActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.account.FindActivity"/>
 
-        <activity android:name=".activity.main_service.MainActivity"/>
-        <activity android:name=".activity.main_service.ServiceReqActivity"/>
-        <activity android:name=".activity.main_service.NavigationActivity"/>
-        <activity android:name=".activity.main_service.PaymentActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.main_service.MainActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.main_service.ServiceReqActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.main_service.NavigationActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.main_service.PaymentActivity"/>
 
-        <activity android:name=".activity.user_service.UserServiceListActivity"/>
-        <activity android:name=".activity.user_service.LostFoundActivity"/>
-        <activity android:name=".activity.user_service.HistoryActivity"/>
-        <activity android:name=".activity.user_service.PointActivity"/>
-        <activity android:name=".activity.user_service.QnAActivity"/>
-        <activity android:name=".activity.user_service.QnADetailActivity"/>
-        <activity android:name=".activity.user_service.QnAEditActivity"/>
-        <activity android:name=".activity.user_service.FAQActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.user_service.UserServiceListActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.user_service.LostFoundActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.user_service.HistoryActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.user_service.PointActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.user_service.QnAActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.user_service.QnADetailActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.user_service.QnAEditActivity"/>
+        <activity android:name="com.team_seven.tannae.activity.user_service.FAQActivity"/>
 
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="be32c53145962ae88db090324e2223b0"/>
     </application>
