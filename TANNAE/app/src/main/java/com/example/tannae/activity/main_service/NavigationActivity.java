@@ -171,8 +171,17 @@ public class NavigationActivity extends AppCompatActivity {
                                 // Show path on Map
                                 showPathOnMap(path);
                             } else {                        // When driver and service ends
-                                // Set inner DB
+                                // Erase map
+                                mapView.removeAllCircles();
+                                mapView.removeAllPolylines();
+
+                                // Get & Set inner DB
+                                JSONObject destination = new JSONObject(InnerDB.sp.getString("path", "")).getJSONObject("destination");
                                 InnerDB.editor.putString("path", null).apply();
+
+                                // Draw destination
+                                mapView.addCircle(new MapCircle(MapPoint.mapPointWithGeoCoord(destination.getDouble("y"), destination.getDouble("x")), 15,
+                                        Color.argb(200, 255, 0, 0), Color.argb(255, 255, 0, 0)));
 
                                 // Set View's variable
                                 tvNext.setText("요금을 정산해주세요.");
@@ -182,10 +191,6 @@ public class NavigationActivity extends AppCompatActivity {
                                 btnEndService.setEnabled(true);
                                 btnEndService.setBackgroundColor(Color.parseColor("#FF127CEA"));
                                 switchDrive.setChecked(false);
-
-                                // Erase map
-                                for (MapPolyline mp : mapView.getPolylines())
-                                    mapView.removePolyline(mp);
                             }
                         }
                     } else {    // When there is no vehicle available
