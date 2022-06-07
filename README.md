@@ -90,7 +90,7 @@ Front-end Java Develop
 * **Use Case**  
   - ***Use Case Diagram***    
   ![image](https://user-images.githubusercontent.com/87649850/172292202-1ee5b828-4e94-408d-af57-15467c80557c.png)   
-  - ***Use Case Description[Exmaple(Sign Up)]***    
+  - ***Use Case Description[Example(Sign Up)]***    
   ![image](https://user-images.githubusercontent.com/87649850/172292321-3cf285f1-13a2-42bb-8e23-345bd031b2d6.png)   
 * **Diagram**  
   - ***Sequence Diagram[Example(Payment & Assessment)]***   
@@ -100,4 +100,20 @@ Front-end Java Develop
   - ***Class Diagram***   
   ![image](https://user-images.githubusercontent.com/87649850/172292660-6c32670f-a6f7-4f39-aa6b-cd23fac7f2ab.png)   
   
+## Design 
   
+* **Diagram**     
+  - ***Class Diagram***   
+  ![image](https://user-images.githubusercontent.com/87649850/172328033-63d1e21d-e920-4712-98c0-5cd3132071da.png)   
+  - ***Sequence Diagram[Example(Payment & Assessment)]***   
+  ![image](https://user-images.githubusercontent.com/87649850/172328249-a3c79580-44a9-4732-8b38-c42588b1d136.png)   
+* **User Interface[Examples]**    
+![image](https://user-images.githubusercontent.com/87649850/172328465-1601833c-3f57-4a06-9aac-06254318fc05.png)
+![image](https://user-images.githubusercontent.com/87649850/172328485-1afef685-a84f-4a47-865a-c6a4611630f7.png)
+![image](https://user-images.githubusercontent.com/87649850/172328576-3fa80ab8-57b1-4670-a7bd-ee972902233e.png)
+![image](https://user-images.githubusercontent.com/87649850/172328608-587a406d-a054-415a-837a-095dc9084f92.png)
+![image](https://user-images.githubusercontent.com/87649850/172328763-da4c7126-2024-482c-ad62-4b36103de654.png)
+![image](https://user-images.githubusercontent.com/87649850/172328786-273eeeb3-2abf-439b-bcdf-c9eea8e0856c.png)   
+* **Database Table[Examples]**    
+![image](https://user-images.githubusercontent.com/87649850/172329017-3236c60b-3ce3-468e-b60d-f1192e2d337a.png)
+![image](https://user-images.githubusercontent.com/87649850/172329032-71a9e7d2-5788-4389-b156-d8a774e52161.png)   
