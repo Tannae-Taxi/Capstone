@@ -1,0 +1,106 @@
+[ Client To Server ]
+JSON : {
+	start	: { name:String, x:double, y:double },
+	end	: { name:String, x:double, y:double },
+	share	: boolean
+	user	: { usn:String, id:String, pw:String, uname:String, rrn:String, gender:tinyint, phone:String, email:String, drive:tinyint, points:int, score:float, state:tinyint }
+}
+
+
+
+[ Path for request kakao navigation ]
+JSON : {
+	origin		: { name:String, x:double, y:double },
+	destination	: { name:String, x:double, y:double },
+	waypoints	: [
+				{name:String, x:double, y:double}
+				...
+			  ]
+	...
+}
+
+
+
+[ Path response from kakao navigation ]
+JSON : {
+	summary		: {
+				origin		: { name:String, x:double, y:double },
+				destination	: { name:String, x:double, y:double },
+				waypoints	: [
+							{ name:String, x:double, y:double },
+							...
+						  ],
+				fare		: { taxi: int }
+				distance	: int
+				duration	: int
+			  },
+	sections	: [
+				{ distance:int, duration:int },
+				...
+			  ]
+}
+
+[ Path for updating db ]
+JSON : {
+	origin		: { name:String, x:double, y:double },
+	destination	: { name:String, x:double, y:double },
+	waypoints	: [
+				{name:String, x:double, y:double}
+				...
+			  ]
+	"distance"	: int
+	"duration"	: int
+	"sections"	: {
+				{distance: int, duration: int}
+			  }	
+}
+
+
+
+[ Vehicle DB pass ]
+JSON:String {
+	waypoints	: [
+				{ name:String, x:double, y:double },
+				...
+			  ],
+	distance	: int,
+	duration	: int,
+	sections	: [
+				{ distance:int, duration:int }
+			  ]
+}
+
+
+
+[ Vehcile DB unpass ] (경로)
+JSON:String {
+	origin		: { name:String, x:double, y:double },
+	destination	: { name:String, x:double, y:double },
+	waypoints	: [
+				{ name:String, x:double, y:double },
+				...
+			  ],
+	distance	: int,
+	duration	: int,
+	sections	: [
+				{ distance:int, duration:int }
+				...
+			  ]
+}
+
+
+
+[ Result of service end ]
+JSON : {
+	'u00001' : { start:String, end:String, cost:int},
+	...,
+	license:String 
+}
+
+
+
+[ Vehicle DB names ]
+JSON : {
+	'doubleX_doubleY_name' : { user:String(usn), type:String(start|end) },
+	...
+}
