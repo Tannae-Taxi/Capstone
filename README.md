@@ -111,4 +111,41 @@ Front-end Java Develop
 ![ezgif-4-9b27879f3d](https://user-images.githubusercontent.com/87649850/172342692-03dc58b5-c009-41bc-bcf3-4390f3b44449.gif)
 
 * **Database Table**    
-![ezgif-4-975930555d](https://user-images.githubusercontent.com/87649850/172344271-9d9ce7c1-8b66-44ad-9c33-97e04a48cf1d.gif)
+![ezgif-4-975930555d](https://user-images.githubusercontent.com/87649850/172344271-9d9ce7c1-8b66-44ad-9c33-97e04a48cf1d.gif)    
+
+## Implementation   
+
+* **Link**  
+```
+Android Code Link   
+https://github.com/jaewonchoi716/Capstone/tree/master/TANNAE
+
+Server Code Link
+https://github.com/jaewonchoi716/Capstone/tree/master/Server
+```
+* **Structure**   
+![image](https://user-images.githubusercontent.com/87649850/172361065-ad2c5631-bbac-4379-9b80-c1868af0a9de.png)   
+* **Implementation Size**   
+![image](https://user-images.githubusercontent.com/87649850/172361142-fb9e5c29-227a-4617-bf72-dcf2d476c34d.png)   
+* **Efficiency**
+  - ***Test Method***
+  ```
+    Number of test case is 100 and the method of testing is as follows. There are three passengers who rides same taxi for service.
+  Single test case ends when all three passengers get on and get off. The order in which service is requested remains the same,
+  but all cases of boarding and getting off positions for each passenger are tested. In addition, since the final fee is settled in
+  proportion to the distance, the test is conducted in consideration of the distance, and the service use area is limited to Gwangju.
+  ```
+  - ***Test Result***
+  ```
+    As a result of creating and testing of 100 test cases, the rate discount rate for the first service requester is 43%.
+  The rate discount rate for the second service requester is 52%. The rate discount rate for the third service requester is 46%,
+  and the average discount rate is 46%. This figure corresponds to 40-50% or more of the initially set rate discount rate,
+  and it is judged that the algorithm has been implemented successfully.
+  
+    The reason why the discount rate for the second passenger is greater than that of the other two passengers is
+  that the first passenger and the third passenger have an average number of solo rides at the beginning and end,
+  while the second passenger does not have a relatively large number of solo rides in more tests. For this reason,
+  Version 2.0 is expected to reduce the rate ratio of first and last passengers and to reduce the rate burden of first and last
+  passengers by applying a method of calculating the rate that other users share.
+  ```   
+  ![image](https://user-images.githubusercontent.com/87649850/172363510-2a9480a6-b048-4b9b-8ae5-22a23794c7ab.png)   
