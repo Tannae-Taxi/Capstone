@@ -89,29 +89,53 @@ Front-end Java Develop
   ```
 * **Use Case**  
   - ***Use Case Diagram***    
-  ![image](https://user-images.githubusercontent.com/87649850/172292202-1ee5b828-4e94-408d-af57-15467c80557c.png)   
+  <p align="center">
+    <img src= "https://user-images.githubusercontent.com/87649850/172292202-1ee5b828-4e94-408d-af57-15467c80557c.png">
+  </p>
+  
   - ***Use Case Description***    
-  ![ezgif-4-b67b3c8901](https://user-images.githubusercontent.com/87649850/172345551-b6b8a4e2-9673-4b3f-a238-0f6f96018275.gif)  
+  <p align="center">
+    <img src= "https://user-images.githubusercontent.com/87649850/172345551-b6b8a4e2-9673-4b3f-a238-0f6f96018275.gif">
+  </p>
+
 * **Diagram**  
   - ***Sequence Diagram***   
-  ![ezgif-4-b616ccf8b3](https://user-images.githubusercontent.com/87649850/172347060-dc84d195-fd34-4250-9a32-1995beba0bcc.gif)   
+  <p align="center">
+    <img src= "https://user-images.githubusercontent.com/87649850/172347060-dc84d195-fd34-4250-9a32-1995beba0bcc.gif">
+  </p>
+  
   - ***Screen FLow Diagram***   
-  ![image](https://user-images.githubusercontent.com/87649850/172292634-80fb4887-c3df-44ab-9e75-caf781c32c18.png)   
+  <p align="center">
+    <img src= "https://user-images.githubusercontent.com/87649850/172292634-80fb4887-c3df-44ab-9e75-caf781c32c18.png">
+  </p>
+
   - ***Class Diagram***   
-  ![image](https://user-images.githubusercontent.com/87649850/172292660-6c32670f-a6f7-4f39-aa6b-cd23fac7f2ab.png)   
+  <p align="center">
+    <img src= "https://user-images.githubusercontent.com/87649850/172292660-6c32670f-a6f7-4f39-aa6b-cd23fac7f2ab.png">
+  </p>
   
 ## Design 
   
 * **Diagram**     
   - ***Class Diagram***   
-  ![image](https://user-images.githubusercontent.com/87649850/172328033-63d1e21d-e920-4712-98c0-5cd3132071da.png)   
+  <p align="center">
+    <img src= "https://user-images.githubusercontent.com/87649850/172328033-63d1e21d-e920-4712-98c0-5cd3132071da.png">
+  </p>
+  
   - ***Sequence Diagram[Example(Payment & Assessment)]***   
-  ![ezgif-4-21f048d82e](https://user-images.githubusercontent.com/87649850/172348272-9fc28398-fbb6-4270-88b7-f5babfd05498.gif)   
+  <p align="center">
+    <img src= "https://user-images.githubusercontent.com/87649850/172348272-9fc28398-fbb6-4270-88b7-f5babfd05498.gif">
+  </p>
+
 * **User Interface**    
-![ezgif-4-9b27879f3d](https://user-images.githubusercontent.com/87649850/172342692-03dc58b5-c009-41bc-bcf3-4390f3b44449.gif)
+<p align="center">
+  <img src= "https://user-images.githubusercontent.com/87649850/172342692-03dc58b5-c009-41bc-bcf3-4390f3b44449.gif">
+</p>
 
 * **Database Table**    
-![ezgif-4-975930555d](https://user-images.githubusercontent.com/87649850/172344271-9d9ce7c1-8b66-44ad-9c33-97e04a48cf1d.gif)    
+<p align="center">
+  <img src= "https://user-images.githubusercontent.com/87649850/172344271-9d9ce7c1-8b66-44ad-9c33-97e04a48cf1d.gif">
+</p> 
 
 ## Implementation   
 
@@ -124,9 +148,15 @@ Server Code Link
 https://github.com/jaewonchoi716/Capstone/tree/master/Server
 ```
 * **Structure**   
-![image](https://user-images.githubusercontent.com/87649850/172361065-ad2c5631-bbac-4379-9b80-c1868af0a9de.png)   
-* **Implementation Size**   
-![image](https://user-images.githubusercontent.com/87649850/172361142-fb9e5c29-227a-4617-bf72-dcf2d476c34d.png)   
+<p align="center">
+<img src="https://user-images.githubusercontent.com/87649850/172361065-ad2c5631-bbac-4379-9b80-c1868af0a9de.png">
+</p>    
+
+* **Implementation Size**     
+<p align="center">
+<img src="https://user-images.githubusercontent.com/87649850/172361142-fb9e5c29-227a-4617-bf72-dcf2d476c34d.png">
+</p>  
+
 * **Efficiency**
   - ***Test Method***
   ```
