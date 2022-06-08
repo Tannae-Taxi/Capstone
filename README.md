@@ -11,34 +11,44 @@ The main purpose is to pay low price than general taxi service.
 * **Topic**   
 ```
 TANNAE project is a updated taxi service which provides sharing service.  
+
 Passengers can share same taxi which moves on similar path.   
+
 When single service ends passengers who shared same taxi pays the total fee in proportion to distance.  
+
 By this service passengers will pay 40~50% lower price than using normal taxi service.  
 ```
 
 * **Requirements**    
 ```
-*Main service* : Allows passenger to use the service and drivers can use navigation.  
-*Sub service* : Provides account|lost & found|QnA(FAQ)|history|charge services.   
+Main service : Allows passenger to use the service and drivers can use navigation.  
+
+Sub service : Provides account|lost & found|QnA(FAQ)|history|charge services.   
 ```
 
 * **Tools**  
   - ***Client[Android]***   
   ```
   IDE : Android Studio    
+  
   Language : Java   
+  
   UI design : XML     
   ```
   - ***Server[AWS EC2 Ubuntu]***  
   ``` 
   IDE : Visual Studio Code    
+  
   Framework : Express.js(Node.js)   
+  
   Language : Javascript
+  
   Database : InnoDB engine based MySQL
   ```
   - ***Network Communication(HTTP)***   
   ```
   Retrofit2 : Client(request) to Server(response) communication library    
+  
   Socket.io : Bi-directional communication library    
   ```
   - ***Code Manage***   
@@ -48,24 +58,25 @@ By this service passengers will pay 40~50% lower price than using normal taxi se
   
 * **Team**  
 
-***Choi Jae Won[Leader]***  
+***Choi Jae Won[Leader - Back-end Developer]***  
 ```
-Back-end Developer  
-  Server & Algorithm Develop
-  Build Database 
-  Client-Server Network Develop
+Server & Algorithm Develop  
+  
+Build Database 
+  
+Client-Server Network Develop
 ```
-***Kim Dong Hyeon***  
+***Kim Dong Hyun[Front-end UI Developer]***  
 ```
-Front-end UI Developer
-  UI/UX Design * Develop
-  Map Develop
+UI/UX Design Develop
+  
+Map Develop
 ```  
-***Lee Seung Chan***  
+***Lee Seung Chan[Front-end Java Developer]***  
 ```
-Front-end Java Develop
-  Client View & Event handler Develop
-  SharedPreferences Develop
+Client View & Event handler Develop  
+  
+SharedPreferences Develop
 ```
 
 ## Analysis 
@@ -74,17 +85,25 @@ Front-end Java Develop
   - ***Functional Requirement***  
   ```
   Function for Account    : Sign In | Sign Out | Register | Withdrawal | Find Account | Edit Account
+  
   Function for Driver     : Check service request | Change operation status
+  
   Function for Passenger  : Request Service | Rate driver
+  
   Function for User       : Lost & Found | QnA(FAQ) | Check History | Charge point
   ```
   - ***Non-Functional Requirement***
   ```
   Client/Server application   : Project is developed based on Client/Server.
+  
   User Familiarity            : Develop Ui/UX intuitively for easy using.
+  
   System Scalability          : Easy maintenance
+  
   System Connectivity         : Server must track users position and update database in real time
+  
   System Response Speed       : Response time must be faster than 1s for single request
+  
   Security                    : Users private info must be secured
   ```
 * **Use Case**  
