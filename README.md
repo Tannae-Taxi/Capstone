@@ -161,10 +161,10 @@ SharedPreferences Develop
 * **Link**  
 ```
 Android Code Link   
-https://github.com/jaewonchoi716/Capstone/tree/master/TANNAE
+https://github.com/codesver/Capstone/tree/master/TANNAE
 
 Server Code Link
-https://github.com/jaewonchoi716/Capstone/tree/master/Server
+https://github.com/codesver/Capstone/tree/master/Server
 ```
 * **Structure**   
 <p align="center">
