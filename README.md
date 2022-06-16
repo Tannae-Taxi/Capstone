@@ -24,7 +24,14 @@ By this service passengers will pay 40~50% lower price than using normal taxi se
 Main service : Allows passenger to use the service and drivers can use navigation.  
 
 Sub service : Provides account|lost & found|QnA(FAQ)|history|charge services.   
-```
+```   
+
+* **Schedule**    
+  <p align="center">
+    <img src= "https://user-images.githubusercontent.com/87649850/174002744-2636aba7-25db-48fd-8648-a98ea1461184.png">    
+    <img src= "https://user-images.githubusercontent.com/87649850/174002754-3184ad2d-1cac-46e8-89b6-cbf47be43c6e.png">  
+  </p>
+
 
 * **Tools**  
   - ***Client[Android]***   
