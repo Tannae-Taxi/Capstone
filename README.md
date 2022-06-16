@@ -181,7 +181,10 @@ https://github.com/codesver/Capstone/tree/master/Server
 * **Implementation Size**     
 <p align="center">
 <img src="https://user-images.githubusercontent.com/87649850/172361142-fb9e5c29-227a-4617-bf72-dcf2d476c34d.png">
-</p>  
+</p>    
+
+* **Demo**  
+https://user-images.githubusercontent.com/87649850/174003448-78cb473b-f622-4312-b6eb-e537aea6a30f.mp4   
 
 * **Efficiency**
   - ***Test Method***
@@ -205,6 +208,3 @@ https://github.com/codesver/Capstone/tree/master/Server
   passengers by applying a method of calculating the rate that other users share.
   ```   
   ![image](https://user-images.githubusercontent.com/87649850/172363510-2a9480a6-b048-4b9b-8ae5-22a23794c7ab.png)   
-  
-  - ***Demo***    
-  https://user-images.githubusercontent.com/87649850/174003448-78cb473b-f622-4312-b6eb-e537aea6a30f.mp4   
