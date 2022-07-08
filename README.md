@@ -166,13 +166,13 @@ SharedPreferences Develop
 ## Implementation   
 
 * **Link**  
-```
-Android Code Link   
-https://github.com/codesver/Capstone/tree/master/TANNAE
 
-Server Code Link
-https://github.com/codesver/Capstone/tree/master/Server
-```
+  Android Code Link   
+  https://github.com/codesver/Capstone/tree/master/TANNAE
+
+  Server Code Link  
+  https://github.com/codesver/Capstone/tree/master/Server
+
 * **Structure**   
 <p align="center">
 <img src="https://user-images.githubusercontent.com/87649850/172361065-ad2c5631-bbac-4379-9b80-c1868af0a9de.png">
